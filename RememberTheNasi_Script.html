@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hebrew Prayer Display</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-top: 20px;
+        }
+
+        p#date {
+            text-align: center;
+            font-size: 1.2em;
+            color: #2980b9;
+        }
+
+        table {
+            margin: 20px auto;
+            width: 80%;
+            border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            table-layout: fixed; /* Equal spacing for columns */
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center; /* Center align the text */
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #2980b9;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        td {
+            font-size: 1.1em;
+        }
+
+        .hebrew {
+            direction: rtl;
+            font-family: 'David Libre', serif;
+        }
+
+        td#hebrew-prayer {
+            font-size: 1.3em;
+        }
+
+        /* Button Style */
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .link-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .link-button:hover {
+            background-color: #1a5276;
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+        }
+
+        body.dark-mode h1 {
+            color: #ecf0f1;
+        }
+
+        body.dark-mode p#date {
+            color: #3498db;
+        }
+
+        body.dark-mode table {
+            background-color: #34495e;
+            color: #ecf0f1;
+        }
+
+        body.dark-mode th {
+            background-color: #1a5276;
+        }
+
+        body.dark-mode td {
+            border-bottom: 1px solid #7f8c8d;
+        }
+
+        .dark-mode-toggle {
+            display: flex;
+            justify-content: center;
+            margin: 20px auto;
+        }
+
+        .dark-mode-toggle button {
+            padding: 10px 15px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .dark-mode-toggle button:hover {
+            background-color: #1a5276;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            table {
+                width: 100%;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Remember The Nasi!</h1>
+    <p id="date"></p>
+    <table>
+        <thead>
+            <tr>
+                <th>English</th>
+                <th>Hebrew</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="english-prayer">Loading prayer...</td>
+                <td id="hebrew-prayer" class="hebrew">טוען תפילה...</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="button-container">
+        <a href="https://www.chabad.org/library/article_cdo/aid/495714/jewish/The-Nasi.htm" class="link-button" target="_blank">Forgot a day?<br>Click to view all days of the Nasi on Chabad.org</a>
+    </div>
+
+    <div class="dark-mode-toggle">
+        <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    </div>
+
+    <script>
+        const prayers = {
+            "ה׳ בֶּאֱלוּל": {
+                "english": "And it was on the day that Moses finished setting up the Tabernacle, and had anointed it and sanctified it and all its vessels, and the altar and all its vessels, and had anointed them and sanctified them—that the princes of Israel, the heads of their father’s houses, who were the princes of the tribes, those who had superintended the counting, offered: And they brought their offering before the Lord—six covered wagons and twelve oxen, a wagon for every two of the princes and an ox for each one; and they presented them before the Tabernacle. And the Lord spoke to Moses, saying: Accept it from them that they may be used in the service of the Tent of Meeting, and give them to the Levi’im, to each man according to his service. Moses took the wagons and the oxen and gave them to the Levi’im. Two wagons and four oxen he gave to the sons of Gershon, according to their service, and four wagons and eight oxen he gave to the sons of Merari, according to their service—under the supervision of Itamar the son of Aaron the Kohen. But to the sons of Kehat he did not give any, since theirs was the service of [carrying the most] sacred objects; they shall carry them upon their shoulders. The princes brought the dedication-offering for the altar on the day that it was anointed, and the princes offered their offering before the altar. And the Lord said to Moses: They shall present their offering, each prince on [his] day, for the dedication of the altar. And he who presented his offering on the first day was Nachshon the son of Aminadav of the tribe of Judah. And his offering was: one silver dish whose weight was a hundred and thirty shekels, one silver bowl of seventy shekels by Sanctuary weight—both filled with fine flour mixed with oil for a meal-offering; one golden cup of ten [shekels], filled with incense. One young bullock, one ram, one lamb in its first year, for a burnt-offering; one goat for a sin-offering; and for a sacrifice of peace-offering: two oxen, five rams, five he-goats, five yearling lambs. This was the offering of Nachshon the son of Aminadav.",
+                "hebrew": "וַיְהִ֡י בְּיוֹם֩ כַּלּ֨וֹת משֶׁ֜ה לְהָקִ֣ים אֶת־הַמִּשְׁכָּ֗ן וַיִּמְשַׁ֨ח אֹת֜וֹ וַיְקַדֵּ֤שׁ אֹתוֹ֙ וְאֶת־כָּל־כֵּלָ֔יו וְאֶת־הַמִּזְבֵּ֖חַ וְאֶת־כָּל־כֵּלָ֑יו וַיִּמְשָׁחֵ֖ם וַיְקַדֵּ֥שׁ אֹתָֽם: וַיַּקְרִ֨יבוּ֙ נְשִׂיאֵ֣י יִשְׂרָאֵ֔ל רָאשֵׁ֖י בֵּ֣ית אֲבֹתָ֑ם הֵ֚ם נְשִׂיאֵ֣י הַמַּטֹּ֔ת הֵ֥ם הָעֹֽמְדִ֖ים עַל־הַפְּקֻדִֽים: וַיָּבִ֨יאוּ אֶת־קָרְבָּנָ֜ם לִפְנֵ֣י יְהוָֹ֗ה שֵֽׁשׁ־עֶגְלֹ֥ת צָב֙ וּשְׁנֵ֣י עָשָׂ֣ר בָּקָ֔ר עֲגָלָ֛ה עַל־שְׁנֵ֥י הַנְּשִׂאִ֖ים וְשׁ֣וֹר לְאֶחָ֑ד וַיַּקְרִ֥יבוּ אוֹתָ֖ם לִפְנֵ֥י הַמִּשְׁכָּֽן: וַיֹּ֥אמֶר יְהוָֹ֖ה אֶל־משֶׁ֥ה לֵּאמֹֽר: קַ֚ח מֵֽאִתָּ֔ם וְהָי֕וּ לַֽעֲבֹ֕ד אֶת־עֲבֹדַ֖ת אֹ֣הֶל מוֹעֵ֑ד וְנָֽתַתָּ֤ה אוֹתָם֙ אֶל־הַֽלְוִיִּ֔ם אִ֖ישׁ כְּפִ֥י עֲבֹֽדָתֽוֹ: וַיִּקַּ֣ח משֶׁ֔ה אֶת־הָֽעֲגָלֹ֖ת וְאֶת־הַבָּקָ֑ר וַיִּתֵּ֥ן אוֹתָ֖ם אֶל־הַֽלְוִיִּֽם: אֵ֣ת | שְׁתֵּ֣י הָֽעֲגָל֗וֹת וְאֵת֙ אַרְבַּ֣עַת הַבָּקָ֔ר נָתַ֖ן לִבְנֵ֣י גֵֽרְשׁ֑וֹן כְּפִ֖י עֲבֹֽדָתָֽם: וְאֵ֣ת | אַרְבַּ֣ע הָֽעֲגָלֹ֗ת וְאֵת֙ שְׁמֹנַ֣ת הַבָּקָ֔ר נָתַ֖ן לִבְנֵ֣י מְרָרִ֑י כְּפִי֙ עֲבֹ֣דָתָ֔ם בְּיַד֙ אִֽיתָמָ֔ר בֶּן־אַֽהֲרֹ֖ן הַכֹּהֵֽן: וְלִבְנֵ֥י קְהָ֖ת לֹ֣א נָתָ֑ן כִּֽי־עֲבֹדַ֤ת הַקֹּ֨דֶשׁ֙ עֲלֵהֶ֔ם בַּכָּתֵ֖ף יִשָּֽׂאוּ: וַיַּקְרִ֣יבוּ הַנְּשִׂאִ֗ים אֵ֚ת חֲנֻכַּ֣ת הַמִּזְבֵּ֔חַ בְּי֖וֹם הִמָּשַׁ֣ח אֹת֑וֹ וַיַּקְרִ֧יבוּ הַנְּשִׂיאִ֛ם אֶת־קָרְבָּנָ֖ם לִפְנֵ֥י הַמִּזְבֵּֽחַ: וַיֹּ֥אמֶר יְהוָֹ֖ה אֶל־משֶׁ֑ה נָשִׂ֨יא אֶחָ֜ד לַיּ֗וֹם נָשִׂ֤יא אֶחָד֙ לַיּ֔וֹם יַקְרִ֨יבוּ֙ אֶת־קָרְבָּנָ֔ם לַֽחֲנֻכַּ֖ת הַמִּזְבֵּֽחַ: וַיְהִ֗י הַמַּקְרִ֛יב בַּיּ֥וֹם הָֽרִאשׁ֖וֹן אֶת־קָרְבָּנ֑וֹ נַחְשׁ֥וֹן בֶּן־עַמִּֽינָדָ֖ב לְמַטֵּ֥ה יְהוּדָֽה: וְקָרְבָּנ֞וֹ קַֽעֲרַת־כֶּ֣סֶף אַחַ֗ת שְׁלשִׁ֣ים וּמֵאָה֘ מִשְׁקָלָהּ֒ מִזְרָ֤ק אֶחָד֙ כֶּ֔סֶף שִׁבְעִ֥ים שֶׁ֖קֶל בְּשֶׁ֣קֶל הַקֹּ֑דֶשׁ שְׁנֵיהֶ֣ם | מְלֵאִ֗ים סֹ֛לֶת בְּלוּלָ֥ה בַשֶּׁ֖מֶן לְמִנְחָֽה: כַּ֥ף אַחַ֛ת עֲשָׂרָ֥ה זָהָ֖ב מְלֵאָ֥ה קְטֹֽרֶת: פַּ֣ר אֶחָ֞ד בֶּן־בָּקָ֗ר אַ֧יִל אֶחָ֛ד כֶּֽבֶשׂ־אֶחָ֥ד בֶּן־שְׁנָת֖וֹ לְעֹלָֽה: שְׂעִיר־עִזִּ֥ים אֶחָ֖ד לְחַטָּֽאת: וּלְזֶ֣בַח הַשְּׁלָמִים֘ בָּקָ֣ר שְׁנַ֒יִם֒ אֵילִ֤ם חֲמִשָּׁה֙ עַתּוּדִ֣ים חֲמִשָּׁ֔ה כְּבָשִׂ֥ים בְּנֵֽי־שָׁנָ֖ה חֲמִשָּׁ֑ה זֶ֛ה קָרְבַּ֥ן נַחְשׁ֖וֹן בֶּן־עַמִּֽינָדָֽב:"
+            },
+            "2 Nissan": {
+                "english": "On the second day, Netanel the son of Tzuar, the prince of Yissachar, offered...",
+                "hebrew": "בַּיּוֹם֙ הַשֵּׁנִ֔י הִקְרִ֖יב נְתַנְאֵ֣ל בֶּן־צוּעָ֑ר..."
+            },
+            "3 Nissan": {
+                "english": "On the third day, the prince of the children of Zevulun, Eliav the son of Chelon [offered]...",
+                "hebrew": "בַּיּוֹם֙ הַשְּׁלִישִׁ֔י נָשִׂ֖יא לִבְנֵ֣י זְבוּלֻ֑ן..."
+            },
+            "Test Space": {
+                "english": "On the fourth day, the prince of the children of Reuven, Elitzur the son of Shedeur [offered]...",
+                "hebrew": "בַּיּוֹם֙ הָֽרְבִיעִ֔י נָשִׂ֖יא לִבְנֵ֣י רְאוּבֵ֑ן..."
+            },
+        };
+
+        function fetchHebrewDate() {
+            const url = "https://www.hebcal.com/converter?cfg=json&gy=" + new Date().getFullYear() +
+                        "&gm=" + (new Date().getMonth() + 1) + "&gd=" + new Date().getDate() +
+                        "&g2h=1";
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const fullHebrewDate = data.hebrew;
+                    document.getElementById("date").innerHTML = "Displaying the Nasi for: " + fullHebrewDate;
+
+                    const hebrewDateParts = fullHebrewDate.split(" ");
+                    const dayMonth = hebrewDateParts[0] + " " + hebrewDateParts[1];
+
+                    const prayer = prayers[dayMonth] || {
+                        english: "No prayer available for today.",
+                        hebrew: "אין תפילה זמינה להיום."
+                    };
+                    document.getElementById("english-prayer").innerHTML = prayer.english;
+                    document.getElementById("hebrew-prayer").innerHTML = prayer.hebrew;
+                })
+                .catch(error => {
+                    console.error("Error fetching the Hebrew date:", error);
+                    document.getElementById("date").innerHTML = "Error fetching the Hebrew date.";
+                });
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+        }
+
+        window.onload = function() {
+            fetchHebrewDate();
+        };
+    </script>
+</body>
+</html>
