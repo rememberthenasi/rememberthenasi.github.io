@@ -150,7 +150,7 @@
     <h1 class="dark-mode-toggle-container">Remember The Nasi!</h1>
     <p id="date">Loading Hebrew date...</p>
 
-    <div class="section-title">Nasi Prayer</div>
+    <div class="section-title">Today's Nasi</div>
     <table>
         <thead>
             <tr>
@@ -160,7 +160,7 @@
         </thead>
         <tbody>
             <tr>
-                <td id="english-nasi">Loading Nasi prayer...</td>
+                <td id="english-nasi">Loading the Nasi...</td>
                 <td id="hebrew-nasi" class="hebrew">טוען תפילה...</td>
             </tr>
         </tbody>
@@ -204,7 +204,7 @@
                         document.getElementById("date").innerHTML = "Displaying the Nasi and Yehi Ratzon for: " + hebrewDate;
                         fetchPrayer(dayMonth, 'nasi.json', 'english-nasi', 'hebrew-nasi');
                     } else {
-                        document.getElementById("date").innerHTML = "The Nasi is read during the first 14 days of Nissan. As we are not currently in that period, there is no Nasi for today.";
+                        document.getElementById("date").innerHTML = "The Nasi is read during the first 14 days of Nissan. <br> As we are not currently in that period, there is no Nasi read today.";
                     }
 
                     fetchPrayer(dayMonth, 'yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
@@ -229,7 +229,7 @@
                 .then(response => response.json())
                 .then(data => {
                     const prayer = data[dayMonth] || {
-                        english: "No prayer available for today.",
+                        english: "No Nasi reading today.",
                         hebrew: "אין תפילה זמינה להיום."
                     };
                     document.getElementById(englishElementId).innerHTML = prayer.english;
