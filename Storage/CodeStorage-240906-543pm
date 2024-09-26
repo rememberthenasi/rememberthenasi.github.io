@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remember The Nasi!</title>
+    <link rel="icon" href="fav    git add index.html favicon.icoicon.ico" type="image/x-icon">
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-top: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #ff0000;
+            margin-top: 20px;
+        }
+
+        p#date {
+            text-align: center;
+            font-size: 1.2em;
+            color: #2980b9;
+        }
+
+        table {
+            margin: 20px auto;
+            width: 80%;
+            border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            table-layout: fixed;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #2980b9;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        td {
+            font-size: 1.1em;
+        }
+
+        .hebrew {
+            direction: rtl;
+            font-family: 'David Libre', serif;
+        }
+
+        td#hebrew-prayer, td#hebrew-yehiRatzon {
+            font-size: 1.3em;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 1.4em;
+        }
+
+        /* Button Style */
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .link-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .link-button:hover {
+            background-color: #1a5276;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #2c3e50;
+            color: #f1f1f1;
+        }
+
+        h1.dark-mode, h2.dark-mode {
+            color: #f4f7f8;
+        }
+
+        p#date.dark-mode {
+            color: #f7f7f7;
+        }
+
+        table.dark-mode {
+            background-color: #2c3e50;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        th.dark-mode {
+            background-color: #0b2d3c;
+        }
+
+        td.dark-mode {
+            color: #f1f1f1;
+        }
+
+        .link-button.dark-mode {
+            background-color: #1a5276;
+            color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .link-button.dark-mode:hover {
+            background-color: #34b3b6;
+        }
+
+        /* Dark Mode Toggle Switch */
+        .dark-mode-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #2980b9;
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .dark-mode-toggle:hover {
+            background-color: #1a5276;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="dark-mode-toggle-container">Remember The Nasi!</h1>
+    <h2>Note: Site in development - probably still buggy 🐛</h2>
+    <p id="date">Loading Hebrew date...</p>
+
+    <div class="section-title">Today's Nasi</div>
+    <table>
+        <thead>
+            <tr>
+                <th>English</th>
+                <th>Hebrew</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="english-nasi">Loading the Nasi...</td>
+                <td id="hebrew-nasi" class="hebrew">טוען תפילה...</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="section-title">Yehi Ratzon</div>
+    <table>
+        <thead>
+            <tr>
+                <th>English</th>
+                <th>Hebrew</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="english-yehiRatzon">Loading Yehi Ratzon...</td>
+                <td id="hebrew-yehiRatzon" class="hebrew">טוען תפילה...</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="button-container">
+        <a href="https://www.chabad.org/library/article_cdo/aid/495714/jewish/The-Nasi.htm" class="link-button" target="_blank">Forgot a day?<br> Click to view all days of the Nasi on Chabad.org</a>
+    </div>
+
+    <button id="dark-mode-toggle" class="dark-mode-toggle">Toggle Dark Mode</button>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Fetch Hebrew Date from HebCal API
+            fetch("https://www.hebcal.com/converter?cfg=json&gy=" + new Date().getFullYear() + "&gm=" + (new Date().getMonth() + 1) + "&gd=" + new Date().getDate() + "&g2h=1")
+                .then(response => response.json())
+                .then(data => {
+                    const hebrewDate = data.hebrew;
+                    const day = data.hd;
+                    const month = data.hm;
+                    const dayMonth = day + " " + month;
+                    
+                    // Check if the date falls within the first 14 days of Nissan
+                    if (month === "Nisan" && day >= 1 && day <= 14) {
+                        document.getElementById("date").innerHTML = "Displaying the Nasi and Yehi Ratzon for: " + hebrewDate;
+                        fetchPrayer(dayMonth, 'nasi.json', 'english-nasi', 'hebrew-nasi');
+                    } else {
+                        document.getElementById("date").innerHTML = "The Nasi is read during the first 14 days of Nissan. <br> As we are not currently in that period, there is no Nasi read today.";
+                    }
+
+                    fetchPrayer(dayMonth, 'yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
+                })
+                .catch(error => {
+                    console.error("Error fetching Hebrew date:", error);
+                    document.getElementById("date").innerHTML = "Error loading Hebrew date.";
+                });
+
+            // Dark Mode Toggle
+            const toggleButton = document.getElementById("dark-mode-toggle");
+            toggleButton.addEventListener("click", function() {
+                document.body.classList.toggle("dark-mode");
+                document.querySelectorAll("h1, h2, p#date, table, th, td, .link-button").forEach(el => {
+                    el.classList.toggle("dark-mode");
+                });
+            });
+        });
+
+        function fetchPrayer(dayMonth, fileName, englishElementId, hebrewElementId) {
+            fetch(fileName)
+                .then(response => response.json())
+                .then(data => {
+                    const prayer = data[dayMonth] || {
+                        english: "No Nasi reading today.",
+                        hebrew: "אין תפילה זמינה להיום."
+                    };
+                    document.getElementById(englishElementId).innerHTML = prayer.english;
+                    document.getElementById(hebrewElementId).innerHTML = prayer.hebrew;
+                })
+                .catch(error => {
+                    console.error("Error loading prayer data:", error);
+                    document.getElementById(englishElementId).innerHTML = "Error loading prayer.";
+                    document.getElementById(hebrewElementId).innerHTML = "שגיאה בטעינת תפילה.";
+                });
+        }
+    </script>
+</body>
+</html>

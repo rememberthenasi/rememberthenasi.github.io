@@ -3,10 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remember The Nasi!</title>
-    <link rel="icon" href="fav    git add index.html favicon.icoicon.ico" type="image/x-icon">
+    <title>Hebrew Prayer Display</title>
     <style>
-        /* Base Styles */
+    /* Flexbox alignment for Hebrew date and Dark Mode button */
+    .header-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+        width: 100%;
+        flex-direction: column; /* Stack date and button vertically */
+    }
+
+    /* Ensure the dark mode button is centered */
+    .button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    p#date, p#dateonly {
+        margin: 0;
+        font-size: 1.2em;
+        text-align: center;
+        color: #2980b9;
+        padding-bottom: 10px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        h1, h2 {
+            font-size: 1.5em;
+        }
+
+        table {
+            width: 95%;
+        }
+
+        th, td {
+            padding: 10px;
+        }
+
+        .link-button {
+            font-size: 1em;
+            padding: 8px 16px;
+        }
+
+        .section-title {
+            font-size: 1.2em;
+        }
+    }
+
+    @media (max-width: 480px) {
+        h1, h2 {
+            font-size: 1.3em;
+        }
+
+        p#date, p#dateonly {
+            font-size: 1em;
+        }
+
+        th, td {
+            font-size: 0.9em;
+        }
+
+        .link-button {
+            font-size: 0.9em;
+            padding: 6px 12px;
+        }
+
+        .section-title {
+            font-size: 1em;
+        }
+    }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f4f9;
@@ -16,22 +86,10 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        h1 {
+        h1, h2 {
             text-align: center;
             color: #2c3e50;
             margin-top: 20px;
-        }
-
-        h2 {
-            text-align: center;
-            color: #ff0000;
-            margin-top: 20px;
-        }
-
-        p#date {
-            text-align: center;
-            font-size: 1.2em;
-            color: #2980b9;
         }
 
         table {
@@ -75,11 +133,6 @@
         }
 
         /* Button Style */
-        .button-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-
         .link-button {
             display: inline-block;
             padding: 10px 20px;
@@ -107,7 +160,7 @@
             color: #f4f7f8;
         }
 
-        p#date.dark-mode {
+        p#date.dark-mode, p#dateonly.dark-mode {
             color: #f7f7f7;
         }
 
@@ -136,9 +189,6 @@
 
         /* Dark Mode Toggle Switch */
         .dark-mode-toggle {
-            position: absolute;
-            top: 10px;
-            right: 10px;
             background-color: #2980b9;
             border: none;
             color: white;
@@ -154,11 +204,17 @@
     </style>
 </head>
 <body>
-    <h1 class="dark-mode-toggle-container">Remember The Nasi!</h1>
-    <h2>Note: Site in development - probably still buggy 🐛</h2>
-    <p id="date">Loading Hebrew date...</p>
+    <h1>Remember The Nasi!</h1>
 
-    <div class="section-title">Today's Nasi</div>
+    <div class="header-container">
+        <!-- Hebrew date with logic -->
+        <p id="date">Loading Hebrew date...</p>
+<br>
+        <!-- Dark mode toggle button -->
+        <button id="dark-mode-toggle" class="dark-mode-toggle">Toggle Dark Mode</button>
+    </div>
+
+    <div class="section-title">Nasi Prayer</div>
     <table>
         <thead>
             <tr>
@@ -168,7 +224,7 @@
         </thead>
         <tbody>
             <tr>
-                <td id="english-nasi">Loading the Nasi...</td>
+                <td id="english-nasi">Loading Nasi prayer...</td>
                 <td id="hebrew-nasi" class="hebrew">טוען תפילה...</td>
             </tr>
         </tbody>
@@ -189,12 +245,10 @@
             </tr>
         </tbody>
     </table>
-
+<br>
     <div class="button-container">
-        <a href="https://www.chabad.org/library/article_cdo/aid/495714/jewish/The-Nasi.htm" class="link-button" target="_blank">Forgot a day?<br> Click to view all days of the Nasi on Chabad.org</a>
+        <a href="https://www.chabad.org/library/article_cdo/aid/495714/jewish/The-Nasi.htm" class="link-button" target="_blank">Forgot a day? Click to view all days of the Nasi on Chabad.org</a>
     </div>
-
-    <button id="dark-mode-toggle" class="dark-mode-toggle">Toggle Dark Mode</button>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -206,49 +260,70 @@
                     const day = data.hd;
                     const month = data.hm;
                     const dayMonth = day + " " + month;
-                    
+
                     // Check if the date falls within the first 14 days of Nissan
                     if (month === "Nisan" && day >= 1 && day <= 14) {
                         document.getElementById("date").innerHTML = "Displaying the Nasi and Yehi Ratzon for: " + hebrewDate;
                         fetchPrayer(dayMonth, 'nasi.json', 'english-nasi', 'hebrew-nasi');
                     } else {
-                        document.getElementById("date").innerHTML = "The Nasi is read during the first 14 days of Nissan. <br> As we are not currently in that period, there is no Nasi read today.";
+                        document.getElementById("date").innerHTML = "The Nasi is read during the first 14 days of Nissan. <br> As we are not currently in that period, there is no Nasi read today. <br> Today's Hebrew date is: " + hebrewDate;
                     }
 
+                    // Fetch Nasi and Yehi Ratzon prayers based on Hebrew date
+                    fetchPrayer(dayMonth, 'nasi.json', 'english-nasi', 'hebrew-nasi');
                     fetchPrayer(dayMonth, 'yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
                 })
                 .catch(error => {
                     console.error("Error fetching Hebrew date:", error);
                     document.getElementById("date").innerHTML = "Error loading Hebrew date.";
+                    document.getElementById("dateonly").innerHTML = "Error loading Hebrew date.";
                 });
 
             // Dark Mode Toggle
             const toggleButton = document.getElementById("dark-mode-toggle");
-            toggleButton.addEventListener("click", function() {
-                document.body.classList.toggle("dark-mode");
-                document.querySelectorAll("h1, h2, p#date, table, th, td, .link-button").forEach(el => {
-                    el.classList.toggle("dark-mode");
-                });
-            });
-        });
+            if (localStorage.getItem("dark-mode") === "enabled") {
+                enableDarkMode();
+            }
 
-        function fetchPrayer(dayMonth, fileName, englishElementId, hebrewElementId) {
-            fetch(fileName)
-                .then(response => response.json())
-                .then(data => {
-                    const prayer = data[dayMonth] || {
-                        english: "No Nasi reading today.",
-                        hebrew: "אין תפילה זמינה להיום."
-                    };
-                    document.getElementById(englishElementId).innerHTML = prayer.english;
-                    document.getElementById(hebrewElementId).innerHTML = prayer.hebrew;
-                })
-                .catch(error => {
-                    console.error("Error loading prayer data:", error);
-                    document.getElementById(englishElementId).innerHTML = "Error loading prayer.";
-                    document.getElementById(hebrewElementId).innerHTML = "שגיאה בטעינת תפילה.";
+            toggleButton.addEventListener("click", function() {
+                if (localStorage.getItem("dark-mode") !== "enabled") {
+                    enableDarkMode();
+                } else {
+                    disableDarkMode();
+                }
+            });
+
+            function enableDarkMode() {
+                document.body.classList.add("dark-mode");
+                document.querySelectorAll("h1, h2, p#date, p#dateonly, table, th, td, .link-button").forEach(el => {
+                    el.classList.add("dark-mode");
                 });
-        }
+                localStorage.setItem("dark-mode", "enabled");
+            }
+
+            function disableDarkMode() {
+                document.body.classList.remove("dark-mode");
+                document.querySelectorAll("h1, h2, p#date, p#dateonly, table, th, td, .link-button").forEach(el => {
+                    el.classList.remove("dark-mode");
+                });
+                localStorage.setItem("dark-mode", "disabled");
+            }
+
+            function fetchPrayer(dayMonth, jsonFile, englishElementId, hebrewElementId) {
+                fetch(jsonFile)
+                    .then(response => response.json())
+                    .then(data => {
+                        const prayer = data[dayMonth];
+                        document.getElementById(englishElementId).innerHTML = prayer.english || "No prayer available";
+                        document.getElementById(hebrewElementId).innerHTML = prayer.hebrew || "אין תפילה זמינה";
+                    })
+                    .catch(error => {
+                        console.error("Error fetching prayer:", error);
+                        document.getElementById(englishElementId).innerHTML = "No prayer available";
+                        document.getElementById(hebrewElementId).innerHTML = "אין תפילה זמינה";
+                    });
+            }
+        });
     </script>
 </body>
 </html>
