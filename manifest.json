@@ -1,6 +1,6 @@
 {
   "name": "Remember The Nasi",
-  "short_name": "NasiReminder",
+  "short_name": "Daily Nasi",
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#ffffff",

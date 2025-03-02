@@ -1,4 +1,4 @@
-const CACHE_NAME = 'prayer-display-cache-v1';
+const CACHE_NAME = 'nasi-cache-v1';
 const urlsToCache = [
     '/',
     '/index.html',
