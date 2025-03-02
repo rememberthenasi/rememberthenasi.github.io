@@ -81,11 +81,11 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f9;
+            background: linear-gradient(to right, #f4f4f9, #e0eafc); /* Light mode gradient background */
             color: #333;
             margin: 0;
             padding: 0;
-            transition: background-color 0.3s, color 0.3s;
+            transition: background 0.3s, color 0.3s;
         }
 
         h1, h2 {
@@ -97,10 +97,11 @@
         table {
             margin: 20px auto;
             width: 80%;
+            max-width: 800px; /* Set a maximum width for the table */
             border-collapse: collapse;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             background-color: #fff;
-            table-layout: fixed;
+            table-layout: auto; /* Change to auto layout */
         }
 
         th, td {
@@ -155,7 +156,7 @@
 
         /* Dark Mode Styles */
         body.dark-mode {
-            background-color: #2c3e50;
+            background: linear-gradient(to right, #2c3e50, #2d4b69); /* Dark mode gradient background */
             color: #f1f1f1;
         }
 
@@ -190,12 +191,22 @@
             background-color: #34b3b6;
         }
 
+        /* Dark Mode Link Styles */
+        a.dark-mode {
+            color: #34b3b6;
+        }
+
+        a.dark-mode:hover {
+            color: #1abc9c;
+        }
+
         /* Dark Mode Toggle Switch */
         .dark-mode-toggle {
             background-color: #2980b9;
             border: none;
             color: white;
-            padding: 10px;
+            padding: 12px 15px; /* Increase padding */
+            font-size: 1em; /* Increase font size */
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
@@ -249,7 +260,7 @@
         </tbody>
     </table>
 <br>
-<p><center><i>Forgot a day? <br> Click to view all of the days of the Nasi on <a href="https://www.chabad.org/library/article_cdo/aid/495714/jewish/The-Nasi.htm">Chabad.org</a>.</center></i></p>
+<p><center><i>Forgot a day? <br> Click to view all of the days of the Nasi on <a href="https://www.chabad.org/library/article_cdo/aid/495714/jewish/The-Nasi.htm" class="dark-mode-link">Chabad.org</a>.</center></i></p>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Fetch Hebrew Date from HebCal API
@@ -295,7 +306,7 @@
 
             function enableDarkMode() {
                 document.body.classList.add("dark-mode");
-                document.querySelectorAll("h1, h2, p#date, p#dateonly, table, th, td, .link-button").forEach(el => {
+                document.querySelectorAll("h1, h2, p#date, p#dateonly, table, th, td, .link-button, a").forEach(el => {
                     el.classList.add("dark-mode");
                 });
                 localStorage.setItem("dark-mode", "enabled");
@@ -303,7 +314,7 @@
 
             function disableDarkMode() {
                 document.body.classList.remove("dark-mode");
-                document.querySelectorAll("h1, h2, p#date, p#dateonly, table, th, td, .link-button").forEach(el => {
+                document.querySelectorAll("h1, h2, p#date, p#dateonly, table, th, td, .link-button, a").forEach(el => {
                     el.classList.remove("dark-mode");
                 });
                 localStorage.setItem("dark-mode", "disabled");
