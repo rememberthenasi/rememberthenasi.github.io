@@ -249,8 +249,9 @@
         </tbody>
     </table>
 <br>
+<p><center><i>Forgot a day? <br> Click below to view all of the days of the Nasi on <a href="https://www.chabad.org/library/article_cdo/aid/495714/jewish/The-Nasi.htm">Chabad.org</a>.</center></i></p>
     <div class="button-container">
-        <a href="https://www.chabad.org/library/article_cdo/aid/495714/jewish/The-Nasi.htm" class="link-button" target="_blank">Forgot a day? <br> Click to view all days of the Nasi on Chabad.org</a>
+        <a href="https://www.chabad.org/library/article_cdo/aid/495714/jewish/The-Nasi.htm" class="link-button" target="_blank"> View all days of the Nasi on Chabad.org</a>
     </div>
 
     <script>
@@ -264,8 +265,8 @@
                     const month = data.hm;
                     const dayMonth = day + " " + month;
 
-                    // Check if the date falls within the first 14 days of Nissan
-                    if (month === "Nisan" && day >= 1 && day <= 14) {
+                    // Check if the date falls within the first 13 days of Nissan
+                    if (month === "Nisan" && day >= 1 && day <= 13) {
                         document.getElementById("date").innerHTML = "Displaying the Nasi and Yehi Ratzon for: " + hebrewDate;
                         fetchPrayer(dayMonth, 'nasi.json', 'english-nasi', 'hebrew-nasi');
                     } else {
