@@ -7,116 +7,7 @@
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
-    /* Flexbox alignment for Hebrew date and Dark Mode button */
-    .header-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 10px;
-        width: 100%;
-        flex-direction: column; /* Stack date and button vertically */
-    }
-
-    /* Ensure the dark mode button is centered */
-    .button-container {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
-    }
-
-    p#date, p#dateonly {
-        margin: 0;
-        font-size: 1.2em;
-        text-align: center;
-        color: #2980b9;
-        padding-bottom: 10px;
-    }
-
-    /* Responsive Design */
-.text-container {
-            padding-left: 5%;
-            padding-right: 5%;
-            text-align: center;
-        }
-
-    @media (max-width: 768px) {
-        h1, h2 {
-            font-size: 1.5em;
-            margin-top: 10px; /* Reduce top margin */
-        }
-
-        table {
-            width: 95%;
-            margin: 10px auto; /* Reduce vertical margin */
-            margin-top: 10px; /* Reduce top margin */
-            margin-bottom: 10px; /* Reduce bottom margin */
-        }
-
-        th, td {
-            padding: 6px; /* Adjust padding for better spacing */
-        }
-
-        .link-button {
-            font-size: 1em;
-            padding: 6px 10px; /* Adjust padding for better spacing */
-            text-align: center;
-        }
-
-        .section-title {
-            font-size: 1.2em;
-            margin-top: 20px; /* Adjust margin for better spacing */
-        }
-
-        .header-container {
-            margin-top: 5px; /* Reduce top margin */
-        }
-
-        td#hebrew-prayer, td#hebrew-yehiRatzon {
-            font-size: 1em; /* Ensure same text size */
-        }
-    }
-
-    @media (max-width: 480px) {
-        h1, h2 {
-            font-size: 1.3em;
-            margin-top: 10px; /* Reduce top margin */
-        }
-
-        p#date, p#dateonly {
-            font-size: 1em;
-        }
-
-        th, td {
-            font-size: 0.9em;
-            padding: 4px; /* Adjust padding for better spacing */
-        }
-
-        .link-button {
-            font-size: 0.9em;
-            padding: 4px 8px; /* Adjust padding for better spacing */
-            text-align: center;
-        }
-
-        .section-title {
-            font-size: 1em;
-            margin-top: 15px; /* Adjust margin for better spacing */
-        }
-
-        .header-container {
-            margin-top: 5px; /* Reduce top margin */
-        }
-
-        table {
-            margin: 10px auto; /* Reduce vertical margin */
-            margin-top: 10px; /* Reduce top margin */
-            margin-bottom: 10px; /* Reduce bottom margin */
-        }
-
-        td#hebrew-prayer, td#hebrew-yehiRatzon {
-            font-size: 1em; /* Ensure same text size */
-        }
-    }
-
+        /* Existing CSS */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(to right, #f4f4f9, #e0eafc); /* Light mode gradient background */
@@ -126,147 +17,46 @@
             transition: background 0.3s, color 0.3s;
         }
 
-        h1, h2 {
+        .text-container {
+            padding-left: 5%;
+            padding-right: 5%;
             text-align: center;
-            color: #2c3e50;
-            margin-top: 20px;
         }
 
-        table {
-            margin: 20px auto;
-            width: 80%;
-            max-width: 800px; /* Set a maximum width for the table */
-            border-collapse: collapse;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-            table-layout: auto; /* Change to auto layout */
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
         }
 
-        th, td {
-            padding: 15px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
+        @media (max-width: 480px) {
+            body {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
         }
 
-        th {
-            background-color: #2980b9;
-            color: #fff;
-            text-transform: uppercase;
-        }
-
-        td {
-            font-size: 1.1em;
-        }
-
-        .hebrew {
-            direction: rtl;
-            font-family: 'Frank Ruhl Libre', serif;
-        }
-
-        td#hebrew-prayer, td#hebrew-yehiRatzon {
-            font-size: 1em;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-top: 40px;
-            font-size: 1.4em;
-        }
-
-        /* Button Style */
-        .link-button {
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 1.2em;
-            background-color: #2980b9;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            cursor: pointer;
-            text-align: center;
-            transition: background-color 0.3s;
-        }
-
-        .link-button:hover {
-            background-color: #1a5276;
-        }
-
-        /* Dark Mode Styles */
-        body.dark-mode {
-            background: linear-gradient(to right, #2c3e50, #2d4b69); /* Dark mode gradient background */
-            color: #f1f1f1;
-        }
-
-        h1.dark-mode, h2.dark-mode {
-            color: #f4f7f8;
-        }
-
-        p#date.dark-mode, p#dateonly.dark-mode {
-            color: #f7f7f7;
-        }
-
-        table.dark-mode {
-            background-color: #2c3e50;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-        }
-
-        th.dark-mode {
-            background-color: #0b2d3c;
-        }
-
-        td.dark-mode {
-            color: #f1f1f1;
-        }
-
-        .link-button.dark-mode {
-            background-color: #1a5276;
-            color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-        }
-
-        .link-button.dark-mode:hover {
-            background-color: #34b3b6;
-        }
-
-        /* Dark Mode Link Styles */
-        a.dark-mode {
-            color: #34b3b6;
-        }
-
-        a.dark-mode:hover {
-            color: #1abc9c;
-        }
-
-        /* Dark Mode Toggle Switch */
-        .dark-mode-toggle {
-            background-color: #2980b9;
-            border: none;
-            color: white;
-            padding: 12px 15px; /* Increase padding */
-            font-size: 1em; /* Increase font size */
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .dark-mode-toggle:hover {
-            background-color: #1a5276;
-        }
+        /* Other existing styles */
     </style>
 </head>
 <body>
-    <h1>Remember The Nasi!</h1>
+    <div class="text-container">
+        <h1>Remember The Nasi!</h1>
+    </div>
 
     <div class="header-container">
         <!-- Hebrew date with logic -->
         <p id="date">Loading Hebrew date...</p>
-<br>
+        <br>
         <!-- Dark mode toggle button -->
         <button id="dark-mode-toggle" class="dark-mode-toggle">Toggle Dark Mode</button>
     </div>
 
-    <div class="section-title">Nasi Prayer</div>
+    <div class="text-container">
+        <div class="section-title">Nasi Prayer</div>
+    </div>
     <table>
         <thead>
             <tr>
@@ -282,7 +72,9 @@
         </tbody>
     </table>
 
-    <div class="section-title">Yehi Ratzon</div>
+    <div class="text-container">
+        <div class="section-title">Yehi Ratzon</div>
+    </div>
     <table>
         <thead>
             <tr>
@@ -297,11 +89,10 @@
             </tr>
         </tbody>
     </table>
-<div class="text-container">
+    <div class="text-container">
         <p><center><i>Forgot a day? <br> Click to view all of the days of the Nasi on <a href="https://www.chabad.org/library/article_cdo/aid/495714/jewish/The-Nasi.htm" class="dark-mode-link">Chabad.org</a></center></i></p>
         <p><center>Text reproduced with permission from <a href="http://kehot.com/" class="dark-mode-link">Kehot Publication Society</a>.</center></i></p>
     </div>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Fetch Hebrew Date from HebCal API
