@@ -33,6 +33,19 @@
     }
 
     /* Responsive Design */
+    body {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+.bottom-text {
+  font-size: 0.8em;
+  padding: 0 2% auto;
+  text-align: center;
+  margin: 0% auto;
+  padding-left: 5%;
+  padding-right: 5%;
+  max-width: 600px; /* optional: to limit the paragraph width */
+}
     @media (max-width: 768px) {
         h1, h2 {
             font-size: 1.5em;
@@ -292,7 +305,19 @@
         </tbody>
     </table>
 <br>
-<p><center><i>Forgot a day? <br> Click to view all of the days of the Nasi on <a href="https://www.chabad.org/library/article_cdo/aid/495714/jewish/The-Nasi.htm" class="dark-mode-link">Chabad.org</a>.</center></i></p>
+<p class="bottom-text">
+<i>Forgot a day? <br> Click to view all of the days on <a href="https://www.chabad.org/library/article_cdo/aid/495714/jewish/The-Nasi.htm" class="dark-mode-link">Chabad.org</a>.</center></i>
+</p>
+<br>
+<p class="bottom-text">
+Text reproduced with permission from
+<br>
+<a href="http://kehot.com/" class="dark-mode-link">Kehot Publication Society</a>.</center></i>
+</p>
+<br>
+<p class="bottom-text">
+<i>Site created by Menachem Spielman<br>Contact: nasi@mspielman.com</i>
+</p>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Fetch Hebrew Date from HebCal API
@@ -304,17 +329,19 @@
                     const month = data.hm;
                     const dayMonth = day + " " + month;
 
+                    console.log("Hebrew Date:", hebrewDate);
+                    console.log("Day:", day);
+                    console.log("Month:", month);
+                    console.log("Day and Month:", dayMonth);
+
                     // Check if the date falls within the first 13 days of Nissan
                     if (month === "Nisan" && day >= 1 && day <= 13) {
                         document.getElementById("date").innerHTML = "Displaying the Nasi and Yehi Ratzon for: " + hebrewDate;
                         fetchPrayer(dayMonth, 'nasi.json', 'english-nasi', 'hebrew-nasi');
+                        fetchPrayer(dayMonth, 'yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
                     } else {
-                        document.getElementById("date").innerHTML = "The Nasi is read during the first 14 days of Nissan. <br> As we are not currently in that period, there is no Nasi read today. <br> Today's Hebrew date is: " + hebrewDate;
+                        document.getElementById("date").innerHTML = "The Nasi is read during the first 13 days of Nissan. <br> As we are not currently in that period, there is no Nasi read today. <br> Today's Hebrew date is: " + hebrewDate;
                     }
-
-                    // Fetch Nasi and Yehi Ratzon prayers based on Hebrew date
-                    fetchPrayer(dayMonth, 'nasi.json', 'english-nasi', 'hebrew-nasi');
-                    fetchPrayer(dayMonth, 'yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
                 })
                 .catch(error => {
                     console.error("Error fetching Hebrew date:", error);
@@ -357,6 +384,7 @@
                     .then(response => response.json())
                     .then(data => {
                         const prayer = data[dayMonth];
+                        console.log("Fetched prayer for", dayMonth, "from", jsonFile, ":", prayer);
                         document.getElementById(englishElementId).innerHTML = prayer.english || "No prayer available";
                         document.getElementById(hebrewElementId).innerHTML = prayer.hebrew || "אין תפילה זמינה";
                     })
