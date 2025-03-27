@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hebrew Prayer Display</title>
+    <title>Daily Nasi</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
@@ -12,7 +12,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 10px;
         width: 100%;
         flex-direction: column; /* Stack date and button vertically */
     }
@@ -21,7 +20,7 @@
     .button-container {
         display: flex;
         justify-content: center;
-        margin-top: 20px;
+        margin-top: 10%;
     }
 
     p#date, p#dateonly {
@@ -29,11 +28,11 @@
         font-size: 1.2em;
         text-align: center;
         color: #2980b9;
-        padding-bottom: 10px;
+        padding-bottom: 2%;
     }
 
     /* Responsive Design */
-    body {
+body {
     padding-left: 5%;
     padding-right: 5%;
 }
@@ -176,7 +175,7 @@
 
         .section-title {
             text-align: center;
-            margin-top: 40px;
+            margin-top: 20px;
             font-size: 1.4em;
         }
 
@@ -268,12 +267,12 @@
     <div class="header-container">
         <!-- Hebrew date with logic -->
         <p id="date">Loading Hebrew date...</p>
-<br>
+
         <!-- Dark mode toggle button -->
         <button id="dark-mode-toggle" class="dark-mode-toggle">Toggle Dark Mode</button>
     </div>
 
-    <div class="section-title">Nasi Prayer</div>
+    <div class="section-title">Nasi</div>
     <table>
         <thead>
             <tr>
@@ -304,7 +303,7 @@
             </tr>
         </tbody>
     </table>
-<br>
+
 <p class="bottom-text">
 <i>Forgot a day? <br> Click to view all of the days on <a href="https://www.chabad.org/library/article_cdo/aid/495714/jewish/The-Nasi.htm" class="dark-mode-link">Chabad.org</a>.</center></i>
 </p>
@@ -340,7 +339,7 @@ Text reproduced with permission from
                         fetchPrayer(dayMonth, 'nasi.json', 'english-nasi', 'hebrew-nasi');
                         fetchPrayer(dayMonth, 'yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
                     } else {
-                        document.getElementById("date").innerHTML = "The Nasi is read during the first 13 days of Nissan. <br> As we are not currently in that period, there is no Nasi read today. <br> Today's Hebrew date is: " + hebrewDate;
+                        document.getElementById("date").innerHTML = "The Nasi is read during the first 13 days of Nissan. <br> There is no Nasi read today. <br> Today's Hebrew date is: " + hebrewDate;
                     }
                 })
                 .catch(error => {
