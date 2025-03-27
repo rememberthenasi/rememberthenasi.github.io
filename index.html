@@ -317,6 +317,7 @@ Text reproduced with permission from
 <p class="bottom-text">
 <i>Site created by Menachem Spielman<br>Contact: nasi@mspielman.com</i>
 </p>
+<br>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Fetch Hebrew Date from HebCal API
@@ -387,11 +388,6 @@ Text reproduced with permission from
                         document.getElementById(englishElementId).innerHTML = prayer.english || "No prayer available";
                         document.getElementById(hebrewElementId).innerHTML = prayer.hebrew || "אין תפילה זמינה";
                     })
-                    .catch(error => {
-                        console.error("Error fetching prayer:", error);
-                        document.getElementById(englishElementId).innerHTML = "No prayer available";
-                        document.getElementById(hebrewElementId).innerHTML = "אין תפילה זמינה";
-                    });
             }
         });
 
