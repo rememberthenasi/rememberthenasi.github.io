@@ -36,6 +36,33 @@
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
+
+    /* Logo header style*/
+    .logo-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 2%;
+}
+
+.site-logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+/* Responsive tweaks */
+@media (max-width: 480px) {
+    .site-logo {
+        width: 40px;
+        height: 40px;
+    }
+
+    .logo-title-container {
+        gap: 10px;
+        flex-direction: column;
+    }
+}
     /* Flexbox alignment for Hebrew date and Dark Mode button */
     .header-container {
         display: flex;
@@ -291,7 +318,12 @@ body {
     </style>
 </head>
 <body>
-    <h1>Remember The Nasi!</h1>
+    <!-- Logo Display -->
+    <div class="logo-container">
+        <img src="icons/icon-192x192.png" alt="Site Logo" class="site-logo">
+    </div>
+    <h1>Remember The Nasi!</h1>    
+    </div>    
 
     <div class="header-container">
         <!-- Hebrew date with logic -->
