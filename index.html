@@ -395,7 +395,7 @@ Text reproduced with permission from
 
                     // Check if the date falls within the first 13 days of Nissan
                     if (month === "Nisan" && day >= 1 && day <= 13) {
-                        document.getElementById("date").innerHTML = "Displaying the Nasi and Yehi Ratzon for: " + hebrewDate;
+                        document.getElementById("date").innerHTML = "Displaying the Nasi and Yehi Ratzon for: <br> " + hebrewDate;
                         fetchPrayer(dayMonth, 'nasi.json', 'english-nasi', 'hebrew-nasi');
                         fetchPrayer(dayMonth, 'yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
                     } else {
