@@ -56,13 +56,13 @@ h1, h2 {
   align-items: center;
   gap: 5px;
   margin-top: 1%; /* Adjusted from 10% to a fixed value */
-  margin-right: 1%;
-  margin-left: 1%;
   margin-bottom: 0.5%;
 }
 .button-container button {
   width: auto;            /* Ensures the button width is determined by its content */
   margin-bottom: 0.2%;
+  margin-right: 0.2%;
+  margin-left: 0.2%;
 }
 
 /* Text Elements */
