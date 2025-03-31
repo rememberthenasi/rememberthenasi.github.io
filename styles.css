@@ -225,15 +225,19 @@ a.dark-mode:hover {
     margin-top: 5px;
   }
   /* Mobile adjustments for button container */
-  .button-container {
-    width: 100%;               /* Force the container to span the full width */
-    flex-direction: row;       /* Arrange buttons side by side */
-    justify-content: space-around; /* Evenly space the buttons */
-    gap: 5px;                  /* Maintain a gap between buttons */
-  }
-  
-  .button-container button {
-    margin: 0;                 /* Remove extra margins */
-    width: 35%;                /* Fixed width on mobile */
-  }
+  @media (max-width: 768px) {
+    /* ...other mobile styles... */
+    
+    .button-container {
+      width: 100%;               /* Force the container to span the full width */
+      flex-direction: row;       /* Arrange buttons side by side */
+      justify-content: space-evenly; /* Evenly space the buttons */
+      gap: 0.5%;                  /* Maintain a gap between buttons */
+    }
+    
+    .button-container button {
+      margin: 0;                 /* Remove extra margins */
+      width: 35%;                /* Fixed width on mobile */
+    }
+  }  
 }
