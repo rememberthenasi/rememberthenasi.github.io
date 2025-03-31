@@ -231,7 +231,7 @@ a.dark-mode:hover {
     .button-container {
       width: 100%;               /* Force the container to span the full width */
       flex-direction: row;       /* Arrange buttons side by side */
-      justify-content: space-evenly; /* Evenly space the buttons */
+      justify-content: space-around; /* Evenly space the buttons */
       gap: 0.5%;                  /* Maintain a gap between buttons */
     }
     
