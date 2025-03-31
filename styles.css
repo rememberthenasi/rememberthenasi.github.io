@@ -224,13 +224,13 @@ a.dark-mode:hover {
   .header-container {
     margin-top: 5px;
   }
-  @media (max-width: 768px) {
-    .button-container {
-      flex-direction: row; /* Side by side on mobile */
-    }
-    .button-container button {
-      margin: 0;
-      width: 35%;
-    }
-  }  
+  /* Mobile adjustments for button container */
+  .button-container {
+    flex-direction: row; /* Side by side on mobile */
+    gap: 5px;           /* Ensure there's a gap between buttons */
+  }
+  .button-container button {
+    margin: 0;          /* Remove any extra margins */
+    width: 35%;         /* Fixed width on mobile */
+  }
 }
