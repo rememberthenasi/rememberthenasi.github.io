@@ -226,11 +226,14 @@ a.dark-mode:hover {
   }
   /* Mobile adjustments for button container */
   .button-container {
-    flex-direction: row; /* Side by side on mobile */
-    gap: 5px;           /* Ensure there's a gap between buttons */
+    width: 100%;               /* Force the container to span the full width */
+    flex-direction: row;       /* Arrange buttons side by side */
+    justify-content: space-around; /* Evenly space the buttons */
+    gap: 5px;                  /* Maintain a gap between buttons */
   }
+  
   .button-container button {
-    margin: 0;          /* Remove any extra margins */
-    width: 35%;         /* Fixed width on mobile */
+    margin: 0;                 /* Remove extra margins */
+    width: 35%;                /* Fixed width on mobile */
   }
 }
