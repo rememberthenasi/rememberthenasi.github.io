@@ -84,13 +84,18 @@
         <p id="date">Loading Hebrew date...</p>
 </div>
     
-    <div class="button-container">
-        <!-- Dark mode toggle button -->
-     <button id="dark-mode-toggle" class="dark-mode-toggle">Toggle Dark Mode</button>
-
-    <!-- Share Button -->
+<div class="button-group">
+    <button id="dark-mode-toggle" class="dark-mode-toggle">Dark Mode</button>
     <button id="share-button" class="dark-mode-toggle">Share the Nasi</button>
-</div>
+  </div>
+  
+  <div class="push-toggle-container">
+    <label class="switch">
+      <input type="checkbox" id="push-optin-toggle">
+      <span class="slider round"></span>
+    </label>
+    <span class="toggle-label">Nasi Reminder</span>
+  </div>  
 
     <div class="section-title">Nasi</div>
     <table>
@@ -139,6 +144,27 @@ Text reproduced with permission from
 <br>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // Push Notification Opt-in Logic
+            const pushToggle = document.getElementById("push-optin-toggle");
+
+if (pushToggle) {
+  OneSignalDeferred.push(function (OneSignal) {
+    OneSignal.isPushNotificationsEnabled(function (isEnabled) {
+      pushToggle.checked = isEnabled;
+    });
+
+    pushToggle.addEventListener("change", function () {
+      if (pushToggle.checked) {
+        OneSignal.showSlidedownPrompt();
+      } else {
+        OneSignal.setSubscription(false);
+      }
+    });
+  });
+} else {
+  console.warn("Push toggle element not found. Push opt-in toggle will not function.");
+}
+
             // Share Button functionality using the Web Share API
 const shareButton = document.getElementById("share-button");
 shareButton.addEventListener("click", async () => {

@@ -49,14 +49,99 @@ h1, h2 {
   margin-bottom: 10px; /* adjust the value as needed */
   padding-bottom: 0;
 }
+
 .button-container {
-  display: flex;
-  flex-direction: column; /* Default vertical stacking */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
   justify-content: center;
   align-items: center;
-  gap: 5px;
-  margin-top: 1%; /* Adjusted from 10% to a fixed value */
-  margin-bottom: 0.5%;
+  margin-top: 1rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Only style actual buttons (not everything) */
+.button-container button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  height: 48px;
+  border-radius: var(--border-radius);
+  background-color: var(--primary-color);
+  color: #fff;
+  font-size: 1em;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border: none;
+}
+
+.button-container button:hover {
+  background-color: var(--primary-hover);
+}
+
+.push-toggle-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1%;
+  padding-bottom: 1%;
+}
+
+.toggle-label {
+  font-weight: bold;
+  font-size: 0.95em;
+  color: var(--primary-color);
+  line-height: 1;
+  transform: translateY(1px);
+}
+
+body.dark-mode .toggle-label {
+  color: var(--dark-text);
+}
+
+/* Align two buttons side-by-side */
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.button-group button {
+  width: 150px;
+  padding: 10px 20px;
+  font-size: 1em;
+  height: 48px;
+  border-radius: var(--border-radius);
+  background-color: var(--primary-color);
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.button-group button:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Ensure dark mode colors apply */
+body.dark-mode .button-container > * {
+  background-color: var(--primary-hover);
+  color: #fff;
+}
+body.dark-mode .button-container > *:hover {
+  background-color: #34b3b6;
+}
+
+
+.button-container button {
+  margin: 0;                 /* Remove extra margins */
+  width: 35%;                /* Fixed width on mobile */
 }
 .button-container button {
   width: auto;            /* Ensures the button width is determined by its content */
@@ -192,6 +277,60 @@ a.dark-mode {
 a.dark-mode:hover {
   color: #1abc9c;
 }
+  
+  /* Actual Switch */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* Slider Style */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+  }
+  
+  .slider:before {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+  
+  /* When Checked */
+  input:checked + .slider {
+    background-color: #f84a07;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(26px);
+  }
+  
+  /* Optional Rounded Version */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
 
 /* Responsive Adjustments for Mobile */
 @media (max-width: 768px) {
@@ -224,20 +363,4 @@ a.dark-mode:hover {
   .header-container {
     margin-top: 5px;
   }
-  /* Mobile adjustments for button container */
-  @media (max-width: 768px) {
-    /* ...other mobile styles... */
-    
-    .button-container {
-      width: 100%;               /* Force the container to span the full width */
-      flex-direction: row;       /* Arrange buttons side by side */
-      justify-content: space-around; /* Evenly space the buttons */
-      gap: 0.5%;                  /* Maintain a gap between buttons */
-    }
-    
-    .button-container button {
-      margin: 0;                 /* Remove extra margins */
-      width: 35%;                /* Fixed width on mobile */
-    }
-  }  
 }
