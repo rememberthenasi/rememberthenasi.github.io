@@ -254,5 +254,15 @@ shareButton.addEventListener("click", async () => {
                 });
         }
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase());
+          const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
+      
+          if (isIOS && !isInStandaloneMode) {
+            alert("To get daily Nasi reminders on iPhone, add this site to your home screen.");
+          }
+        });
+      </script>      
 </body>
 </html>
