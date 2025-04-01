@@ -235,6 +235,13 @@ a.dark-mode:hover {
   .header-container {
     margin-top: 5px;
   }
+  /* Hover undo for mobile taps */
+  @media (hover: none) {
+    .link-button:hover,
+    .dark-mode-toggle:hover {
+      background-color: var(--primary-color);
+    }
+  }  
   /* Mobile adjustments for button container */
   @media (max-width: 768px) {
     /* ...other mobile styles... */

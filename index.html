@@ -323,6 +323,14 @@ shareButton.addEventListener("click", async () => {
                     console.log('ServiceWorker registration failed: ', error);
                 });
         }
+        document.addEventListener("DOMContentLoaded", function() {
+  // Paste this inside the existing function
+  document.querySelectorAll("button").forEach(button => {
+    button.addEventListener("touchend", () => {
+      button.blur();
+    });
+  });
+});
     </script>         
 </body>
 </html>
