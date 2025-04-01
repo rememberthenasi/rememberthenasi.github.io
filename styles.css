@@ -232,11 +232,16 @@ td {
   background-color: var(--primary-color);
   border: none;
   color: #fff;
-  padding: 12px 15px;
   font-size: 1em;
   border-radius: var(--border-radius);
   cursor: pointer;
   transition: background-color 0.3s;
+}
+.button-group button {
+  width: 150px;
+  padding: 10px 20px;
+  height: 48px;
+  font-size: 1em;
 }
 .dark-mode-toggle:hover {
   background-color: var(--primary-hover);
