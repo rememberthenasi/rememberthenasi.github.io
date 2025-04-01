@@ -3,7 +3,7 @@
   --primary-color: #0b3957;
   --primary-hover: #1a5278;
   --light-bg: #c7d7e6;
-  --dark-bg-end: #173551;
+  --dark-bg: #173551;
   --text-color: #333;
   --dark-text: #f1f1f1;
   --table-bg: #f9f7f5;
@@ -159,7 +159,7 @@ td {
 
 /* Dark Mode Styles */
 body.dark-mode {
-  background: linear-gradient(to right, var(--dark-bg-start), var(--dark-bg-end));
+  background-color: var(--dark-bg);
   color: var(--dark-text);
 }
 h1.dark-mode, h2.dark-mode {

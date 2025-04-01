@@ -45,31 +45,44 @@
     <link rel="stylesheet" href="styles.css">
 
 <!-- Push Notification Script-->
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(async function(OneSignal) {
-    await OneSignal.init({
-      appId: "d70dc600-03a1-459b-9ab9-9bc7a4fcc1d6",
-      safari_web_id: "web.onesignal.auto.68a78e72-ca6b-43d3-aa15-83c87cfb9ced",
-      notifyButton: {
-        enable: true, // Bell widget
-      },
-      promptOptions: {
-        slidedown: {
-          enabled: true,
-          actionMessage: "Would you like daily Nasi reminders?",
-          acceptButtonText: "Yes, please!",
-          cancelButtonText: "No thanks"
-        }
-      },
-      autoResubscribe: true,
-    });
 
-    // Actually trigger the permission prompt
-    OneSignal.showSlidedownPrompt();
-  });
-</script>
+<!-- Place this script tag in your HTML <head> or just before </body> -->
+    <script>
+        // Check if OneSignal isn't being blocked
+        if (typeof OneSignal !== "undefined") {
+          OneSignal.push(function() {
+            window.OneSignalDeferred = window.OneSignalDeferred || [];
+            OneSignalDeferred.push(async function(OneSignal) {
+              await OneSignal.init({
+                appId: "d70dc600-03a1-459b-9ab9-9bc7a4fcc1d6",
+                safari_web_id: "web.onesignal.auto.68a78e72-ca6b-43d3-aa15-83c87cfb9ced",
+                notifyButton: {
+                  enable: true,
+                },
+                promptOptions: {
+                  slidedown: {
+                    enabled: true,
+                    actionMessage: "Would you like daily Nasi reminders?",
+                    acceptButtonText: "Yes, please!",
+                    cancelButtonText: "No thanks"
+                  }
+                },
+                autoResubscribe: true,
+              });
+      
+              // Trigger the permission prompt
+              OneSignal.showSlidedownPrompt();
+            });
+          });
+        } else {
+          console.warn("OneSignal was blocked by the client.");
+          // Optional: fallback logic here, like showing a toast
+        }
+      </script>
+      
+      <!-- Load the OneSignal SDK -->
+      <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" async defer></script>
+      
 
 </head>
 
