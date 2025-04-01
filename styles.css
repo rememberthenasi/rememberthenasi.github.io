@@ -23,6 +23,7 @@ body {
   transition: background 0.3s, color 0.3s;
 }
 h1, h2 {
+  font-family: 'Forum', serif;
   text-align: center;
   color: var(--text-color);
   margin-top: 20px;
