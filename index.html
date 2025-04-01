@@ -42,10 +42,20 @@
 <!-- Link to Styles-->
     <link rel="stylesheet" href="styles.css">
 
-<!-- Actual Design -->
+<!-- Push Notification Script-->
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "d70dc600-03a1-459b-9ab9-9bc7a4fcc1d6",
+    });
+  });
+</script>
 
 </head>
 
+<!-- Actual Design -->
 <body>
     <!-- Logo Display -->
     <div class="logo-container">
