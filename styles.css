@@ -24,6 +24,7 @@ body {
 }
 h1, h2 {
   font-family: 'Forum', serif;
+  color: #0b3957;
   text-align: center;
   color: var(--text-color);
   margin-top: 20px;
