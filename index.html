@@ -83,7 +83,53 @@
       <!-- Load the OneSignal SDK -->
       <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" async defer></script>
       
-
+<!-- Wait until OneSignal is defined-->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Wait until OneSignal is defined
+      function initNotificationToggle() {
+        if (typeof OneSignal === "undefined") {
+          console.warn("OneSignal not yet loaded, retrying...");
+          setTimeout(initNotificationToggle, 500);
+          return;
+        }
+  
+        OneSignal.push(function () {
+          const notifToggle = document.getElementById('notif-toggle');
+  
+          // Disable if not supported
+          if (!OneSignal.isPushNotificationsSupported()) {
+            notifToggle.disabled = true;
+            notifToggle.title = "Push notifications are not supported on this device.";
+            return;
+          }
+  
+          // Set initial state
+          OneSignal.isPushNotificationsEnabled().then(function (isEnabled) {
+            notifToggle.checked = isEnabled;
+          });
+  
+          // Toggle logic
+          notifToggle.addEventListener('change', function () {
+            if (notifToggle.checked) {
+              OneSignal.registerForPushNotifications()
+                .then(() => console.log('Subscribed to notifications'))
+                .catch(err => {
+                  console.error('Subscription failed:', err);
+                  notifToggle.checked = false;
+                });
+            } else {
+              OneSignal.setSubscription(false);
+              console.log('Unsubscribed from notifications');
+            }
+          });
+        });
+      }
+  
+      initNotificationToggle();
+    });
+  </script>
+  
 </head>
 
 <!-- Actual Design -->
