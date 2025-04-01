@@ -83,53 +83,7 @@
       <!-- Load the OneSignal SDK -->
       <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" async defer></script>
       
-<!-- Wait until OneSignal is defined-->
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-      // Wait until OneSignal is defined
-      function initNotificationToggle() {
-        if (typeof OneSignal === "undefined") {
-          console.warn("OneSignal not yet loaded, retrying...");
-          setTimeout(initNotificationToggle, 500);
-          return;
-        }
-  
-        OneSignal.push(function () {
-          const notifToggle = document.getElementById('notif-toggle');
-  
-          // Disable if not supported
-          if (!OneSignal.isPushNotificationsSupported()) {
-            notifToggle.disabled = true;
-            notifToggle.title = "Push notifications are not supported on this device.";
-            return;
-          }
-  
-          // Set initial state
-          OneSignal.isPushNotificationsEnabled().then(function (isEnabled) {
-            notifToggle.checked = isEnabled;
-          });
-  
-          // Toggle logic
-          notifToggle.addEventListener('change', function () {
-            if (notifToggle.checked) {
-              OneSignal.registerForPushNotifications()
-                .then(() => console.log('Subscribed to notifications'))
-                .catch(err => {
-                  console.error('Subscription failed:', err);
-                  notifToggle.checked = false;
-                });
-            } else {
-              OneSignal.setSubscription(false);
-              console.log('Unsubscribed from notifications');
-            }
-          });
-        });
-      }
-  
-      initNotificationToggle();
-    });
-  </script>
-  
+
 </head>
 
 <!-- Actual Design -->
@@ -165,7 +119,7 @@
   font-size: 1em;
 ">
         📱 <strong>Want daily Nasi reminders?</strong><br>
-        For notifications to work on iPhone, you have to tap the <strong>Share</strong> 📤 icon, then select <strong>“Add to Home Screen”</strong> to install this app. <br> You should then get a notification popup the next time you open the app.
+        Tap the <strong>Share</strong> 📤 icon, then select <strong>“Add to Home Screen”</strong> to install this app.        
       </div>
       <script>
         let deferredPrompt;
@@ -222,16 +176,6 @@
     <!-- Share Button -->
     <button id="share-button" class="dark-mode-toggle">Share the Nasi!</button>
 </div>
-<!--Notification Toggle-->
-<div class="notification-card">
-    <h2>🔔 Daily Nasi Notifications</h2>
-    <p>Get a daily reminder during the 13 days of Nisan.</p>
-    <label class="switch">
-        <input type="checkbox" id="notif-toggle">
-        <span class="slider round"></span>
-      </label>               
-  </div>
-  
 
 <table class="prayer-table">
     <thead>
