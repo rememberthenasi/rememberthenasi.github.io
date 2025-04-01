@@ -253,6 +253,52 @@ shareButton.addEventListener("click", async () => {
                     console.log('ServiceWorker registration failed: ', error);
                 });
         }
-    </script>    
+    </script>
+    <div id="install-banner" style="display: none; text-align: center; background: #fffbcc; padding: 15px; font-size: 1em;">
+        📲 Install this app for easy access: 
+        <button id="install-btn" style="margin-left: 10px;">Install</button>
+      </div>
+      
+      <div id="ios-banner" style="display: none; text-align: center; background: #cce5ff; padding: 15px; font-size: 1em;">
+        📱 On iPhone, tap <span style="font-weight: bold;">Share</span> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/IOS_Share_icon.png/20px-IOS_Share_icon.png" style="vertical-align: middle;" /> 
+        then <strong>“Add to Home Screen”</strong> to install this app.
+      </div>
+      <script>
+        let deferredPrompt;
+      
+        window.addEventListener('beforeinstallprompt', (e) => {
+          // Prevent the mini-infobar from appearing
+          e.preventDefault();
+          deferredPrompt = e;
+      
+          // Show the install banner
+          const banner = document.getElementById('install-banner');
+          banner.style.display = 'block';
+      
+          const installBtn = document.getElementById('install-btn');
+          installBtn.addEventListener('click', () => {
+            banner.style.display = 'none';
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+              if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+              } else {
+                console.log('User dismissed the install prompt');
+              }
+              deferredPrompt = null;
+            });
+          });
+        });
+      
+        document.addEventListener("DOMContentLoaded", function () {
+          const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase());
+          const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
+      
+          if (isIOS && !isInStandaloneMode) {
+            document.getElementById("ios-banner").style.display = "block";
+          }
+        });
+      </script>
+                
 </body>
 </html>
