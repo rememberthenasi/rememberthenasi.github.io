@@ -1,10 +1,8 @@
-const CACHE_NAME = 'rememberthenasi-v2';
+const CACHE_NAME = 'rememberthenasi-v3';
 const urlsToCache = [
   '/',
   '/index.html',
   '/styles.css',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
   '/nasi.json',
   '/yehiRatzon.json',
   '/manifest.json',
