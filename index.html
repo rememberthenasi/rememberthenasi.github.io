@@ -53,8 +53,7 @@
 
 <!-- Place this script tag in your HTML <head> or just before </body> -->
     <script>
-        // Check if OneSignal isn't being blocked
-        if (typeof OneSignal !== "undefined") {
+
           OneSignal.push(function() {
             window.OneSignalDeferred = window.OneSignalDeferred || [];
             OneSignalDeferred.push(async function(OneSignal) {
@@ -79,10 +78,7 @@
               OneSignal.showSlidedownPrompt();
             });
           });
-        } else {
-          console.warn("OneSignal was blocked by the client.");
-          // Optional: fallback logic here, like showing a toast
-        }
+
       </script>
       
       <!-- Load the OneSignal SDK -->
