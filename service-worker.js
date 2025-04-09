@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rememberthenasi-v7';
+const CACHE_NAME = 'rememberthenasi-' + new Date().toISOString();
 const STATIC_ASSETS = [
   '/',
   '/index.html',
