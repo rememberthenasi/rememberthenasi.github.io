@@ -1,4 +1,6 @@
-const CACHE_NAME = 'rememberthenasi-v10';
+// Unified Service Worker: Offline Support + OneSignal Push
+
+const CACHE_NAME = 'rememberthenasi-v11'; // ⬅ bump version to force update
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -10,45 +12,42 @@ const STATIC_ASSETS = [
   '/yehiRatzon.json',
 ];
 
-console.log('Using cache version:', CACHE_NAME);
-
+// Cache core files on install
 self.addEventListener('install', event => {
-  self.skipWaiting(); // Activate immediately
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
   );
 });
 
+// Remove old caches
 self.addEventListener('activate', event => {
-  clients.claim(); // Control pages immediately
+  clients.claim();
   event.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.map(key => {
-        if (key !== CACHE_NAME) return caches.delete(key);
-      }))
+      Promise.all(
+        keys.map(key => {
+          if (key !== CACHE_NAME) return caches.delete(key);
+        })
+      )
     )
   );
 });
 
+// Serve cached content on failure
 self.addEventListener('fetch', event => {
   event.respondWith(
-    fetch(event.request).then(response => {
-      // Clone the response before putting it into the cache
-      const responseClone = response.clone();
-      
-      caches.open('rememberthenasi-v10').then(cache => {
-        cache.put(event.request, responseClone);
-      });
-
-      return response;
-    }).catch(error => {
-      return caches.match(event.request);
-    })
+    fetch(event.request)
+      .then(response => {
+        const responseClone = response.clone();
+        caches.open(CACHE_NAME).then(cache => {
+          cache.put(event.request, responseClone);
+        });
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
 });
 
-self.addEventListener('message', event => {
-  if (event.data.action === 'skipWaiting') {
-    self.skipWaiting();
-  }
-});
+// 🟢 Add OneSignal Push Notifications Support
+importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
