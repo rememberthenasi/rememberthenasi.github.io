@@ -13,14 +13,14 @@ const STATIC_ASSETS = [
 console.log('Using cache version:', CACHE_NAME);
 
 self.addEventListener('install', event => {
-  self.skipWaiting(); // activate immediately
+  self.skipWaiting(); // Activate immediately
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
   );
 });
 
 self.addEventListener('activate', event => {
-  clients.claim(); // control pages immediately
+  clients.claim(); // Control pages immediately
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.map(key => {
@@ -52,3 +52,6 @@ self.addEventListener('fetch', event => {
 
 self.addEventListener('message', event => {
   if (event.data.action === 'skipWaiting') {
+    self.skipWaiting();
+  }
+});
