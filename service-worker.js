@@ -1,6 +1,6 @@
 // Unified Service Worker: Offline Support + OneSignal Push
 
-const CACHE_NAME = 'rememberthenasi-v11'; // ⬅ bump version to force update
+const CACHE_NAME = 'rememberthenasi-v12';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
