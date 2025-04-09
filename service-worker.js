@@ -50,9 +50,5 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// Fix: handle skipWaiting messages correctly
 self.addEventListener('message', event => {
   if (event.data.action === 'skipWaiting') {
-    self.skipWaiting();
-  }
-});
