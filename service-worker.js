@@ -10,6 +10,8 @@ const STATIC_ASSETS = [
   '/yehiRatzon.json',
 ];
 
+console.log('Using cache version:', CACHE_NAME);
+
 self.addEventListener('install', event => {
   self.skipWaiting(); // activate immediately
   event.waitUntil(
@@ -53,4 +55,4 @@ self.addEventListener('fetch', event => {
     if (event.data.action === 'skipWaiting') {
       self.skipWaiting();
     }
-  });  
+  });
