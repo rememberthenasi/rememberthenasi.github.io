@@ -31,21 +31,18 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  const req = event.request;
-  
-  if (req.method !== 'GET' || !req.url.startsWith(self.location.origin)) return;
-  
   event.respondWith(
-    caches.match(req).then(cached => {
-      const fetchAndUpdate = fetch(req).then(res => {
-        if (res.ok) {
-          caches.open(CACHE_NAME).then(cache => cache.put(req, res.clone()));
-        }
-        return res;
+    fetch(event.request).then(response => {
+      // Clone the response before putting it into the cache
+      const responseClone = response.clone();
+      
+      caches.open('rememberthenasi-v10').then(cache => {
+        cache.put(event.request, responseClone);
       });
-  
-      // Serve cached fast, update silently
-      return cached || fetchAndUpdate;
+
+      return response;
+    }).catch(error => {
+      return caches.match(event.request);
     })
   );
 });
