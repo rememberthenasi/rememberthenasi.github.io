@@ -1,6 +1,26 @@
 # rememberthenasi.com
 A website for displaying the daily Nasi reading during the Jewish month of Nissan, based on the HebCal date.
 
+## Previewing online with GitHub Codespaces
+
+You can check new features **entirely in your browser** — no software to install.
+
+1. On GitHub, open the repository (or your branch/PR).
+2. Click the green **Code** button → **Codespaces** tab → **Create codespace on \<branch\>**.
+3. VS Code opens in a new browser tab.  Dependencies are installed automatically.
+4. In the VS Code terminal, run:
+
+   ```bash
+   npm start
+   ```
+
+5. A notification pops up offering to **Open in Browser**.  Click it to see the live preview at `http://localhost:3000`.
+
+> Tip: you can also validate the HTML without leaving the browser:
+> ```bash
+> npm run lint
+> ```
+
 ## Testing locally before pushing
 
 You can preview any branch on your own machine **without touching the live site**.
