@@ -86,95 +86,6 @@
 
 <!-- Actual Design -->
 <body>
-    <div id="install-banner" class="install-notice" style="display: none;">
-        <button type="button" id="install-close-btn" class="install-notice__close" aria-label="Dismiss install banner">&times;</button>
-        <p class="install-notice__text">📲 Tap to install the Daily Nasi as an app</p>
-        <button type="button" id="install-btn" class="install-notice__action">Install</button>
-      </div>
-      
-      <div id="ios-banner" class="install-notice" style="display: none;">
-        <button type="button" id="ios-close-btn" class="install-notice__close" aria-label="Dismiss install instructions">&times;</button>
-        <p class="install-notice__text">📱 <strong>Want daily Nasi reminders?</strong></p>
-        <p class="install-notice__subtext">Tap the <strong>Share</strong> icon, then select <strong>Add to Home Screen</strong>.</p>
-      </div>
-      <script>
-        let deferredPrompt;
-
-        function isRunningAsInstalledApp() {
-          const isStandaloneDisplay =
-            window.matchMedia('(display-mode: standalone)').matches ||
-            window.matchMedia('(display-mode: fullscreen)').matches ||
-            window.matchMedia('(display-mode: minimal-ui)').matches ||
-            (('standalone' in navigator) && navigator.standalone) ||
-            document.referrer.startsWith('android-app://');
-
-          return isStandaloneDisplay || localStorage.getItem('pwa-installed') === 'true';
-        }
-
-        window.addEventListener('appinstalled', () => {
-          localStorage.setItem('pwa-installed', 'true');
-          const installBanner = document.getElementById('install-banner');
-          const iosBanner = document.getElementById('ios-banner');
-          if (installBanner) installBanner.style.display = 'none';
-          if (iosBanner) iosBanner.style.display = 'none';
-        });
-      
-        window.addEventListener('beforeinstallprompt', (e) => {
-          // Prevent the mini-infobar from appearing
-          e.preventDefault();
-          deferredPrompt = e;
-
-          if (localStorage.getItem('dismiss-install-banner') === 'true' || isRunningAsInstalledApp()) {
-            return;
-          }
-      
-          // Show the install banner
-          const banner = document.getElementById('install-banner');
-          banner.style.display = 'block';
-      
-          const installBtn = document.getElementById('install-btn');
-          installBtn.onclick = () => {
-            if (!deferredPrompt) return;
-            banner.style.display = 'none';
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-              if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the install prompt');
-              } else {
-                console.log('User dismissed the install prompt');
-              }
-              deferredPrompt = null;
-            });
-          };
-        });
-      
-        document.addEventListener("DOMContentLoaded", function () {
-          const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase());
-
-          const installCloseBtn = document.getElementById("install-close-btn");
-          const iosCloseBtn = document.getElementById("ios-close-btn");
-
-          installCloseBtn.addEventListener("click", function () {
-            document.getElementById("install-banner").style.display = "none";
-            localStorage.setItem("dismiss-install-banner", "true");
-          });
-
-          iosCloseBtn.addEventListener("click", function () {
-            document.getElementById("ios-banner").style.display = "none";
-            localStorage.setItem("dismiss-ios-banner", "true");
-          });
-      
-          if (isIOS && !isRunningAsInstalledApp() && localStorage.getItem("dismiss-ios-banner") !== "true") {
-            document.getElementById("ios-banner").style.display = "block";
-          }
-
-          if (isRunningAsInstalledApp()) {
-            document.getElementById("install-banner").style.display = "none";
-            document.getElementById("ios-banner").style.display = "none";
-          }
-        });
-      </script>
-
   <main class="app">
     <!-- Logo Display -->
     <p style="text-align:center;">בס"ד</p>
@@ -221,10 +132,12 @@
             <button type="button" class="language-option is-active" data-language="both" aria-pressed="true">א/A</button>
             <button type="button" class="language-option" data-language="hebrew" aria-pressed="false">א</button>
           </div>
-          <!-- Share Button -->
-          <button type="button" id="share-button" class="dark-mode-toggle icon-button" aria-label="Share the Nasi" title="Share the Nasi">
-            <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M4 19v-2c0-4.4 3.6-8 8-8h7V6l5 5-5 5v-3h-7c-2.2 0-4 1.8-4 4v2"></path>
+          <!-- Install Button -->
+          <button type="button" id="share-button" class="dark-mode-toggle icon-button" aria-label="Install app" title="Install app">
+            <svg class="button-icon install-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path>
+              <path d="M10 5h4"></path>
+              <circle cx="12" cy="18" r="1"></circle>
             </svg>
           </button>
         </div>
@@ -296,25 +209,39 @@
                 );
             }
 
-            // Share Button functionality using the Web Share API
-const shareButton = document.getElementById("share-button");
-shareButton.addEventListener("click", async () => {
-    if (navigator.share) {
-        try {
-            await navigator.share({
-                title: document.title,
-                text: "Use Remember The Nasi to say the Daily Nasi!",
-                url: window.location.href
+            // Install button functionality using the PWA install prompt
+            const shareButton = document.getElementById("share-button");
+            let installPromptEvent = null;
+
+            window.addEventListener("beforeinstallprompt", (event) => {
+              event.preventDefault();
+              installPromptEvent = event;
             });
-            console.log("Page shared successfully.");
-        } catch (error) {
-            console.error("Error sharing:", error);
-        }
-    } else {
-        // Fallback for browsers that do not support the Web Share API
-        alert("Sharing not supported. Copy this link: " + window.location.href);
-    }
-});
+
+            window.addEventListener("appinstalled", () => {
+              installPromptEvent = null;
+            });
+
+            shareButton.addEventListener("click", async () => {
+              if (installPromptEvent) {
+                installPromptEvent.prompt();
+                const choice = await installPromptEvent.userChoice;
+                console.log("Install prompt result:", choice.outcome);
+                installPromptEvent = null;
+                return;
+              }
+
+              const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase());
+              const isStandalone =
+                window.matchMedia("(display-mode: standalone)").matches ||
+                ("standalone" in navigator && navigator.standalone);
+
+              if (isIOS && !isStandalone) {
+                alert("To install: tap Share, then Add to Home Screen.");
+              } else {
+                alert("Install is not available right now. If already installed, open from your home screen.");
+              }
+            });
 
 
             // Dark Mode Toggle

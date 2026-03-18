@@ -24,14 +24,14 @@
   --ring-color: rgba(174, 160, 155, 0.5);
 
   /* Install banner accent */
-  --install-bg: #e8f4f8;
-  --install-border: #b3d9e8;
-  --install-text: #0d3a50;
-  --install-btn-bg: #0077a8;
-  --install-btn-hover: #005f87;
-  --install-dark-bg: #0d2d3d;
-  --install-dark-border: #1a4a60;
-  --install-dark-text: #c8e8f4;
+  --install-bg: #f1e9e4;
+  --install-border: #d2c4bd;
+  --install-text: #3d3531;
+  --install-btn-bg: #8f7f78;
+  --install-btn-hover: #7e6f69;
+  --install-dark-bg: #1b2f41;
+  --install-dark-border: #29455e;
+  --install-dark-text: #d7dee5;
 
   /* Layout */
   --content-max: 860px;
@@ -186,68 +186,9 @@ body.dark-mode .bottom-text {
   stroke-linejoin: round;
 }
 
-/* Install Notice */
-.install-notice {
-  margin: 20px auto;
-  max-width: 90%;
-  padding: 18px 16px 16px;
-  border-radius: 20px;
-  background: linear-gradient(180deg, #d8eef4 0%, #c9e7ef 100%);
-  border: 1px solid #b3d9e8;
-  box-shadow: 0 10px 24px rgba(13, 58, 80, 0.12);
-  text-align: center;
-  color: #173551;
-  position: relative;
-}
 
-.install-notice__text {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.4;
-}
-
-.install-notice__subtext {
-  margin: 6px 0 0;
-  font-size: 0.95rem;
-  line-height: 1.45;
-}
-
-.install-notice__action {
-  margin-top: 12px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 999px;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #fff;
-  background: linear-gradient(135deg, #2f8ab3 0%, #1f6f95 100%);
-  box-shadow: 0 6px 14px rgba(31, 111, 149, 0.35);
-  cursor: pointer;
-}
-
-.install-notice__action:hover {
-  filter: brightness(1.05);
-}
-
-.install-notice__close {
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: 999px;
-  background: rgba(23, 53, 81, 0.12);
-  color: #173551;
-  font-size: 1.2rem;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.install-notice__close:hover {
-  background: rgba(23, 53, 81, 0.2);
+.install-icon {
+  stroke: #111;
 }
 
 /* Link Button */
@@ -475,16 +416,7 @@ body.dark-mode .banner {
   border-color: var(--install-dark-border);
 }
 
-body.dark-mode .install-notice {
-  background: linear-gradient(180deg, #133445 0%, #0f2b3a 100%);
-  border-color: #1f5066;
-  color: #d4edf8;
-}
 
-body.dark-mode .install-notice__close {
-  background: rgba(212, 237, 248, 0.15);
-  color: #d4edf8;
-}
 
 /* Responsive Adjustments for Mobile */
 @media (max-width: 768px) {
@@ -556,10 +488,6 @@ body.dark-mode .install-notice__close {
     padding: 11px 20px;
   }
 
-  .install-notice {
-    max-width: 94%;
-    padding: 16px 14px 14px;
-  }
 }
 
 /* Hover undo for mobile taps */
