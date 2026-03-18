@@ -81,7 +81,7 @@ h1, h2 {
   height: 64px;
   border-radius: var(--border-radius);
   object-fit: cover;
-  box-shadow: var(--shadow-card);
+  box-shadow: none;
 }
 
 .header-container {
