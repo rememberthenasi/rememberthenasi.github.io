@@ -153,72 +153,72 @@
           }
         });
       </script>
-       
+
+  <main class="app">
     <!-- Logo Display -->
-   <p><center>בס"ד</center></p>
+    <p style="text-align:center;">בס"ד</p>
     <div class="logo-container">
         <img src="icons/icon-192x192.png" alt="Site Logo" class="site-logo">
     </div>
-    <h1>Remember The Nasi!</h1>      
+    <h1>Remember The Nasi!</h1>
 
     <div class="header-container">
         <!-- Hebrew date with logic -->
         <p id="date">Loading Hebrew date...</p>
-</div>
-    
+    </div>
+
     <div class="button-container">
         <!-- Dark mode toggle button -->
-     <button id="dark-mode-toggle" class="dark-mode-toggle">Toggle Dark Mode</button>
+        <button id="dark-mode-toggle" class="dark-mode-toggle">Toggle Dark Mode</button>
+        <!-- Share Button -->
+        <button id="share-button" class="dark-mode-toggle">Share the Nasi!</button>
+    </div>
 
-    <!-- Share Button -->
-    <button id="share-button" class="dark-mode-toggle">Share the Nasi!</button>
-</div>
+    <table class="prayer-table">
+        <thead>
+          <tr>
+            <th colspan="1">Nasi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="hebrew" id="hebrew-nasi">Loading...</td>
+          </tr>
+          <tr>
+            <td id="english-nasi">Loading...</td>
+          </tr>
+        </tbody>
+    </table>
 
-<table class="prayer-table">
-    <thead>
-      <tr>
-        <th colspan="1">Nasi</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="hebrew" id="hebrew-nasi">Loading...</td>
-      </tr>
-      <tr>
-        <td id="english-nasi">Loading...</td>
-      </tr>
-    </tbody>
-  </table>
+    <table class="prayer-table">
+        <thead>
+          <tr>
+            <th colspan="1">Yehi Ratzon</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="hebrew" id="hebrew-yehiRatzon">Loading...</td>
+          </tr>
+          <tr>
+            <td id="english-yehiRatzon">Loading...</td>
+          </tr>
+        </tbody>
+    </table>
 
-  <table class="prayer-table">
-    <thead>
-      <tr>
-        <th colspan="1">Yehi Ratzon</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="hebrew" id="hebrew-yehiRatzon">Loading...</td>
-      </tr>
-      <tr>
-        <td id="english-yehiRatzon">Loading...</td>
-      </tr>
-    </tbody>
-  </table>
-
-<p class="bottom-text">
-<i>Forgot a day? <br> Click to view all of the days on <a href="https://www.chabad.org/library/article_cdo/aid/495714/jewish/The-Nasi.htm" class="dark-mode-link">Chabad.org</a>.</center></i>
-</p>
-<p class="bottom-text">
-Text reproduced with permission from
-<br>
-<a href="http://kehot.com/" class="dark-mode-link">Kehot Publication Society</a>.</center></i>
-</p>
-<p class="bottom-text">
-<i>Site created by Menachem Spielman<br>Contact: nasi@mspielman.com</i>
-</p>
-<br>
-<br>
+    <p class="bottom-text">
+      <i>Forgot a day? <br> Click to view all of the days on <a href="https://www.chabad.org/library/article_cdo/aid/495714/jewish/The-Nasi.htm" class="dark-mode-link">Chabad.org</a>.</i>
+    </p>
+    <p class="bottom-text">
+      Text reproduced with permission from
+      <br>
+      <a href="http://kehot.com/" class="dark-mode-link">Kehot Publication Society</a>.
+    </p>
+    <p class="bottom-text">
+      <i>Site created by Menachem Spielman<br>Contact: nasi@mspielman.com</i>
+    </p>
+    <br>
+    <br>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Share Button functionality using the Web Share API
@@ -354,6 +354,7 @@ shareButton.addEventListener("click", async () => {
             window.location.reload();
           });
         }
-        </script>                   
+        </script>
+  </main>
 </body>
 </html>
