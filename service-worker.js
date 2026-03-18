@@ -1,11 +1,14 @@
 // Unified Service Worker: Offline Support + OneSignal Push
 
-const CACHE_NAME = 'rememberthenasi-v12';
+const CACHE_NAME = 'rememberthenasi-v13';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
+  '/index.html?v=20260318a',
   '/styles.css',
+  '/styles.css?v=20260318a',
   '/manifest.json',
+  '/manifest.json?v=20260318a',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
   '/nasi.json',
