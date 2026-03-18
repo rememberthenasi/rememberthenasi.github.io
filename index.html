@@ -221,6 +221,28 @@
     <br>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+
+            function setPrayerCells(englishMsg, hebrewMsg) {
+                document.getElementById("english-nasi").textContent = englishMsg;
+                document.getElementById("hebrew-nasi").textContent = hebrewMsg;
+                document.getElementById("english-yehiRatzon").textContent = englishMsg;
+                document.getElementById("hebrew-yehiRatzon").textContent = hebrewMsg;
+            }
+
+            function setNoNasiMessage() {
+                setPrayerCells(
+                    "There is no Nasi / Yehi Ratzon to display today (only said during the first 13 days of Nisan).",
+                    "אין נאסי או יהי רצון להיום (נאמר רק בי״ג הימים הראשונים של חודש ניסן)."
+                );
+            }
+
+            function setErrorMessage() {
+                setPrayerCells(
+                    "Unable to load today's date. Please check your connection and try again.",
+                    "לא ניתן לטעון את תאריך היום. אנא בדוק חיבור לאינטרנט ונסה שוב."
+                );
+            }
+
             // Share Button functionality using the Web Share API
 const shareButton = document.getElementById("share-button");
 shareButton.addEventListener("click", async () => {
@@ -261,12 +283,13 @@ shareButton.addEventListener("click", async () => {
                         fetchPrayer(dayMonth, 'yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
                     } else {
                         document.getElementById("date").innerHTML = "The Nasi is read during the first 13 days of Nissan. <br> There is no Nasi read today. <br> Today's Hebrew date is: " + hebrewDate;
+                        setNoNasiMessage();
                     }
                 })
                 .catch(error => {
                     console.error("Error fetching Hebrew date:", error);
                     document.getElementById("date").innerHTML = "Error loading Hebrew date.";
-                    document.getElementById("dateonly").innerHTML = "Error loading Hebrew date.";
+                    setErrorMessage();
                 });
 
             // Dark Mode Toggle
@@ -305,6 +328,11 @@ shareButton.addEventListener("click", async () => {
                     .then(data => {
                         const prayer = data[dayMonth];
                         console.log("Fetched prayer for", dayMonth, "from", jsonFile, ":", prayer);
+                        if (!prayer) {
+                            document.getElementById(englishElementId).textContent = "No text available for this day.";
+                            document.getElementById(hebrewElementId).textContent = "אין טקסט זמין ליום זה.";
+                            return;
+                        }
                         document.getElementById(englishElementId).innerHTML = prayer.english || "No prayer available";
                         document.getElementById(hebrewElementId).innerHTML = prayer.hebrew || "אין תפילה זמינה";
                     })
