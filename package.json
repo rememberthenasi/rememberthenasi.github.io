@@ -3,11 +3,9 @@
   "private": true,
   "description": "Website for displaying the daily Nasi reading during the first 13 days of Nisan",
   "scripts": {
-    "start": "serve .",
     "lint": "html-validate index.html"
   },
   "devDependencies": {
-    "html-validate": "^10.11.2",
-    "serve": "^14.2.6"
+    "html-validate": "^10.11.2"
   }
 }
