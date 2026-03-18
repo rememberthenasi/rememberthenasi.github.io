@@ -8,11 +8,21 @@
   --dark-text: #f1f1f1;
   --table-bg: #f9f7f5;
   --table-dark-bg: #1e3044;
-  --shadow-light: 0 4px 8px rgba(0, 0, 0, 0.1);
-  --shadow-dark: 0 4px 8px rgba(0, 0, 0, 0.4);
-  --border-radius: 8px;
+  --shadow-light: 0 10px 25px rgba(0, 0, 0, 0.08);
+  --shadow-dark: 0 10px 25px rgba(0, 0, 0, 0.35);
+  --border-radius: 12px;
+  --card-radius: 16px;
   --dark-primary-color: #182d40;
   --dark-primary-hover: #1a5278;
+
+  /* Layout */
+  --content-max: 860px;
+
+  /* Spacing scale */
+  --space-1: 8px;
+  --space-2: 12px;
+  --space-3: 16px;
+  --space-4: 24px;
 }
 
 /* Global Styles */
@@ -21,127 +31,101 @@ body {
   background-color: var(--light-bg);
   color: var(--text-color);
   margin: 0;
-  padding: 20px;
+  padding: var(--space-4) var(--space-3);
   transition: background 0.3s, color 0.3s;
 }
+
+/* Centered app container */
+.app {
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
 h1, h2 {
   font-family: 'Forum', serif;
-  color: #0b3957;
   text-align: center;
   color: var(--text-color);
-  margin-top: 20px;
+  margin: var(--space-3) 0 var(--space-2);
 }
 
 /* Logo & Header */
 .logo-container {
   display: flex;
   justify-content: center;
-  margin-top: 3%;
+  margin-top: var(--space-2);
 }
+
 .site-logo {
   width: 64px;
   height: 64px;
   border-radius: var(--border-radius);
   object-fit: cover;
+  box-shadow: var(--shadow-light);
 }
+
 .header-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 10px; /* adjust the value as needed */
+  margin-bottom: var(--space-2);
   padding-bottom: 0;
-}
-.button-container {
-  display: flex;
-  flex-direction: column; /* Default vertical stacking */
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  margin-top: 1%; /* Adjusted from 10% to a fixed value */
-  margin-bottom: 0.5%;
-}
-.button-container button {
-  width: auto;            /* Ensures the button width is determined by its content */
-  margin-bottom: 0.2%;
-  margin-right: 0.2%;
-  margin-left: 0.2%;
 }
 
 /* Text Elements */
 p#date,
 p#dateonly {
   margin: 0;
-  font-size: 1.2em;
+  font-size: 1.1rem;
   text-align: center;
   color: var(--primary-color);
-  padding-bottom: 0%;
+  line-height: 1.35;
 }
+
 .bottom-text {
-  font-size: 0.9em;
+  font-size: 0.95rem;
   text-align: center;
-  margin: 20px auto;
-  padding: 0 2%;
-  max-width: 600px;
+  margin: var(--space-4) auto;
+  padding: 0 var(--space-2);
+  max-width: 60ch;
+  line-height: 1.5;
 }
 
-/* Table Styles */
-table {
-  margin: 1% auto;
-  width: 70%; /* about 2/3 of the screen on desktop */
-  max-width: 100%;
-  border-collapse: collapse;
-  background-color: var(--table-bg);
-  table-layout: auto;
-  box-shadow: var(--shadow-light);
-  border-radius: var(--border-radius);
-  overflow: hidden;
-}
-th, td {
-  vertical-align: top;
-  padding: 15px;
-  text-align: center;
-  font-size: 1.1em;
-  line-height: 1.6;
-  border-bottom: 1px solid #ddd;
-}
-th {
-  background-color: var(--primary-color);
-  color: #fff;
-  text-transform: uppercase;
-}
-td {
-  font-size: 1.1em;
-}
-
-table.prayer-table th {
-  background-color: var(--primary-color);
-  color: #fff;
-  font-size: 1.3em;      /* Bigger text */
-  font-weight: bold;     /* Make it pop */
-  padding: 8px 10px;     /* Slightly smaller padding = smaller row height */
-  text-align: center;
-  border-radius: var(--border-radius) var(--border-radius) 0 0;
-}
-
-/* Hebrew text: same size as English */
-.hebrew {
-  direction: rtl;
-  font-family: 'Noto Serif Hebrew', serif;
-  font-size: 1.2em;
-  font-weight: 500;
-}
-
-/* Section Titles */
-.section-title {
-  text-align: center;
-  font-size: 1.4em;
+/* Button container */
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 var(--space-2);
+  flex-wrap: wrap;
 }
 
 /* Button Styles */
+.dark-mode-toggle {
+  background-color: var(--primary-color);
+  border: none;
+  color: #fff;
+  padding: 12px 16px;
+  font-size: 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.05s ease;
+  box-shadow: var(--shadow-light);
+}
+
+.dark-mode-toggle:hover {
+  background-color: var(--primary-hover);
+}
+
+.dark-mode-toggle:active {
+  transform: translateY(1px);
+}
+
+/* Link Button */
 .link-button {
   display: inline-block;
   padding: 10px 20px;
-  font-size: 1.2em;
+  font-size: 1rem;
   background-color: var(--primary-color);
   color: #fff;
   border: none;
@@ -150,24 +134,57 @@ table.prayer-table th {
   cursor: pointer;
   transition: background-color 0.3s;
 }
+
 .link-button:hover {
   background-color: var(--primary-hover);
 }
 
-/* Dark Mode Toggle Button */
-.dark-mode-toggle {
-  margin-bottom: 1.2%;
-  background-color: var(--primary-color);
-  border: none;
-  color: #fff;
-  padding: 12px 15px;
-  font-size: 1em;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  transition: background-color 0.3s;
+/* Table Styles -> card-like */
+table {
+  margin: var(--space-3) auto;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: var(--table-bg);
+  table-layout: auto;
+  box-shadow: var(--shadow-light);
+  border-radius: var(--card-radius);
+  overflow: hidden;
 }
-.dark-mode-toggle:hover {
-  background-color: var(--primary-hover);
+
+th, td {
+  vertical-align: top;
+  padding: var(--space-3);
+  text-align: center;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  overflow-wrap: anywhere;
+}
+
+table.prayer-table th {
+  background-color: var(--primary-color);
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  padding: var(--space-2) var(--space-3);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+/* Hebrew text */
+.hebrew {
+  direction: rtl;
+  font-family: 'Noto Serif Hebrew', serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+/* Section Titles */
+.section-title {
+  text-align: center;
+  font-size: 1.4rem;
 }
 
 /* Dark Mode Styles */
@@ -177,95 +194,97 @@ body.dark-mode {
   --primary-color: var(--dark-primary-color);
   --primary-hover: var(--dark-primary-hover);
 }
+
 h1.dark-mode, h2.dark-mode {
   color: var(--dark-text);
 }
+
 p#date.dark-mode, p#dateonly.dark-mode {
   color: var(--dark-text);
 }
+
 table.dark-mode {
   background-color: var(--table-dark-bg);
   box-shadow: var(--shadow-dark);
 }
+
 th.dark-mode {
   background-color: #0b2d3c;
 }
+
 td.dark-mode {
   color: var(--dark-text);
 }
+
 .link-button.dark-mode {
   background-color: var(--primary-hover);
   color: #fff;
   box-shadow: var(--shadow-dark);
 }
+
 .link-button.dark-mode:hover {
   background-color: #34b3b6;
 }
+
 a.dark-mode {
   color: #34b3b6;
 }
+
 a.dark-mode:hover {
   color: #1abc9c;
 }
+
 .colored-text {
   color: rgb(32, 32, 33);
 }
+
 body.dark-mode .colored-text {
-  color: rgb(228, 228, 228); /* Light gray color for dark mode */
+  color: rgb(228, 228, 228);
 }
 
 /* Responsive Adjustments for Mobile */
 @media (max-width: 768px) {
+  body {
+    padding: var(--space-3) var(--space-2);
+  }
+
   .site-logo {
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
   }
+
   h1, h2 {
-    font-size: 1.3em;
-    margin-top: 1%;
+    font-size: 1.35rem;
+    margin-top: var(--space-2);
   }
+
   p#date, p#dateonly {
-    font-size: 1em;
+    font-size: 1rem;
   }
-  table {
-    width: 100%; /* nearly full width with small margins */
-    margin: 2% auto;
+
+  .button-container {
+    flex-direction: column;
+    align-items: stretch;
   }
+
+  .dark-mode-toggle {
+    width: 100%;
+  }
+
   th, td {
-    font-size: 0.9em;
-    padding: 4px;
+    font-size: 1rem;
+    padding: var(--space-2);
   }
-  .link-button {
-    font-size: 0.9em;
-    padding: 4px 8px;
+
+  .hebrew {
+    font-size: 1.05rem;
   }
-  .section-title {
-    font-size: 1em;
+}
+
+/* Hover undo for mobile taps */
+@media (hover: none) {
+  .dark-mode-toggle:hover,
+  .link-button:hover {
+    background-color: var(--primary-color);
   }
-  .header-container {
-    margin-top: 5px;
-  }
-  /* Hover undo for mobile taps */
-  @media (hover: none) {
-    .link-button:hover,
-    .dark-mode-toggle:hover {
-      background-color: var(--primary-color);
-    }
-  }  
-  /* Mobile adjustments for button container */
-  @media (max-width: 768px) {
-    /* ...other mobile styles... */
-    
-    .button-container {
-      width: 100%;               /* Force the container to span the full width */
-      flex-direction: row;       /* Arrange buttons side by side */
-      justify-content: space-around; /* Evenly space the buttons */
-      gap: 0.5%;                  /* Maintain a gap between buttons */
-    }
-    
-    .button-container button {
-      margin: 0;                 /* Remove extra margins */
-      width: 35%;                /* Fixed width on mobile */
-    }
-  }  
 }
