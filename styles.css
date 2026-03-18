@@ -448,3 +448,81 @@ body.dark-mode .banner {
     box-shadow: var(--shadow-light);
   }
 }
+
+/* Day Selector */
+.day-selector-container {
+  text-align: center;
+  margin: var(--space-4) auto;
+  max-width: 480px;
+}
+
+.day-selector-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.day-selector-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.day-select {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background-color: var(--surface-1);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 10px 36px 10px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: var(--shadow-light);
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+}
+
+.day-select:hover {
+  background-color: var(--surface-2);
+  box-shadow: var(--shadow-card);
+}
+
+.day-select:focus-visible {
+  outline: 3px solid var(--ring-color);
+  outline-offset: 2px;
+}
+
+body.dark-mode .day-selector-label {
+  color: var(--dark-text);
+}
+
+body.dark-mode .day-select {
+  background-color: var(--surface-1);
+  border-color: var(--border-dark);
+  color: var(--dark-text);
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f1f1f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+body.dark-mode .day-select:hover {
+  background-color: var(--surface-2);
+}
+
+@media (max-width: 768px) {
+  .day-selector-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .day-select {
+    width: 100%;
+  }
+}
