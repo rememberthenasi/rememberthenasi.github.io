@@ -5,8 +5,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@400;700&display=swap" rel="stylesheet">
     <!-- Import font Forum-->
     <link href="https://fonts.googleapis.com/css2?family=Forum&display=swap" rel="stylesheet">
-    <!-- Import Inter for UI -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BFNQ3TZSCK"></script>
@@ -86,23 +84,38 @@
 
 <!-- Actual Design -->
 <body>
-    <div id="install-banner" class="banner" style="display:none;">
-        <div class="banner__inner">
-          <div class="banner__text">
-            <span class="banner__title">📲 Install the Daily Nasi</span>
-            <span class="banner__subtitle">Add to your home screen for quick access</span>
-          </div>
-          <button id="install-btn" class="btn btn--install">Install</button>
-        </div>
+    <div id="install-banner" style="
+  display: none;
+  margin: 20px auto;
+  max-width: 90%;
+  background: #e0fafd;
+  color: #333;
+  border: 1px solid #e0fafd;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+  font-size: 1em;
+">
+        📲 Tap to install the Daily Nasi as an app: 
+        <button id="install-btn" style="margin-left: 10px;">Install</button>
       </div>
-
-      <div id="ios-banner" class="banner" style="display:none;">
-        <div class="banner__inner">
-          <div class="banner__text">
-            <span class="banner__title">📱 Want daily Nasi reminders?</span>
-            <span class="banner__subtitle">Tap the <strong>Share</strong> 📤 icon, then select <strong>“Add to Home Screen”</strong> to install this app.</span>
-          </div>
-        </div>
+      
+      <div id="ios-banner" style="
+  display: none;
+  margin: 20px auto;
+  max-width: 90%;
+  background: #e0fafd;
+  color: #173551;
+  border: 1px solid #e0fafd;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+  font-size: 1em;
+">
+        📱 <strong>Want daily Nasi reminders?</strong><br>
+        Tap the <strong>Share</strong> 📤 icon, then select <strong>“Add to Home Screen”</strong> to install this app.        
       </div>
       <script>
         let deferredPrompt;
