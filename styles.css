@@ -120,11 +120,21 @@ body.dark-mode .bottom-text {
 /* Button container */
 .button-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: var(--space-2);
   margin: var(--space-3) 0 var(--space-2);
+}
+
+.controls-top-row,
+.controls-bottom-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2);
   flex-wrap: wrap;
+  width: 100%;
 }
 
 /* Button Styles */
@@ -155,6 +165,25 @@ body.dark-mode .bottom-text {
 .dark-mode-toggle:focus-visible {
   outline: 3px solid var(--ring-color);
   outline-offset: 2px;
+}
+
+.icon-button {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /* Link Button */
@@ -450,27 +479,6 @@ body.dark-mode .banner {
 }
 
 /* Day Selector */
-.day-selector-container {
-  text-align: center;
-  margin: var(--space-4) auto;
-  max-width: 480px;
-}
-
-.day-selector-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: var(--space-2);
-  flex-wrap: wrap;
-}
-
-.day-selector-label {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--text-color);
-}
-
 .day-select {
   font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
@@ -478,17 +486,21 @@ body.dark-mode .banner {
   background-color: var(--surface-1);
   border: 1px solid var(--border-color);
   color: var(--text-color);
-  padding: 10px 36px 10px 16px;
+  padding: 10px 20px;
   border-radius: 999px;
   cursor: pointer;
   transition: background-color 0.15s ease, box-shadow 0.15s ease;
   box-shadow: var(--shadow-light);
   appearance: none;
   -webkit-appearance: none;
+  width: auto;
+  min-width: fit-content;
+  text-align: center;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
-  background-position: right 12px center;
+  background-position: right 8px center;
   background-size: 14px;
+  padding-right: 32px;
 }
 
 .day-select:hover {
@@ -496,13 +508,54 @@ body.dark-mode .banner {
   box-shadow: var(--shadow-card);
 }
 
+.day-select:focus {
+  outline: 3px solid var(--ring-color);
+  outline-offset: 2px;
+}
+
 .day-select:focus-visible {
   outline: 3px solid var(--ring-color);
   outline-offset: 2px;
 }
 
-body.dark-mode .day-selector-label {
-  color: var(--dark-text);
+/* Language Selector */
+.language-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 999px;
+  background-color: var(--surface-1);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-light);
+}
+
+.language-option {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-color);
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  min-width: 40px;
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.language-option:hover {
+  background-color: var(--surface-2);
+}
+
+.language-option:focus-visible {
+  outline: 3px solid var(--ring-color);
+  outline-offset: 2px;
+}
+
+.language-option.is-active {
+  background-color: var(--primary-color);
+  color: #fff;
 }
 
 body.dark-mode .day-select {
@@ -516,13 +569,38 @@ body.dark-mode .day-select:hover {
   background-color: var(--surface-2);
 }
 
+body.dark-mode .day-select:focus,
+body.dark-mode .day-select:focus-visible {
+  outline: 3px solid var(--ring-color);
+  outline-offset: 2px;
+}
+
+body.dark-mode .language-toggle {
+  background-color: var(--surface-1);
+  border-color: var(--border-dark);
+}
+
+body.dark-mode .language-option {
+  color: var(--dark-text);
+}
+
+body.dark-mode .language-option:hover {
+  background-color: var(--surface-2);
+}
+
+body.dark-mode .language-option.is-active {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
 @media (max-width: 768px) {
-  .day-selector-row {
-    flex-direction: column;
-    align-items: stretch;
+  .day-select {
+    width: auto;
+    min-width: fit-content;
   }
 
-  .day-select {
-    width: 100%;
+  .language-option {
+    min-width: 36px;
+    padding: 8px;
   }
 }

@@ -170,10 +170,45 @@
     </div>
 
     <div class="button-container">
-        <!-- Dark mode toggle button -->
-        <button type="button" id="dark-mode-toggle" class="dark-mode-toggle">Toggle Dark Mode</button>
-        <!-- Share Button -->
-        <button type="button" id="share-button" class="dark-mode-toggle">Share the Nasi!</button>
+        <div class="controls-top-row">
+          <!-- Day selector dropdown -->
+          <select id="day-select" class="day-select">
+            <option value="">Today</option>
+            <option value="1 Nisan">1 Nisan</option>
+            <option value="2 Nisan">2 Nisan</option>
+            <option value="3 Nisan">3 Nisan</option>
+            <option value="4 Nisan">4 Nisan</option>
+            <option value="5 Nisan">5 Nisan</option>
+            <option value="6 Nisan">6 Nisan</option>
+            <option value="7 Nisan">7 Nisan</option>
+            <option value="8 Nisan">8 Nisan</option>
+            <option value="9 Nisan">9 Nisan</option>
+            <option value="10 Nisan">10 Nisan</option>
+            <option value="11 Nisan">11 Nisan</option>
+            <option value="12 Nisan">12 Nisan</option>
+            <option value="13 Nisan">13 Nisan</option>
+          </select>
+        </div>
+        <div class="controls-bottom-row">
+          <!-- Dark mode toggle button -->
+          <button type="button" id="dark-mode-toggle" class="dark-mode-toggle icon-button" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <svg id="dark-mode-icon" class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 1 0 21 12.8z"></path>
+            </svg>
+          </button>
+          <!-- Language selector -->
+          <div class="language-toggle" role="group" aria-label="Language selector">
+            <button type="button" class="language-option" data-language="english" aria-pressed="false">A</button>
+            <button type="button" class="language-option is-active" data-language="both" aria-pressed="true">א/A</button>
+            <button type="button" class="language-option" data-language="hebrew" aria-pressed="false">א</button>
+          </div>
+          <!-- Share Button -->
+          <button type="button" id="share-button" class="dark-mode-toggle icon-button" aria-label="Share the Nasi" title="Share the Nasi">
+            <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M4 19v-2c0-4.4 3.6-8 8-8h7V6l5 5-5 5v-3h-7c-2.2 0-4 1.8-4 4v2"></path>
+            </svg>
+          </button>
+        </div>
     </div>
 
     <table class="prayer-table">
@@ -208,28 +243,6 @@
         </tbody>
     </table>
 
-    <div class="day-selector-container">
-      <p class="bottom-text"><i>Forgot to say the Nasi on a specific day?</i></p>
-      <div class="day-selector-row">
-        <label for="day-select" class="day-selector-label">Select a day to view:</label>
-        <select id="day-select" class="day-select">
-          <option value="">-- Select a day --</option>
-          <option value="1 Nisan">1 Nisan</option>
-          <option value="2 Nisan">2 Nisan</option>
-          <option value="3 Nisan">3 Nisan</option>
-          <option value="4 Nisan">4 Nisan</option>
-          <option value="5 Nisan">5 Nisan</option>
-          <option value="6 Nisan">6 Nisan</option>
-          <option value="7 Nisan">7 Nisan</option>
-          <option value="8 Nisan">8 Nisan</option>
-          <option value="9 Nisan">9 Nisan</option>
-          <option value="10 Nisan">10 Nisan</option>
-          <option value="11 Nisan">11 Nisan</option>
-          <option value="12 Nisan">12 Nisan</option>
-          <option value="13 Nisan">13 Nisan</option>
-        </select>
-      </div>
-    </div>
     <p class="bottom-text">
       Text reproduced with permission from
       <br>
@@ -283,38 +296,11 @@ shareButton.addEventListener("click", async () => {
         alert("Sharing not supported. Copy this link: " + window.location.href);
     }
 });
-            // Fetch Hebrew Date from HebCal API
-            fetch("https://www.hebcal.com/converter?cfg=json&gy=" + new Date().getFullYear() + "&gm=" + (new Date().getMonth() + 1) + "&gd=" + new Date().getDate() + "&g2h=1")
-                .then(response => response.json())
-                .then(data => {
-                    const hebrewDate = data.hebrew;
-                    const day = data.hd;
-                    const month = data.hm;
-                    const dayMonth = day + " " + month;
 
-                    console.log("Hebrew Date:", hebrewDate);
-                    console.log("Day:", day);
-                    console.log("Month:", month);
-                    console.log("Day and Month:", dayMonth);
-
-                    // Check if the date falls within the first 13 days of Nissan
-                    if (month === "Nisan" && day >= 1 && day <= 13) {
-                        document.getElementById("date").innerHTML = "<span class='colored-text'>Displaying the Nasi and Yehi Ratzon for: <br> " + hebrewDate;
-                        fetchPrayer(dayMonth, 'nasi.json', 'english-nasi', 'hebrew-nasi');
-                        fetchPrayer(dayMonth, 'yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
-                    } else {
-                        document.getElementById("date").innerHTML = "The Nasi is read during the first 13 days of Nissan. <br> There is no Nasi read today. <br> Today's Hebrew date is: " + hebrewDate;
-                        setNoNasiMessage();
-                    }
-                })
-                .catch(error => {
-                    console.error("Error fetching Hebrew date:", error);
-                    document.getElementById("date").innerHTML = "Error loading Hebrew date.";
-                    setErrorMessage();
-                });
 
             // Dark Mode Toggle
             const toggleButton = document.getElementById("dark-mode-toggle");
+            const darkModeIcon = document.getElementById("dark-mode-icon");
             if (localStorage.getItem("dark-mode") === "enabled") {
                 enableDarkMode();
             }
@@ -332,6 +318,9 @@ shareButton.addEventListener("click", async () => {
                 document.querySelectorAll("h1, h2, p#date, p#dateonly, table, th, td, .link-button, a").forEach(el => {
                     el.classList.add("dark-mode");
                 });
+              if (darkModeIcon) {
+                darkModeIcon.innerHTML = "<circle cx='12' cy='12' r='4'></circle><path d='M12 2v2'></path><path d='M12 20v2'></path><path d='M4.93 4.93l1.41 1.41'></path><path d='M17.66 17.66l1.41 1.41'></path><path d='M2 12h2'></path><path d='M20 12h2'></path><path d='M4.93 19.07l1.41-1.41'></path><path d='M17.66 6.34l1.41-1.41'></path>";
+              }
                 localStorage.setItem("dark-mode", "enabled");
             }
 
@@ -340,6 +329,9 @@ shareButton.addEventListener("click", async () => {
                 document.querySelectorAll("h1, h2, p#date, p#dateonly, table, th, td, .link-button, a").forEach(el => {
                     el.classList.remove("dark-mode");
                 });
+              if (darkModeIcon) {
+                darkModeIcon.innerHTML = "<path d='M21 12.8A9 9 0 1 1 11.2 3 7 7 0 1 0 21 12.8z'></path>";
+              }
                 localStorage.setItem("dark-mode", "disabled");
             }
 
@@ -359,23 +351,133 @@ shareButton.addEventListener("click", async () => {
                     })
             }
 
+            // Store current day info for reverting
+            let currentDayMonth = null;
+            let originalDateHTML = null;
+            let isCurrentDayValidNisan = false;
+
+            // Fetch Hebrew Date from HebCal API - UPDATED VERSION
+            fetch("https://www.hebcal.com/converter?cfg=json&gy=" + new Date().getFullYear() + "&gm=" + (new Date().getMonth() + 1) + "&gd=" + new Date().getDate() + "&g2h=1")
+                .then(response => response.json())
+                .then(data => {
+                    const hebrewDate = data.hebrew;
+                    const day = data.hd;
+                    const month = data.hm;
+                    const dayMonth = day + " " + month;
+
+                    currentDayMonth = dayMonth;
+
+                    console.log("Hebrew Date:", hebrewDate);
+                    console.log("Day:", day);
+                    console.log("Month:", month);
+                    console.log("Day and Month:", dayMonth);
+
+                    // Check if the date falls within the first 13 days of Nissan
+                    const dateEl = document.getElementById("date");
+                    if (month === "Nisan" && day >= 1 && day <= 13) {
+                        isCurrentDayValidNisan = true;
+                        originalDateHTML = "<span class='colored-text'>Displaying the Nasi and Yehi Ratzon for</span>";
+                        dateEl.innerHTML = originalDateHTML;
+                        fetchPrayer(dayMonth, 'nasi.json', 'english-nasi', 'hebrew-nasi');
+                        fetchPrayer(dayMonth, 'yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
+                    } else {
+                        isCurrentDayValidNisan = false;
+                        originalDateHTML = "The Nasi is read during the first 13 days of Nissan. <br> There is no Nasi read today. <br> Today's Hebrew date is: " + hebrewDate;
+                        dateEl.innerHTML = originalDateHTML;
+                        setNoNasiMessage();
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching Hebrew date:", error);
+                    document.getElementById("date").innerHTML = "Error loading Hebrew date.";
+                    setErrorMessage();
+                });
+
             // Day selector: display a specific day's Nasi and Yehi Ratzon
             document.getElementById("day-select").addEventListener("change", function() {
                 const selectedDay = this.value;
                 if (selectedDay) {
+                    // Clear previous prayers while loading
+                    document.getElementById("english-nasi").textContent = "Loading...";
+                    document.getElementById("hebrew-nasi").textContent = "Loading...";
+                    document.getElementById("english-yehiRatzon").textContent = "Loading...";
+                    document.getElementById("hebrew-yehiRatzon").textContent = "Loading...";
+                    
                     const dateEl = document.getElementById("date");
                     const span = document.createElement("span");
                     span.className = "colored-text";
-                    span.appendChild(document.createTextNode("Displaying the Nasi and Yehi Ratzon for: "));
-                    span.appendChild(document.createElement("br"));
-                    span.appendChild(document.createTextNode(selectedDay));
+                    span.appendChild(document.createTextNode("Displaying the Nasi and Yehi Ratzon for"));
                     dateEl.textContent = "";
                     dateEl.appendChild(span);
                     fetchPrayer(selectedDay, 'nasi.json', 'english-nasi', 'hebrew-nasi');
                     fetchPrayer(selectedDay, 'yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    // Clear previous prayers while loading
+                    document.getElementById("english-nasi").textContent = "Loading...";
+                    document.getElementById("hebrew-nasi").textContent = "Loading...";
+                    document.getElementById("english-yehiRatzon").textContent = "Loading...";
+                    document.getElementById("hebrew-yehiRatzon").textContent = "Loading...";
+                    
+                    // Revert to current day
+                    if (originalDateHTML) {
+                        document.getElementById("date").innerHTML = originalDateHTML;
+                        if (isCurrentDayValidNisan && currentDayMonth) {
+                            // Current date is within Nisan 1-13, fetch the prayers
+                            fetchPrayer(currentDayMonth, 'nasi.json', 'english-nasi', 'hebrew-nasi');
+                            fetchPrayer(currentDayMonth, 'yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
+                        } else {
+                            // Current date is outside Nisan, show the no-nasi message
+                            setNoNasiMessage();
+                        }
+                    }
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             });
+
+            // Language Selector
+            const languageButtons = document.querySelectorAll(".language-option");
+            const savedLanguageMode = localStorage.getItem("language-mode") || "both";
+            setLanguageMode(savedLanguageMode);
+
+            languageButtons.forEach(button => {
+              button.addEventListener("click", function() {
+                const mode = this.dataset.language || "both";
+                setLanguageMode(mode);
+                localStorage.setItem("language-mode", mode);
+              });
+            });
+
+            function setLanguageMode(mode) {
+              languageButtons.forEach(button => {
+                const isActive = button.dataset.language === mode;
+                button.classList.toggle("is-active", isActive);
+                button.setAttribute("aria-pressed", isActive ? "true" : "false");
+              });
+              applyLanguageMode(mode);
+            }
+
+            function applyLanguageMode(mode) {
+                const tables = document.querySelectorAll("table.prayer-table tbody");
+                
+                tables.forEach(tbody => {
+                    const rows = tbody.querySelectorAll("tr");
+                    rows.forEach(row => {
+                        const isHebrew = row.querySelector("td.hebrew") !== null;
+                        
+                        if (mode === "hebrew") {
+                            // Show only Hebrew rows
+                            row.style.display = isHebrew ? "table-row" : "none";
+                        } else if (mode === "english") {
+                            // Show only English rows
+                            row.style.display = !isHebrew ? "table-row" : "none";
+                        } else {
+                            // Show both
+                            row.style.display = "table-row";
+                        }
+                    });
+                });
+            }
         });
 
         if ('serviceWorker' in navigator) {
