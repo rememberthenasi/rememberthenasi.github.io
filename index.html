@@ -100,7 +100,7 @@
   font-size: 1em;
 ">
         📲 Tap to install the Daily Nasi as an app: 
-        <button id="install-btn" style="display:inline-block;margin:10px auto 0;padding:8px 16px;width:auto;text-align:center;">Install</button>
+        <button type="button" id="install-btn" style="display:inline-block;margin:10px auto 0;padding:8px 16px;width:auto;text-align:center;">Install</button>
       </div>
       
       <div id="ios-banner" style="
@@ -171,9 +171,9 @@
 
     <div class="button-container">
         <!-- Dark mode toggle button -->
-        <button id="dark-mode-toggle" class="dark-mode-toggle">Toggle Dark Mode</button>
+        <button type="button" id="dark-mode-toggle" class="dark-mode-toggle">Toggle Dark Mode</button>
         <!-- Share Button -->
-        <button id="share-button" class="dark-mode-toggle">Share the Nasi!</button>
+        <button type="button" id="share-button" class="dark-mode-toggle">Share the Nasi!</button>
     </div>
 
     <table class="prayer-table">
@@ -208,9 +208,28 @@
         </tbody>
     </table>
 
-    <p class="bottom-text">
-      <i>Forgot a day? <br> Click to view all of the days on <a href="https://www.chabad.org/library/article_cdo/aid/495714/jewish/The-Nasi.htm" class="dark-mode-link">Chabad.org</a>.</i>
-    </p>
+    <div class="day-selector-container">
+      <p class="bottom-text"><i>Forgot to say the Nasi on a specific day?</i></p>
+      <div class="day-selector-row">
+        <label for="day-select" class="day-selector-label">Select a day to view:</label>
+        <select id="day-select" class="day-select">
+          <option value="">-- Select a day --</option>
+          <option value="1 Nisan">1 Nisan</option>
+          <option value="2 Nisan">2 Nisan</option>
+          <option value="3 Nisan">3 Nisan</option>
+          <option value="4 Nisan">4 Nisan</option>
+          <option value="5 Nisan">5 Nisan</option>
+          <option value="6 Nisan">6 Nisan</option>
+          <option value="7 Nisan">7 Nisan</option>
+          <option value="8 Nisan">8 Nisan</option>
+          <option value="9 Nisan">9 Nisan</option>
+          <option value="10 Nisan">10 Nisan</option>
+          <option value="11 Nisan">11 Nisan</option>
+          <option value="12 Nisan">12 Nisan</option>
+          <option value="13 Nisan">13 Nisan</option>
+        </select>
+      </div>
+    </div>
     <p class="bottom-text">
       Text reproduced with permission from
       <br>
@@ -339,6 +358,24 @@ shareButton.addEventListener("click", async () => {
                         document.getElementById(hebrewElementId).innerHTML = prayer.hebrew || "אין תפילה זמינה";
                     })
             }
+
+            // Day selector: display a specific day's Nasi and Yehi Ratzon
+            document.getElementById("day-select").addEventListener("change", function() {
+                const selectedDay = this.value;
+                if (selectedDay) {
+                    const dateEl = document.getElementById("date");
+                    const span = document.createElement("span");
+                    span.className = "colored-text";
+                    span.appendChild(document.createTextNode("Displaying the Nasi and Yehi Ratzon for: "));
+                    span.appendChild(document.createElement("br"));
+                    span.appendChild(document.createTextNode(selectedDay));
+                    dateEl.textContent = "";
+                    dateEl.appendChild(span);
+                    fetchPrayer(selectedDay, 'nasi.json', 'english-nasi', 'hebrew-nasi');
+                    fetchPrayer(selectedDay, 'yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
         });
 
         if ('serviceWorker' in navigator) {
