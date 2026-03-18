@@ -86,53 +86,55 @@
 
 <!-- Actual Design -->
 <body>
-    <div id="install-banner" style="
-  display: none;
-  margin: 20px auto;
-  max-width: 90%;
-  background: #e0fafd;
-  color: #333;
-  border: 1px solid #e0fafd;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  text-align: center;
-  font-size: 1em;
-">
-        📲 Tap to install the Daily Nasi as an app: 
-        <button type="button" id="install-btn" style="display:inline-block;margin:10px auto 0;padding:8px 16px;width:auto;text-align:center;">Install</button>
+    <div id="install-banner" class="install-notice" style="display: none;">
+        <button type="button" id="install-close-btn" class="install-notice__close" aria-label="Dismiss install banner">&times;</button>
+        <p class="install-notice__text">📲 Tap to install the Daily Nasi as an app</p>
+        <button type="button" id="install-btn" class="install-notice__action">Install</button>
       </div>
       
-      <div id="ios-banner" style="
-  display: none;
-  margin: 20px auto;
-  max-width: 90%;
-  background: #e0fafd;
-  color: #173551;
-  border: 1px solid #e0fafd;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  text-align: center;
-  font-size: 1em;
-">
-        📱 <strong>Want daily Nasi reminders?</strong><br>
-        Tap the <strong>Share</strong> 📤 icon, then select <strong>“Add to Home Screen”</strong> to install this app.        
+      <div id="ios-banner" class="install-notice" style="display: none;">
+        <button type="button" id="ios-close-btn" class="install-notice__close" aria-label="Dismiss install instructions">&times;</button>
+        <p class="install-notice__text">📱 <strong>Want daily Nasi reminders?</strong></p>
+        <p class="install-notice__subtext">Tap the <strong>Share</strong> icon, then select <strong>Add to Home Screen</strong>.</p>
       </div>
       <script>
         let deferredPrompt;
+
+        function isRunningAsInstalledApp() {
+          const isStandaloneDisplay =
+            window.matchMedia('(display-mode: standalone)').matches ||
+            window.matchMedia('(display-mode: fullscreen)').matches ||
+            window.matchMedia('(display-mode: minimal-ui)').matches ||
+            (('standalone' in navigator) && navigator.standalone) ||
+            document.referrer.startsWith('android-app://');
+
+          return isStandaloneDisplay || localStorage.getItem('pwa-installed') === 'true';
+        }
+
+        window.addEventListener('appinstalled', () => {
+          localStorage.setItem('pwa-installed', 'true');
+          const installBanner = document.getElementById('install-banner');
+          const iosBanner = document.getElementById('ios-banner');
+          if (installBanner) installBanner.style.display = 'none';
+          if (iosBanner) iosBanner.style.display = 'none';
+        });
       
         window.addEventListener('beforeinstallprompt', (e) => {
           // Prevent the mini-infobar from appearing
           e.preventDefault();
           deferredPrompt = e;
+
+          if (localStorage.getItem('dismiss-install-banner') === 'true' || isRunningAsInstalledApp()) {
+            return;
+          }
       
           // Show the install banner
           const banner = document.getElementById('install-banner');
           banner.style.display = 'block';
       
           const installBtn = document.getElementById('install-btn');
-          installBtn.addEventListener('click', () => {
+          installBtn.onclick = () => {
+            if (!deferredPrompt) return;
             banner.style.display = 'none';
             deferredPrompt.prompt();
             deferredPrompt.userChoice.then((choiceResult) => {
@@ -143,15 +145,32 @@
               }
               deferredPrompt = null;
             });
-          });
+          };
         });
       
         document.addEventListener("DOMContentLoaded", function () {
           const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase());
-          const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
+
+          const installCloseBtn = document.getElementById("install-close-btn");
+          const iosCloseBtn = document.getElementById("ios-close-btn");
+
+          installCloseBtn.addEventListener("click", function () {
+            document.getElementById("install-banner").style.display = "none";
+            localStorage.setItem("dismiss-install-banner", "true");
+          });
+
+          iosCloseBtn.addEventListener("click", function () {
+            document.getElementById("ios-banner").style.display = "none";
+            localStorage.setItem("dismiss-ios-banner", "true");
+          });
       
-          if (isIOS && !isInStandaloneMode) {
+          if (isIOS && !isRunningAsInstalledApp() && localStorage.getItem("dismiss-ios-banner") !== "true") {
             document.getElementById("ios-banner").style.display = "block";
+          }
+
+          if (isRunningAsInstalledApp()) {
+            document.getElementById("install-banner").style.display = "none";
+            document.getElementById("ios-banner").style.display = "none";
           }
         });
       </script>
