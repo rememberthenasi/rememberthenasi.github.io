@@ -226,6 +226,14 @@
               return (temp.textContent || temp.innerText || "").trim();
             }
 
+            function normalizeHebrewText(text) {
+              if (!text) {
+                return "";
+              }
+              // Remove meteg (vertical mark) when it is combined with tsere.
+              return text.replace(/\u05B5\u05BD|\u05BD\u05B5/g, "\u05B5");
+            }
+
             function getShareUrl() {
               return window.location.origin + window.location.pathname;
             }
@@ -272,8 +280,8 @@
 
               if (mode === "hebrew" || mode === "both") {
                 sections.push(
-                  { heading: "נשיא", body: htmlToText(nasiPrayer.hebrew), lang: "he" },
-                  { heading: "יהי רצון", body: htmlToText(yehiPrayer.hebrew), lang: "he" }
+                  { heading: "נשיא", body: htmlToText(normalizeHebrewText(nasiPrayer.hebrew)), lang: "he" },
+                  { heading: "יהי רצון", body: htmlToText(normalizeHebrewText(yehiPrayer.hebrew)), lang: "he" }
                 );
               }
 
@@ -642,7 +650,7 @@
                             return;
                         }
                         document.getElementById(englishElementId).innerHTML = prayer.english || "No prayer available";
-                        document.getElementById(hebrewElementId).innerHTML = prayer.hebrew || "אין תפילה זמינה";
+                        document.getElementById(hebrewElementId).innerHTML = normalizeHebrewText(prayer.hebrew || "אין תפילה זמינה");
                     })
             }
 
