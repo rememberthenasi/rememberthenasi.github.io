@@ -478,7 +478,17 @@
               ctx.font = footerSize + "px 'Inter', sans-serif";
               ctx.textAlign = "center";
               ctx.direction = "ltr";
-              ctx.fillText(footerText, width / 2, height - 16);
+              
+              // Wrap footer text if needed
+              const footerMaxWidth = maxTextWidth;
+              ctx.font = footerSize + "px 'Inter', sans-serif";
+              const wrappedFooter = buildWrappedLines([footerText], ctx, footerMaxWidth);
+              
+              // Position footer text with proper spacing
+              let footerY = height - (paddingBottom / 2) - ((wrappedFooter.length - 1) * footerSize / 2);
+              wrappedFooter.forEach((line, index) => {
+                ctx.fillText(line, width / 2, footerY + (index * footerSize * 0.9));
+              });
 
               return canvasToBlob(canvas);
             }

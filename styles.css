@@ -41,6 +41,10 @@
   --space-2: 12px;
   --space-3: 16px;
   --space-4: 24px;
+
+  /* Shared button viewport size (except language buttons) */
+  --language-button-vh: 3.2vh;
+  --ui-button-vh: 3.6vh;
 }
 
 /* Global Styles */
@@ -138,6 +142,10 @@ body.dark-mode .bottom-text {
 }
 
 /* Button Styles */
+button {
+  box-sizing: border-box;
+}
+
 .dark-mode-toggle {
   font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
@@ -145,11 +153,16 @@ body.dark-mode .bottom-text {
   background-color: var(--surface-1);
   border: 1px solid var(--border-color);
   color: var(--text-color);
-  padding: 10px 20px;
+  padding: 0 20px;
   border-radius: 999px;
   cursor: pointer;
   transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
   box-shadow: var(--shadow-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-sizing: border-box;
 }
 
 .dark-mode-toggle:hover {
@@ -167,18 +180,41 @@ body.dark-mode .bottom-text {
   outline-offset: 2px;
 }
 
+#dark-mode-toggle {
+  width: var(--ui-button-vh);
+  height: var(--ui-button-vh);
+  padding: 0;
+  border-radius: 50%;
+}
+
+#share-button {
+  width: var(--ui-button-vh);
+  height: var(--ui-button-vh);
+  padding: 0;
+  border-radius: 50%;
+}
+
 .icon-button {
-  width: 42px;
-  height: 42px;
-  min-width: 42px;
-  min-height: 42px;
+  width: var(--ui-button-vh);
+  height: var(--ui-button-vh);
+  min-width: var(--ui-button-vh);
+  min-height: var(--ui-button-vh);
   padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   line-height: 0;
-  flex: 0 0 42px;
+  flex: 0 0 var(--ui-button-vh);
+  background-color: var(--surface-1);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: var(--shadow-light);
+  box-sizing: border-box;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .button-icon {
@@ -196,15 +232,37 @@ body.dark-mode .bottom-text {
   stroke: currentColor;
 }
 
+#text-share-button {
+  height: var(--ui-button-vh);
+  padding: 0 14px;
+}
+
 .text-share-button {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  min-height: 42px;
+  height: var(--ui-button-vh);
+  min-height: var(--ui-button-vh);
   padding: 0 14px;
   border-radius: 999px;
   line-height: 1;
   white-space: nowrap;
+  border: 1px solid var(--border-color);
+  background-color: var(--surface-1);
+  color: var(--text-color);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: var(--shadow-light);
+  box-sizing: border-box;
+}
+
+.text-share-button:hover {
+  background-color: var(--surface-2);
+  box-shadow: var(--shadow-card);
 }
 
 .text-share-button .button-icon {
@@ -596,9 +654,16 @@ body.dark-mode .banner {
   border: none;
   border-radius: 999px;
   min-width: 40px;
+  height: var(--language-button-vh);
   padding: 8px 10px;
   cursor: pointer;
   transition: background-color 0.15s ease, color 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: none;
+  box-sizing: border-box;
 }
 
 .language-option:hover {
