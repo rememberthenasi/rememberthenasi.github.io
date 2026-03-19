@@ -204,11 +204,13 @@ body.dark-mode .bottom-text {
   padding: 0 14px;
   border-radius: 999px;
   line-height: 1;
+  white-space: nowrap;
 }
 
 .text-share-button .button-icon {
   width: 16px;
   height: 16px;
+  flex: 0 0 auto;
 }
 
 /* Link Button */

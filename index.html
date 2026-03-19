@@ -133,7 +133,7 @@
             <button type="button" class="language-option" data-language="hebrew" aria-pressed="false">א</button>
           </div>
           <!-- Share Today's Text -->
-          <button type="button" id="text-share-button" class="dark-mode-toggle text-share-button" aria-label="Share as text" title="Share as text">
+          <button type="button" id="text-share-button" class="dark-mode-toggle text-share-button" aria-label="Share as image" title="Share as image">
             <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <circle cx="18" cy="5" r="3"></circle>
               <circle cx="6" cy="12" r="3"></circle>
@@ -141,7 +141,7 @@
               <path d="M8.8 10.6l6.4-3.2"></path>
               <path d="M8.8 13.4l6.4 3.2"></path>
             </svg>
-            <span>Share as text</span>
+            <span>Share as image</span>
           </button>
           <!-- Install Button -->
           <button type="button" id="share-button" class="dark-mode-toggle icon-button" aria-label="Install app" title="Install app">
@@ -230,29 +230,35 @@
               return window.location.origin + window.location.pathname;
             }
 
-            function trimShareText(text, maxChars) {
-              if (text.length <= maxChars) {
-                return text;
-              }
-              const notice = "\n\n...המשך הטקסט באתר";
-              const allowedLength = Math.max(0, maxChars - notice.length);
-              return text.slice(0, allowedLength).trimEnd() + notice;
+            function getCurrentLanguageMode() {
+              const activeLanguageButton = document.querySelector(".language-option.is-active");
+              return activeLanguageButton?.dataset.language || localStorage.getItem("language-mode") || "both";
             }
 
-            async function buildTodayShareText() {
+            async function buildTodayShareData(languageMode) {
               const todayOption = document.getElementById("today-option");
-              const todayLabel = todayOption ? todayOption.textContent : "Today";
+              const todayLabel = todayOption ? todayOption.textContent.replace(/^Today:\s*/, "").trim() : "";
               const shareHeader = "rememberthenasi.com";
+              const mode = languageMode || "both";
+              const daySelect = document.getElementById("day-select");
+              const selectedDay = daySelect ? daySelect.value : "";
+              const displayedDayMonth = selectedDay || currentDayMonth;
+              const displayedDateLabel = selectedDay || todayLabel;
+              const isDisplayedNisanDay = Boolean(displayedDayMonth);
 
-              if (!isCurrentDayValidNisan || !currentDayMonth) {
-                const hebrewDate = (document.getElementById("today-option")?.textContent || "").replace(/^Today:\s*/, "").trim();
-                return [
-                  shareHeader,
-                  "",
-                  "נשיא היום",
-                  hebrewDate ? "תאריך: " + hebrewDate : "",
-                  "אין נשיא או יהי רצון להיום"
-                ].join("\n").trim();
+              if (!isDisplayedNisanDay) {
+                const sections = [];
+                if (mode === "hebrew" || mode === "both") {
+                  sections.push({ heading: "", body: "אין נשיא או יהי רצון להיום", lang: "he" });
+                }
+                if (mode === "english" || mode === "both") {
+                  sections.push({ heading: "", body: "No Nasi or Yehi Ratzon for today.", lang: "en" });
+                }
+                return {
+                  title: shareHeader,
+                  dateLabel: displayedDateLabel,
+                  sections
+                };
               }
 
               const [nasiData, yehiRatzonData] = await Promise.all([
@@ -260,46 +266,260 @@
                 fetch("yehiRatzon.json").then(response => response.json())
               ]);
 
-              const nasiPrayer = nasiData[currentDayMonth] || {};
-              const yehiPrayer = yehiRatzonData[currentDayMonth] || {};
+              const nasiPrayer = nasiData[displayedDayMonth] || {};
+              const yehiPrayer = yehiRatzonData[displayedDayMonth] || {};
+              const sections = [];
 
-              return [
-                shareHeader,
-                "",
-                "Remember The Nasi",
-                todayLabel,
-                "",
-                "נשיא:",
-                htmlToText(nasiPrayer.hebrew),
-                "",
-                "יהי רצון:",
-                htmlToText(yehiPrayer.hebrew)
-              ].join("\n").trim();
+              if (mode === "hebrew" || mode === "both") {
+                sections.push(
+                  { heading: "נשיא", body: htmlToText(nasiPrayer.hebrew), lang: "he" },
+                  { heading: "יהי רצון", body: htmlToText(yehiPrayer.hebrew), lang: "he" }
+                );
+              }
+
+              if (mode === "english" || mode === "both") {
+                sections.push(
+                  { heading: "Nasi", body: htmlToText(nasiPrayer.english), lang: "en" },
+                  { heading: "Yehi Ratzon", body: htmlToText(yehiPrayer.english), lang: "en" }
+                );
+              }
+
+              return {
+                title: shareHeader,
+                dateLabel: displayedDateLabel,
+                sections
+              };
             }
 
-            async function shareTodayText() {
-              const shareUrl = getShareUrl();
-              const maxShareChars = 60000;
+            function wrapTextLine(ctx, text, maxWidth) {
+              const words = text.trim().split(/\s+/);
+              if (words.length === 0) {
+                return [];
+              }
+              const wrapped = [];
+              let current = words[0];
 
-              try {
-                const shareText = trimShareText(await buildTodayShareText(), maxShareChars);
-                if (navigator.share) {
-                  await navigator.share({
-                    title: "Remember The Nasi",
-                    text: shareText,
-                    url: shareUrl
-                  });
+              for (let i = 1; i < words.length; i += 1) {
+                const candidate = current + " " + words[i];
+                if (ctx.measureText(candidate).width <= maxWidth) {
+                  current = candidate;
+                } else {
+                  wrapped.push(current);
+                  current = words[i];
+                }
+              }
+              wrapped.push(current);
+              return wrapped;
+            }
+
+            function buildWrappedLines(lines, ctx, maxWidth) {
+              const output = [];
+              lines.forEach(line => {
+                if (!line || !line.trim()) {
+                  output.push("");
                   return;
                 }
+                output.push(...wrapTextLine(ctx, line, maxWidth));
+              });
+              return output;
+            }
 
-                const whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(shareText);
-                window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+            function loadImage(src) {
+              return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = () => reject(new Error("Unable to load image: " + src));
+                img.src = src;
+              });
+            }
+
+            function canvasToBlob(canvas) {
+              return new Promise((resolve, reject) => {
+                canvas.toBlob(blob => {
+                  if (blob) {
+                    resolve(blob);
+                  } else {
+                    reject(new Error("Failed to create image blob"));
+                  }
+                }, "image/png");
+              });
+            }
+
+            async function createShareImageBlob(shareData) {
+              const canvas = document.createElement("canvas");
+              const ctx = canvas.getContext("2d");
+              if (!ctx) {
+                throw new Error("Canvas context unavailable");
+              }
+
+              const width = 1080;
+              const paddingX = 44;
+              const paddingTop = 42;
+              const paddingBottom = 46;
+              const titleSize = 52;
+              const dateSize = 34;
+              const maxTextWidth = width - (paddingX * 2);
+              const sectionGap = 30;
+              const headingGap = 14;
+              const bodyGap = 12;
+              const iconSize = 72;
+
+              const wrappedSections = [];
+              let contentHeight = titleSize + 20;
+
+              if (shareData.dateLabel) {
+                contentHeight += dateSize + 18;
+              }
+
+              shareData.sections.forEach(section => {
+                const isHebrew = section.lang === "he";
+                const headingFont = isHebrew
+                  ? "700 42px 'Noto Serif Hebrew', serif"
+                  : "700 38px 'Inter', sans-serif";
+                const bodyFont = isHebrew
+                  ? "500 36px 'Noto Serif Hebrew', serif"
+                  : "500 32px 'Inter', sans-serif";
+                const bodyLineHeight = isHebrew ? 48 : 42;
+
+                let wrappedHeading = [];
+                if (section.heading) {
+                  ctx.font = headingFont;
+                  wrappedHeading = buildWrappedLines([section.heading], ctx, maxTextWidth);
+                }
+
+                ctx.font = bodyFont;
+                const wrappedBody = buildWrappedLines([section.body], ctx, maxTextWidth);
+
+                const sectionHeight =
+                  (wrappedHeading.length ? wrappedHeading.length * (isHebrew ? 48 : 42) + headingGap : 0) +
+                  (wrappedBody.length ? wrappedBody.length * bodyLineHeight : 0) +
+                  bodyGap +
+                  sectionGap;
+
+                wrappedSections.push({
+                  lang: section.lang,
+                  headingLines: wrappedHeading,
+                  bodyLines: wrappedBody,
+                  headingFont,
+                  bodyFont,
+                  headingLineHeight: isHebrew ? 48 : 42,
+                  bodyLineHeight
+                });
+                contentHeight += sectionHeight;
+              });
+
+              const minHeight = 1200;
+              const height = Math.max(minHeight, paddingTop + contentHeight + paddingBottom);
+
+              canvas.width = width;
+              canvas.height = height;
+
+              ctx.fillStyle = "#ffffff";
+              ctx.fillRect(0, 0, width, height);
+
+              try {
+                const icon = await loadImage("icons/icon-192x192.png");
+                ctx.drawImage(icon, paddingX, paddingTop - 6, iconSize, iconSize);
+              } catch (iconError) {
+                console.warn("Icon could not be loaded for share image:", iconError);
+              }
+
+              ctx.fillStyle = "#111111";
+              ctx.textAlign = "left";
+              ctx.direction = "ltr";
+              ctx.font = "700 " + titleSize + "px 'Inter', sans-serif";
+              ctx.fillText(shareData.title, paddingX + iconSize + 22, paddingTop + 50);
+
+              let y = paddingTop + iconSize + 28;
+
+              if (shareData.dateLabel) {
+                ctx.fillStyle = "#374151";
+                ctx.font = "600 " + dateSize + "px 'Inter', sans-serif";
+                ctx.textAlign = "left";
+                ctx.direction = "ltr";
+                ctx.fillText(shareData.dateLabel, paddingX, y);
+                y += dateSize + 18;
+              }
+
+              wrappedSections.forEach(section => {
+                const isHebrew = section.lang === "he";
+
+                if (section.headingLines.length) {
+                  ctx.fillStyle = "#0f172a";
+                  ctx.font = section.headingFont;
+                  ctx.textAlign = isHebrew ? "right" : "left";
+                  ctx.direction = isHebrew ? "rtl" : "ltr";
+                  section.headingLines.forEach(line => {
+                    ctx.fillText(line, isHebrew ? width - paddingX : paddingX, y);
+                    y += section.headingLineHeight;
+                  });
+                  y += headingGap;
+                }
+
+                ctx.fillStyle = "#111111";
+                ctx.font = section.bodyFont;
+                ctx.textAlign = isHebrew ? "right" : "left";
+                ctx.direction = isHebrew ? "rtl" : "ltr";
+                section.bodyLines.forEach(line => {
+                  if (!line) {
+                    y += Math.floor(section.bodyLineHeight * 0.6);
+                    return;
+                  }
+                  ctx.fillText(line, isHebrew ? width - paddingX : paddingX, y);
+                  y += section.bodyLineHeight;
+                });
+
+                y += sectionGap;
+              });
+
+              return canvasToBlob(canvas);
+            }
+
+            async function shareTodayAsImage() {
+              const shareCaption = "rememberthenasi.com";
+
+              try {
+                const shareData = await buildTodayShareData(getCurrentLanguageMode());
+                const imageBlob = await createShareImageBlob(shareData);
+
+                let imageFile = null;
+                try {
+                  imageFile = new File([imageBlob], "remember-the-nasi.png", { type: "image/png" });
+                } catch (fileError) {
+                  console.warn("File constructor unavailable, using fallback download:", fileError);
+                }
+
+                if (imageFile && navigator.share && navigator.canShare && navigator.canShare({ files: [imageFile] })) {
+                  try {
+                    await navigator.share({
+                      title: shareData.title,
+                      text: shareCaption,
+                      files: [imageFile]
+                    });
+                    return;
+                  } catch (shareError) {
+                    if (shareError && shareError.name === "AbortError") {
+                      return;
+                    }
+                    console.warn("Native file share failed, falling back to download:", shareError);
+                  }
+                }
+
+                const imageUrl = URL.createObjectURL(imageBlob);
+                const downloadLink = document.createElement("a");
+                downloadLink.href = imageUrl;
+                downloadLink.download = "remember-the-nasi.png";
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                URL.revokeObjectURL(imageUrl);
+                alert("Image downloaded. You can now share it in WhatsApp.");
               } catch (error) {
                 if (error && error.name === "AbortError") {
                   return;
                 }
-                console.error("Error sharing today's text:", error);
-                alert("Unable to share right now. Please try again.");
+                console.error("Error sharing today's image:", error);
+                alert("Unable to generate image right now. Please try again.");
               }
             }
 
@@ -351,7 +571,7 @@
             });
 
             if (textShareButton) {
-              textShareButton.addEventListener("click", shareTodayText);
+              textShareButton.addEventListener("click", shareTodayAsImage);
             }
 
 
