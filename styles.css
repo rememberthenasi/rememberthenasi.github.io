@@ -196,6 +196,17 @@ body.dark-mode .bottom-text {
   stroke: currentColor;
 }
 
+.text-share-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.text-share-button .button-icon {
+  width: 16px;
+  height: 16px;
+}
+
 /* Link Button */
 .link-button {
   display: inline-block;
