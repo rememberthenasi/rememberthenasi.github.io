@@ -230,19 +230,28 @@
               return window.location.origin + window.location.pathname;
             }
 
+            function trimShareText(text, maxChars) {
+              if (text.length <= maxChars) {
+                return text;
+              }
+              const notice = "\n\n...המשך הטקסט באתר";
+              const allowedLength = Math.max(0, maxChars - notice.length);
+              return text.slice(0, allowedLength).trimEnd() + notice;
+            }
+
             async function buildTodayShareText() {
               const todayOption = document.getElementById("today-option");
               const todayLabel = todayOption ? todayOption.textContent : "Today";
               const shareHeader = "rememberthenasi.com";
 
               if (!isCurrentDayValidNisan || !currentDayMonth) {
-                const dateText = (document.getElementById("date")?.innerText || "").trim();
+                const hebrewDate = (document.getElementById("today-option")?.textContent || "").replace(/^Today:\s*/, "").trim();
                 return [
                   shareHeader,
                   "",
-                  "Remember The Nasi",
-                  todayLabel,
-                  dateText
+                  "נשיא היום",
+                  hebrewDate ? "תאריך: " + hebrewDate : "",
+                  "אין נשיא או יהי רצון להיום"
                 ].join("\n").trim();
               }
 
@@ -260,25 +269,20 @@
                 "Remember The Nasi",
                 todayLabel,
                 "",
-                "Nasi (English):",
-                htmlToText(nasiPrayer.english),
-                "",
-                "Nasi (Hebrew):",
+                "נשיא:",
                 htmlToText(nasiPrayer.hebrew),
                 "",
-                "Yehi Ratzon (English):",
-                htmlToText(yehiPrayer.english),
-                "",
-                "Yehi Ratzon (Hebrew):",
+                "יהי רצון:",
                 htmlToText(yehiPrayer.hebrew)
               ].join("\n").trim();
             }
 
             async function shareTodayText() {
               const shareUrl = getShareUrl();
+              const maxShareChars = 60000;
 
               try {
-                const shareText = await buildTodayShareText();
+                const shareText = trimShareText(await buildTodayShareText(), maxShareChars);
                 if (navigator.share) {
                   await navigator.share({
                     title: "Remember The Nasi",
