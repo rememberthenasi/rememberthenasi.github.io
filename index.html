@@ -212,14 +212,28 @@
             // Install button functionality using the PWA install prompt
             const shareButton = document.getElementById("share-button");
             let installPromptEvent = null;
+            const isStandaloneMode = () =>
+              window.matchMedia("(display-mode: standalone)").matches ||
+              ("standalone" in navigator && navigator.standalone);
+
+            function updateInstallButtonVisibility() {
+              if (!shareButton) return;
+              const isInstalled = isStandaloneMode() || localStorage.getItem("app-installed") === "true";
+              shareButton.style.display = isInstalled ? "none" : "inline-flex";
+            }
+
+            updateInstallButtonVisibility();
 
             window.addEventListener("beforeinstallprompt", (event) => {
               event.preventDefault();
               installPromptEvent = event;
+              updateInstallButtonVisibility();
             });
 
             window.addEventListener("appinstalled", () => {
               installPromptEvent = null;
+              localStorage.setItem("app-installed", "true");
+              updateInstallButtonVisibility();
             });
 
             shareButton.addEventListener("click", async () => {
@@ -232,9 +246,7 @@
               }
 
               const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase());
-              const isStandalone =
-                window.matchMedia("(display-mode: standalone)").matches ||
-                ("standalone" in navigator && navigator.standalone);
+              const isStandalone = isStandaloneMode();
 
               if (isIOS && !isStandalone) {
                 alert("To install: tap Share, then Add to Home Screen.");
