@@ -132,6 +132,16 @@
             <button type="button" class="language-option is-active" data-language="both" aria-pressed="true">א/A</button>
             <button type="button" class="language-option" data-language="hebrew" aria-pressed="false">א</button>
           </div>
+          <!-- Share Today's Text -->
+          <button type="button" id="text-share-button" class="dark-mode-toggle icon-button" aria-label="Share today's text" title="Share today's text">
+            <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <path d="M8.8 10.6l6.4-3.2"></path>
+              <path d="M8.8 13.4l6.4 3.2"></path>
+            </svg>
+          </button>
           <!-- Install Button -->
           <button type="button" id="share-button" class="dark-mode-toggle icon-button" aria-label="Install app" title="Install app">
             <svg class="button-icon install-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -209,8 +219,88 @@
                 );
             }
 
+            function htmlToText(html) {
+              const temp = document.createElement("div");
+              temp.innerHTML = html || "";
+              return (temp.textContent || temp.innerText || "").trim();
+            }
+
+            function getShareUrl() {
+              return window.location.origin + window.location.pathname;
+            }
+
+            async function buildTodayShareText() {
+              const todayOption = document.getElementById("today-option");
+              const todayLabel = todayOption ? todayOption.textContent : "Today";
+              const shareHeader = "rememberthenasi.com";
+
+              if (!isCurrentDayValidNisan || !currentDayMonth) {
+                const dateText = (document.getElementById("date")?.innerText || "").trim();
+                return [
+                  shareHeader,
+                  "",
+                  "Remember The Nasi",
+                  todayLabel,
+                  dateText
+                ].join("\n").trim();
+              }
+
+              const [nasiData, yehiRatzonData] = await Promise.all([
+                fetch("nasi.json").then(response => response.json()),
+                fetch("yehiRatzon.json").then(response => response.json())
+              ]);
+
+              const nasiPrayer = nasiData[currentDayMonth] || {};
+              const yehiPrayer = yehiRatzonData[currentDayMonth] || {};
+
+              return [
+                shareHeader,
+                "",
+                "Remember The Nasi",
+                todayLabel,
+                "",
+                "Nasi (English):",
+                htmlToText(nasiPrayer.english),
+                "",
+                "Nasi (Hebrew):",
+                htmlToText(nasiPrayer.hebrew),
+                "",
+                "Yehi Ratzon (English):",
+                htmlToText(yehiPrayer.english),
+                "",
+                "Yehi Ratzon (Hebrew):",
+                htmlToText(yehiPrayer.hebrew)
+              ].join("\n").trim();
+            }
+
+            async function shareTodayText() {
+              const shareUrl = getShareUrl();
+
+              try {
+                const shareText = await buildTodayShareText();
+                if (navigator.share) {
+                  await navigator.share({
+                    title: "Remember The Nasi",
+                    text: shareText,
+                    url: shareUrl
+                  });
+                  return;
+                }
+
+                const whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(shareText);
+                window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+              } catch (error) {
+                if (error && error.name === "AbortError") {
+                  return;
+                }
+                console.error("Error sharing today's text:", error);
+                alert("Unable to share right now. Please try again.");
+              }
+            }
+
             // Install button functionality using the PWA install prompt
             const shareButton = document.getElementById("share-button");
+            const textShareButton = document.getElementById("text-share-button");
             let installPromptEvent = null;
             const isStandaloneMode = () =>
               window.matchMedia("(display-mode: standalone)").matches ||
@@ -254,6 +344,10 @@
                 alert("Install is not available right now. If already installed, open from your home screen.");
               }
             });
+
+            if (textShareButton) {
+              textShareButton.addEventListener("click", shareTodayText);
+            }
 
 
             // Dark Mode Toggle
