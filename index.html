@@ -103,7 +103,7 @@
         <div class="controls-top-row">
           <!-- Day selector dropdown -->
           <select id="day-select" class="day-select">
-            <option value="">Today</option>
+            <option id="today-option" value="">Today</option>
             <option value="1 Nisan">1 Nisan</option>
             <option value="2 Nisan">2 Nisan</option>
             <option value="3 Nisan">3 Nisan</option>
@@ -310,8 +310,12 @@
                     const day = data.hd;
                     const month = data.hm;
                     const dayMonth = day + " " + month;
+                  const todayOption = document.getElementById("today-option");
 
                     currentDayMonth = dayMonth;
+                  if (todayOption) {
+                      todayOption.textContent = "Today: " + dayMonth;
+                  }
 
                     console.log("Hebrew Date:", hebrewDate);
                     console.log("Day:", day);

@@ -193,7 +193,7 @@ body.dark-mode .bottom-text {
 
 
 .install-icon {
-  stroke: #111;
+  stroke: currentColor;
 }
 
 /* Link Button */
