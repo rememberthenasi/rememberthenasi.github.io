@@ -353,15 +353,17 @@
               }
 
               const width = 1080;
-              const paddingX = 44;
-              const paddingTop = 42;
-              const paddingBottom = 46;
-              const titleSize = 52;
-              const dateSize = 34;
+              const paddingX = 32;
+              const paddingTop = 32;
+              const paddingBottom = 50;
+              const titleSize = 38;
+              const dateSize = 24;
+              const footerSize = 16;
+              const footerText = "Rememberthenasi.com. Text reproduced with permission from Kehot Publication Society.";
               const maxTextWidth = width - (paddingX * 2);
-              const sectionGap = 30;
-              const headingGap = 14;
-              const bodyGap = 12;
+              const sectionGap = 10;
+              const headingGap = 4;
+              const bodyGap = 3;
               const iconSize = 72;
 
               const wrappedSections = [];
@@ -374,12 +376,12 @@
               shareData.sections.forEach(section => {
                 const isHebrew = section.lang === "he";
                 const headingFont = isHebrew
-                  ? "700 42px 'Noto Serif Hebrew', serif"
-                  : "700 38px 'Inter', sans-serif";
+                  ? "700 32px 'Noto Serif Hebrew', serif"
+                  : "700 28px 'Inter', sans-serif";
                 const bodyFont = isHebrew
-                  ? "500 36px 'Noto Serif Hebrew', serif"
-                  : "500 32px 'Inter', sans-serif";
-                const bodyLineHeight = isHebrew ? 48 : 42;
+                  ? "500 28px 'Noto Serif Hebrew', serif"
+                  : "500 24px 'Inter', sans-serif";
+                const bodyLineHeight = isHebrew ? 36 : 32;
 
                 let wrappedHeading = [];
                 if (section.heading) {
@@ -391,7 +393,7 @@
                 const wrappedBody = buildWrappedLines([section.body], ctx, maxTextWidth);
 
                 const sectionHeight =
-                  (wrappedHeading.length ? wrappedHeading.length * (isHebrew ? 48 : 42) + headingGap : 0) +
+                  (wrappedHeading.length ? wrappedHeading.length * (isHebrew ? 36 : 32) + headingGap : 0) +
                   (wrappedBody.length ? wrappedBody.length * bodyLineHeight : 0) +
                   bodyGap +
                   sectionGap;
@@ -402,13 +404,13 @@
                   bodyLines: wrappedBody,
                   headingFont,
                   bodyFont,
-                  headingLineHeight: isHebrew ? 48 : 42,
+                  headingLineHeight: isHebrew ? 36 : 32,
                   bodyLineHeight
                 });
                 contentHeight += sectionHeight;
               });
 
-              const minHeight = 1200;
+              const minHeight = 900;
               const height = Math.max(minHeight, paddingTop + contentHeight + paddingBottom);
 
               canvas.width = width;
@@ -469,8 +471,14 @@
                   y += section.bodyLineHeight;
                 });
 
-                y += sectionGap;
+                y += 8;
               });
+
+              ctx.fillStyle = "#999999";
+              ctx.font = footerSize + "px 'Inter', sans-serif";
+              ctx.textAlign = "center";
+              ctx.direction = "ltr";
+              ctx.fillText(footerText, width / 2, height - 16);
 
               return canvasToBlob(canvas);
             }
