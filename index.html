@@ -45,11 +45,11 @@
 
 <!-- HTML Site Design -->
     <title>Daily Nasi</title>
-    <link rel="manifest" href="manifest.json?v=20260318a">
+    <link rel="manifest" href="manifest.json?v=20260320a">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     
 <!-- Link to Styles-->
-<link rel="stylesheet" href="styles.css?v=20260318a">
+<link rel="stylesheet" href="styles.css?v=20260320a">
 
 <!-- Push Notification Script-->
       
@@ -185,6 +185,15 @@
           </tr>
         </tbody>
     </table>
+
+    <div id="nasi-check-container" class="nasi-check-container" style="display:none;">
+      <button type="button" id="nasi-check-button" class="nasi-check-button" aria-pressed="false">
+        <svg id="nasi-check-icon" class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+        </svg>
+        <span id="nasi-check-label">Mark Nasi as said</span>
+      </button>
+    </div>
 
     <p class="bottom-text">
       Text reproduced with permission from
@@ -658,6 +667,105 @@
             let currentDayMonth = null;
             let originalDateHTML = null;
             let isCurrentDayValidNisan = false;
+            let currentHebrewYear = null;
+
+            // === NASI SAID TRACKING ===
+            function getNasiSaidData(hebrewYear) {
+                try {
+                    const stored = localStorage.getItem("nasi-said-" + hebrewYear);
+                    return stored ? JSON.parse(stored) : {};
+                } catch (e) {
+                    return {};
+                }
+            }
+
+            function saveNasiSaidData(hebrewYear, data) {
+                try {
+                    localStorage.setItem("nasi-said-" + hebrewYear, JSON.stringify(data));
+                } catch (e) {
+                    // Storage unavailable (e.g. private browsing quota)
+                }
+            }
+
+            function isNasiSaid(hebrewYear, dayMonth) {
+                const data = getNasiSaidData(hebrewYear);
+                return Boolean(data[dayMonth]);
+            }
+
+            function toggleNasiSaid(hebrewYear, dayMonth) {
+                const data = getNasiSaidData(hebrewYear);
+                data[dayMonth] = !data[dayMonth];
+                saveNasiSaidData(hebrewYear, data);
+                return Boolean(data[dayMonth]);
+            }
+
+            function getDisplayedDayMonth() {
+                const daySelect = document.getElementById("day-select");
+                const selectedDay = daySelect ? daySelect.value : "";
+                return selectedDay || currentDayMonth;
+            }
+
+            function updateCheckButton(dayMonth) {
+                const container = document.getElementById("nasi-check-container");
+                const button = document.getElementById("nasi-check-button");
+                const label = document.getElementById("nasi-check-label");
+                const icon = document.getElementById("nasi-check-icon");
+                if (!container || !button || !label) return;
+                if (!dayMonth || !currentHebrewYear) {
+                    container.style.display = "none";
+                    return;
+                }
+                container.style.display = "flex";
+                const isSaid = isNasiSaid(currentHebrewYear, dayMonth);
+                button.setAttribute("aria-pressed", isSaid ? "true" : "false");
+                button.classList.toggle("is-said", isSaid);
+                label.textContent = isSaid ? "Nasi said!" : "Mark Nasi as said";
+                if (icon) {
+                    const ns = "http://www.w3.org/2000/svg";
+                    while (icon.firstChild) {
+                        icon.removeChild(icon.firstChild);
+                    }
+                    if (isSaid) {
+                        const path = document.createElementNS(ns, "path");
+                        path.setAttribute("d", "M22 11.08V12a10 10 0 1 1-5.93-9.14");
+                        const poly = document.createElementNS(ns, "polyline");
+                        poly.setAttribute("points", "22 4 12 14.01 9 11.01");
+                        icon.appendChild(path);
+                        icon.appendChild(poly);
+                    } else {
+                        const circle = document.createElementNS(ns, "circle");
+                        circle.setAttribute("cx", "12");
+                        circle.setAttribute("cy", "12");
+                        circle.setAttribute("r", "10");
+                        icon.appendChild(circle);
+                    }
+                }
+            }
+
+            function updateDaySelectOptions() {
+                if (!currentHebrewYear) return;
+                const data = getNasiSaidData(currentHebrewYear);
+                const select = document.getElementById("day-select");
+                if (!select) return;
+                Array.from(select.options).forEach(option => {
+                    if (!option.value) return;
+                    const dayMonth = option.value;
+                    const wasSaid = Boolean(data[dayMonth]);
+                    option.text = wasSaid ? "✓ " + dayMonth : dayMonth;
+                });
+            }
+
+            // Check button click handler
+            const nasiCheckButton = document.getElementById("nasi-check-button");
+            if (nasiCheckButton) {
+                nasiCheckButton.addEventListener("click", function() {
+                    const dayMonth = getDisplayedDayMonth();
+                    if (!dayMonth || !currentHebrewYear) return;
+                    toggleNasiSaid(currentHebrewYear, dayMonth);
+                    updateCheckButton(dayMonth);
+                    updateDaySelectOptions();
+                });
+            }
 
             // Fetch Hebrew Date from HebCal API - UPDATED VERSION
             fetch("https://www.hebcal.com/converter?cfg=json&gy=" + new Date().getFullYear() + "&gm=" + (new Date().getMonth() + 1) + "&gd=" + new Date().getDate() + "&g2h=1")
@@ -670,6 +778,7 @@
                   const todayOption = document.getElementById("today-option");
 
                     currentDayMonth = dayMonth;
+                    currentHebrewYear = data.hy;
                   if (todayOption) {
                       todayOption.textContent = "Today: " + dayMonth;
                   }
@@ -693,6 +802,8 @@
                         dateEl.innerHTML = originalDateHTML;
                         setNoNasiMessage();
                     }
+                    updateDaySelectOptions();
+                    updateCheckButton(isCurrentDayValidNisan ? dayMonth : null);
                 })
                 .catch(error => {
                     console.error("Error fetching Hebrew date:", error);
@@ -718,6 +829,7 @@
                     dateEl.appendChild(span);
                     fetchPrayer(selectedDay, 'nasi.json', 'english-nasi', 'hebrew-nasi');
                     fetchPrayer(selectedDay, 'yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
+                    updateCheckButton(selectedDay);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
                     // Clear previous prayers while loading
@@ -733,9 +845,11 @@
                             // Current date is within Nisan 1-13, fetch the prayers
                             fetchPrayer(currentDayMonth, 'nasi.json', 'english-nasi', 'hebrew-nasi');
                             fetchPrayer(currentDayMonth, 'yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
+                            updateCheckButton(currentDayMonth);
                         } else {
                             // Current date is outside Nisan, show the no-nasi message
                             setNoNasiMessage();
+                            updateCheckButton(null);
                         }
                     }
                     window.scrollTo({ top: 0, behavior: 'smooth' });

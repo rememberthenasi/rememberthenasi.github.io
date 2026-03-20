@@ -727,3 +727,85 @@ body.dark-mode .language-option.is-active {
     padding: 8px;
   }
 }
+
+/* ── Nasi Said Check Button ── */
+.nasi-check-container {
+  display: flex;
+  justify-content: center;
+  margin: var(--space-1) auto var(--space-4);
+}
+
+.nasi-check-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--ui-button-vh);
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  line-height: 1;
+  border: 2px solid var(--border-color);
+  background-color: var(--surface-1);
+  color: var(--text-color);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+  box-shadow: var(--shadow-light);
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.nasi-check-button:hover {
+  background-color: var(--surface-2);
+  box-shadow: var(--shadow-card);
+}
+
+.nasi-check-button:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.nasi-check-button:focus-visible {
+  outline: 3px solid var(--ring-color);
+  outline-offset: 2px;
+}
+
+.nasi-check-button.is-said {
+  background-color: #e8f5e9;
+  border-color: #4caf50;
+  color: #2e7d32;
+}
+
+.nasi-check-button.is-said:hover {
+  background-color: #d4edda;
+}
+
+body.dark-mode .nasi-check-button {
+  background-color: var(--surface-1);
+  border-color: var(--border-dark);
+  color: var(--dark-text);
+}
+
+body.dark-mode .nasi-check-button:hover {
+  background-color: var(--surface-2);
+}
+
+body.dark-mode .nasi-check-button.is-said {
+  background-color: #1b3a1e;
+  border-color: #4caf50;
+  color: #a5d6a7;
+}
+
+body.dark-mode .nasi-check-button.is-said:hover {
+  background-color: #1f4523;
+}
+
+@media (max-width: 768px) {
+  .nasi-check-button {
+    min-height: 50px;
+    font-size: 1rem;
+  }
+}
