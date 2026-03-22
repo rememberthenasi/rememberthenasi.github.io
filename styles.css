@@ -141,6 +141,96 @@ body.dark-mode .bottom-text {
   width: 100%;
 }
 
+.missed-day-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0;
+}
+
+.missed-day-prompt {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  line-height: 1;
+  border: 2px solid #f0b429;
+  background-color: #fff6dd;
+  color: #7a5700;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: var(--shadow-light);
+  box-sizing: border-box;
+  white-space: normal;
+  text-align: center;
+}
+
+.missed-day-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.missed-day-action-button {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 50%;
+  border: 1px solid #d39e00;
+  background-color: #ffffff;
+  color: #7a5700;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.missed-day-action-button:hover {
+  background-color: #fff0c6;
+}
+
+.missed-day-action-button:focus-visible {
+  outline: 3px solid rgba(240, 180, 41, 0.45);
+  outline-offset: 2px;
+}
+
+.missed-day-container.is-confirmed .missed-day-prompt {
+  border-color: #4caf50;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+body.dark-mode .missed-day-prompt {
+  background-color: #3e2f10;
+  border-color: #f0b429;
+  color: #ffd87a;
+}
+
+body.dark-mode .missed-day-action-button {
+  background-color: #241b08;
+  border-color: #f0b429;
+  color: #ffd87a;
+}
+
+body.dark-mode .missed-day-action-button:hover {
+  background-color: #4c3a14;
+}
+
+body.dark-mode .missed-day-container.is-confirmed .missed-day-prompt {
+  background-color: #1b3a1e;
+  border-color: #4caf50;
+  color: #a5d6a7;
+}
+
 /* Button Styles */
 button {
   box-sizing: border-box;
@@ -804,6 +894,15 @@ body.dark-mode .nasi-check-button.is-said:hover {
 }
 
 @media (max-width: 768px) {
+  .missed-day-prompt {
+    min-height: 50px;
+    font-size: 0.95rem;
+    width: 100%;
+    max-width: 460px;
+    border-radius: 18px;
+    padding: 10px 12px;
+  }
+
   .nasi-check-button {
     min-height: 50px;
     font-size: 1rem;

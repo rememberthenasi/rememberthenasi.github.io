@@ -119,6 +119,15 @@
             <option value="13 Nisan">13 Nisan</option>
           </select>
         </div>
+        <div id="missed-day-container" class="missed-day-container" style="display:none;">
+          <div class="missed-day-prompt" aria-live="polite">
+            <span id="missed-day-label">Missed day reminder</span>
+            <div class="missed-day-actions">
+              <button type="button" id="missed-day-check" class="missed-day-action-button missed-day-check" aria-label="Mark missed day as said" title="Mark as said">✓</button>
+              <button type="button" id="missed-day-open" class="missed-day-action-button missed-day-open" aria-label="Open missed day" title="Open day">✕</button>
+            </div>
+          </div>
+        </div>
         <div class="controls-bottom-row">
           <!-- Dark mode toggle button -->
           <button type="button" id="dark-mode-toggle" class="dark-mode-toggle icon-button" aria-label="Toggle dark mode" title="Toggle dark mode">
@@ -699,6 +708,81 @@
                 return Boolean(data[dayMonth]);
             }
 
+            function setNasiSaid(hebrewYear, dayMonth, isSaid) {
+              const data = getNasiSaidData(hebrewYear);
+              data[dayMonth] = Boolean(isSaid);
+              saveNasiSaidData(hebrewYear, data);
+              return Boolean(data[dayMonth]);
+            }
+
+            function getNisanDayNumber(dayMonth) {
+              const match = /^([0-9]{1,2})\s+Nisan$/.exec(dayMonth || "");
+              if (!match) {
+                return null;
+              }
+              const parsed = Number.parseInt(match[1], 10);
+              if (Number.isNaN(parsed) || parsed < 1 || parsed > 13) {
+                return null;
+              }
+              return parsed;
+            }
+
+            function getMissedDaysBeforeCurrent() {
+              if (!currentHebrewYear || !isCurrentDayValidNisan || !currentDayMonth) {
+                return [];
+              }
+              const todayNisanDay = getNisanDayNumber(currentDayMonth);
+              if (!todayNisanDay || todayNisanDay <= 1) {
+                return [];
+              }
+              const data = getNasiSaidData(currentHebrewYear);
+              const missed = [];
+              for (let day = 1; day < todayNisanDay; day += 1) {
+                const dayMonth = day + " Nisan";
+                if (!data[dayMonth]) {
+                  missed.push(dayMonth);
+                }
+              }
+              return missed;
+            }
+
+            let missedDayHideTimer = null;
+
+            function updateMissedDayPrompt() {
+              const container = document.getElementById("missed-day-container");
+              const label = document.getElementById("missed-day-label");
+              const checkButton = document.getElementById("missed-day-check");
+              const openButton = document.getElementById("missed-day-open");
+              const actions = container ? container.querySelector(".missed-day-actions") : null;
+              if (!container || !label || !checkButton || !openButton) return;
+
+              if (missedDayHideTimer) {
+                clearTimeout(missedDayHideTimer);
+                missedDayHideTimer = null;
+              }
+
+              container.classList.remove("is-confirmed");
+              if (actions) {
+                actions.style.display = "inline-flex";
+              }
+
+              const missedDays = getMissedDaysBeforeCurrent();
+              if (missedDays.length === 0) {
+                container.style.display = "none";
+                checkButton.removeAttribute("data-day-month");
+                openButton.removeAttribute("data-day-month");
+                return;
+              }
+
+              const nextMissedDay = missedDays[0];
+              label.textContent = nextMissedDay + " is not marked as said. Did you miss it?";
+              checkButton.setAttribute("data-day-month", nextMissedDay);
+              openButton.setAttribute("data-day-month", nextMissedDay);
+              checkButton.setAttribute("aria-label", "Mark " + nextMissedDay + " as said");
+              openButton.setAttribute("aria-label", "Open " + nextMissedDay);
+              container.style.display = "flex";
+            }
+
             function getDisplayedDayMonth() {
                 const daySelect = document.getElementById("day-select");
                 const selectedDay = daySelect ? daySelect.value : "";
@@ -764,7 +848,49 @@
                     toggleNasiSaid(currentHebrewYear, dayMonth);
                     updateCheckButton(dayMonth);
                     updateDaySelectOptions();
+                updateMissedDayPrompt();
                 });
+            }
+
+            const missedDayCheckButton = document.getElementById("missed-day-check");
+            if (missedDayCheckButton) {
+              missedDayCheckButton.addEventListener("click", function() {
+                const missedDay = this.getAttribute("data-day-month");
+                if (!missedDay || !currentHebrewYear) return;
+                setNasiSaid(currentHebrewYear, missedDay, true);
+                updateDaySelectOptions();
+                if (getDisplayedDayMonth() === missedDay) {
+                  updateCheckButton(missedDay);
+                }
+
+                const container = document.getElementById("missed-day-container");
+                const label = document.getElementById("missed-day-label");
+                const actions = container ? container.querySelector(".missed-day-actions") : null;
+                if (container && label) {
+                  container.classList.add("is-confirmed");
+                  label.textContent = missedDay + " has been checked off.";
+                  if (actions) {
+                    actions.style.display = "none";
+                  }
+                  missedDayHideTimer = setTimeout(() => {
+                    container.style.display = "none";
+                    updateMissedDayPrompt();
+                  }, 1200);
+                } else {
+                  updateMissedDayPrompt();
+                }
+              });
+            }
+
+            const missedDayOpenButton = document.getElementById("missed-day-open");
+            if (missedDayOpenButton) {
+              missedDayOpenButton.addEventListener("click", function() {
+                const missedDay = this.getAttribute("data-day-month");
+                const daySelect = document.getElementById("day-select");
+                if (!missedDay || !daySelect) return;
+                daySelect.value = missedDay;
+                daySelect.dispatchEvent(new Event("change", { bubbles: true }));
+              });
             }
 
             // Fetch Hebrew Date from HebCal API - UPDATED VERSION
@@ -804,11 +930,13 @@
                     }
                     updateDaySelectOptions();
                     updateCheckButton(isCurrentDayValidNisan ? dayMonth : null);
+                    updateMissedDayPrompt();
                 })
                 .catch(error => {
                     console.error("Error fetching Hebrew date:", error);
                     document.getElementById("date").innerHTML = "Error loading Hebrew date.";
                     setErrorMessage();
+                    updateMissedDayPrompt();
                 });
 
             // Day selector: display a specific day's Nasi and Yehi Ratzon
@@ -830,6 +958,7 @@
                     fetchPrayer(selectedDay, 'nasi.json', 'english-nasi', 'hebrew-nasi');
                     fetchPrayer(selectedDay, 'yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
                     updateCheckButton(selectedDay);
+                    updateMissedDayPrompt();
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
                     // Clear previous prayers while loading
@@ -852,6 +981,7 @@
                             updateCheckButton(null);
                         }
                     }
+                        updateMissedDayPrompt();
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             });
