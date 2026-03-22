@@ -727,6 +727,22 @@
               return parsed;
             }
 
+            function getMostRecentUnmarkedDay() {
+              if (!currentHebrewYear) return null;
+              const maxDay = (isCurrentDayValidNisan && currentDayMonth)
+                ? getNisanDayNumber(currentDayMonth)
+                : 13;
+              if (!maxDay) return null;
+              const data = getNasiSaidData(currentHebrewYear);
+              for (let day = maxDay; day >= 1; day -= 1) {
+                const dayMonth = day + " Nisan";
+                if (!data[dayMonth]) {
+                  return dayMonth;
+                }
+              }
+              return null;
+            }
+
             function getMissedDaysBeforeCurrent() {
               if (!currentHebrewYear || !isCurrentDayValidNisan || !currentDayMonth) {
                 return [];
@@ -845,10 +861,20 @@
                 nasiCheckButton.addEventListener("click", function() {
                     const dayMonth = getDisplayedDayMonth();
                     if (!dayMonth || !currentHebrewYear) return;
-                    toggleNasiSaid(currentHebrewYear, dayMonth);
+                    const newState = toggleNasiSaid(currentHebrewYear, dayMonth);
                     updateCheckButton(dayMonth);
                     updateDaySelectOptions();
-                updateMissedDayPrompt();
+                    updateMissedDayPrompt();
+                    if (newState && dayMonth !== currentDayMonth) {
+                        const mostRecentUnmarked = getMostRecentUnmarkedDay();
+                        if (mostRecentUnmarked) {
+                            const daySelect = document.getElementById("day-select");
+                            if (daySelect) {
+                                daySelect.value = mostRecentUnmarked !== currentDayMonth ? mostRecentUnmarked : "";
+                                daySelect.dispatchEvent(new Event("change", { bubbles: true }));
+                            }
+                        }
+                    }
                 });
             }
 
