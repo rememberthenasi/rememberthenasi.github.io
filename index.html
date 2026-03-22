@@ -775,7 +775,7 @@
               }
 
               const nextMissedDay = missedDays[0];
-              label.textContent = nextMissedDay + " is not marked as said. Did you miss it?";
+              label.innerHTML = nextMissedDay + " is not marked as said. <br class='mobile-only-break'>Did you say it?";
               checkButton.setAttribute("data-day-month", nextMissedDay);
               openButton.setAttribute("data-day-month", nextMissedDay);
               checkButton.setAttribute("aria-label", "Mark " + nextMissedDay + " as said");

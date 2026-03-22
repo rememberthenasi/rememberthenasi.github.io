@@ -175,6 +175,10 @@ body.dark-mode .bottom-text {
   line-height: 1.3;
 }
 
+.missed-day-label .mobile-only-break {
+  display: none;
+}
+
 .missed-day-actions {
   display: inline-flex;
   align-items: center;
@@ -899,6 +903,10 @@ body.dark-mode .nasi-check-button.is-said:hover {
 }
 
 @media (max-width: 768px) {
+  .missed-day-label .mobile-only-break {
+    display: block;
+  }
+
   .missed-day-prompt {
     min-height: 56px;
     font-size: 0.95rem;
