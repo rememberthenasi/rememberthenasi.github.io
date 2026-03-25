@@ -793,6 +793,20 @@
                 actions.style.display = "inline-flex";
               }
 
+              // Only show missed-day reminder after today's Nasi has been checked off.
+              const todayIsSaid = Boolean(
+                isCurrentDayValidNisan &&
+                currentDayMonth &&
+                currentHebrewYear &&
+                isNasiSaid(currentHebrewYear, currentDayMonth)
+              );
+              if (!todayIsSaid) {
+                container.style.display = "none";
+                checkButton.removeAttribute("data-day-month");
+                openButton.removeAttribute("data-day-month");
+                return;
+              }
+
               const missedDays = getMissedDaysBeforeCurrent();
               if (missedDays.length === 0) {
                 container.style.display = "none";
