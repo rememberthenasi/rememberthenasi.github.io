@@ -1098,3 +1098,115 @@ body.dark-mode .settings-notice--warn {
 body.dark-mode .settings-notice--warn .settings-notice__text {
   color: #ffa726;
 }
+
+/* ── Reminder Time Picker ── */
+
+.settings-row--time {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  padding: var(--space-2) 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.time-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+.time-picker__presets {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 999px;
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-color);
+}
+
+.time-preset-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-color);
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.time-preset-btn:hover {
+  background-color: var(--surface-1);
+}
+
+.time-preset-btn.is-active,
+.time-preset-btn[aria-pressed="true"] {
+  background-color: var(--primary-color);
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.time-preset-btn:focus-visible {
+  outline: 3px solid var(--ring-color);
+  outline-offset: 2px;
+}
+
+.custom-time-input {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-color);
+  background-color: var(--surface-1);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 7px 12px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  width: auto;
+  min-width: 130px;
+  box-shadow: var(--shadow-light);
+  box-sizing: border-box;
+}
+
+.custom-time-input:focus {
+  outline: 3px solid var(--ring-color);
+  outline-offset: 2px;
+  border-color: var(--primary-color);
+}
+
+/* Dark mode */
+body.dark-mode .settings-row--time {
+  border-top-color: var(--border-dark);
+}
+
+body.dark-mode .time-picker__presets {
+  background-color: var(--surface-2);
+  border-color: var(--border-dark);
+}
+
+body.dark-mode .time-preset-btn {
+  color: var(--dark-text);
+}
+
+body.dark-mode .time-preset-btn:hover {
+  background-color: rgba(255, 255, 255, 0.07);
+}
+
+body.dark-mode .time-preset-btn.is-active,
+body.dark-mode .time-preset-btn[aria-pressed="true"] {
+  background-color: var(--primary-color);
+  color: var(--dark-text);
+}
+
+body.dark-mode .custom-time-input {
+  background-color: var(--surface-1);
+  border-color: var(--border-dark);
+  color: var(--dark-text);
+  color-scheme: dark;
+}

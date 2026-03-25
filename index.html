@@ -935,6 +935,56 @@
   var notificationStatusText = document.getElementById("notification-status-text");
   var notificationIosNotice = document.getElementById("notification-ios-notice");
   var notificationDeniedNotice = document.getElementById("notification-denied-notice");
+  var reminderTimeRow = document.getElementById("reminder-time-row");
+  var customTimeInput = document.getElementById("custom-time-input");
+  var timePresetBtns = document.querySelectorAll(".time-preset-btn");
+
+  // ── Reminder Time helpers ──
+  var REMINDER_TIME_KEY = "reminder-time";
+  var DEFAULT_REMINDER_TIME = "06:00";
+  var DEFAULT_CUSTOM_TIME = "08:00";
+
+  function getSavedReminderTime() {
+    return localStorage.getItem(REMINDER_TIME_KEY) || DEFAULT_REMINDER_TIME;
+  }
+
+  function saveReminderTime(time) {
+    localStorage.setItem(REMINDER_TIME_KEY, time);
+    // Tag OneSignal user so the server can target the right send-time segment
+    try {
+      if (window.OneSignal && window.OneSignal.User) {
+        window.OneSignal.User.addTags({ reminder_time: time });
+      }
+    } catch (e) {
+      console.warn("OneSignal addTags failed:", e);
+    }
+  }
+
+  function isPresetTime(time) {
+    return time === "06:00" || time === "09:00";
+  }
+
+  function applyReminderTimeUI(time) {
+    var isCustom = !isPresetTime(time);
+    timePresetBtns.forEach(function(btn) {
+      var isActive = btn.dataset.time === time || (btn.dataset.time === "custom" && isCustom);
+      btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+      btn.classList.toggle("is-active", isActive);
+    });
+    if (customTimeInput) {
+      customTimeInput.style.display = isCustom ? "block" : "none";
+      if (isCustom) {
+        customTimeInput.value = time;
+      }
+    }
+  }
+
+  function updateReminderTimeRowVisibility() {
+    if (!reminderTimeRow) return;
+    var isSubscribed = notificationToggle &&
+      notificationToggle.getAttribute("aria-checked") === "true";
+    reminderTimeRow.style.display = isSubscribed ? "flex" : "none";
+  }
 
   function isIOSDevice() {
     return /iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase());
@@ -985,6 +1035,7 @@
       if (notificationStatusText) {
         notificationStatusText.textContent = "Notifications not supported in this browser";
       }
+      updateReminderTimeRowVisibility();
       return;
     }
 
@@ -997,6 +1048,7 @@
       if (notificationStatusText) {
         notificationStatusText.textContent = "Install the app to enable reminders";
       }
+      updateReminderTimeRowVisibility();
       return;
     }
 
@@ -1012,6 +1064,7 @@
       if (notificationStatusText) {
         notificationStatusText.textContent = "Notifications blocked – change in browser settings";
       }
+      updateReminderTimeRowVisibility();
       return;
     }
 
@@ -1036,6 +1089,7 @@
     } catch (e) {
       console.warn("OneSignal status check failed:", e);
     }
+    updateReminderTimeRowVisibility();
   };
 
   async function toggleNotifications() {
@@ -1088,6 +1142,34 @@
   if (notificationToggle) {
     notificationToggle.addEventListener("click", toggleNotifications);
   }
+
+  // Time preset buttons
+  timePresetBtns.forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      var chosen = btn.dataset.time;
+      if (chosen === "custom") {
+        // Use existing custom input value, or fall back to default custom time
+        var existing = getSavedReminderTime();
+        chosen = isPresetTime(existing) ? DEFAULT_CUSTOM_TIME : existing;
+        if (customTimeInput) customTimeInput.value = chosen;
+      }
+      saveReminderTime(chosen);
+      applyReminderTimeUI(chosen);
+    });
+  });
+
+  // Custom time input
+  if (customTimeInput) {
+    customTimeInput.addEventListener("change", function() {
+      if (this.value) {
+        saveReminderTime(this.value);
+        applyReminderTimeUI(this.value);
+      }
+    });
+  }
+
+  // Initialise time picker UI from saved preference
+  applyReminderTimeUI(getSavedReminderTime());
 
   // Keyboard: close on Escape
   document.addEventListener("keydown", function(e) {
@@ -1151,6 +1233,21 @@
             <span class="toggle-btn__thumb"></span>
           </button>
         </div>
+        <!-- Reminder Time Picker (shown only when notifications are on) -->
+        <div id="reminder-time-row" class="settings-row settings-row--time" style="display:none;">
+          <div class="settings-row__info">
+            <span class="settings-row__label">Reminder Time</span>
+          </div>
+          <div class="time-picker">
+            <div class="time-picker__presets" role="group" aria-label="Select reminder time">
+              <button type="button" class="time-preset-btn" data-time="06:00" aria-pressed="false">6 AM</button>
+              <button type="button" class="time-preset-btn" data-time="09:00" aria-pressed="false">9 AM</button>
+              <button type="button" class="time-preset-btn is-custom" data-time="custom" aria-pressed="false">Custom</button>
+            </div>
+            <input type="time" id="custom-time-input" class="custom-time-input" aria-label="Custom reminder time" style="display:none;" value="08:00">
+          </div>
+        </div>
+
         <div id="notification-ios-notice" class="settings-notice" style="display:none;">
           <svg class="settings-notice__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <circle cx="12" cy="12" r="10"></circle>
