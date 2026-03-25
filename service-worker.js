@@ -37,18 +37,30 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Serve cached content on failure
+// Handle skipWaiting message from the page
+self.addEventListener('message', event => {
+  if (event.data && event.data.action === 'skipWaiting') {
+    self.skipWaiting();
+  }
+});
+
+// Serve cached content on failure (same-origin GET requests only)
 self.addEventListener('fetch', event => {
+  const { request } = event;
+  // Only intercept same-origin GET requests
+  if (request.method !== 'GET' || !request.url.startsWith(self.location.origin)) {
+    return;
+  }
   event.respondWith(
-    fetch(event.request)
+    fetch(request)
       .then(response => {
         const responseClone = response.clone();
         caches.open(CACHE_NAME).then(cache => {
-          cache.put(event.request, responseClone);
+          cache.put(request, responseClone);
         });
         return response;
       })
-      .catch(() => caches.match(event.request))
+      .catch(() => caches.match(request))
   );
 });
 
