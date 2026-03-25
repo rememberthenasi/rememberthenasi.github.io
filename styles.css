@@ -86,6 +86,7 @@ h1, h2 {
 }
 
 .site-logo {
+  display: block;
   width: 64px;
   height: 64px;
   border-radius: var(--border-radius);
@@ -247,7 +248,9 @@ body.dark-mode .bottom-text {
 /* Today reminder action button: pill-shaped with text label */
 .today-reminder-action {
   width: auto;
-  padding: 0 12px;
+  height: auto;
+  min-height: 32px;
+  padding: 5px 16px;
   border-radius: 999px;
   font-size: 0.85rem;
 }
