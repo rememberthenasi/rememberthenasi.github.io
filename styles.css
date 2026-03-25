@@ -80,12 +80,44 @@ h1, h2 {
   margin-top: var(--space-2);
 }
 
+.logo-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .site-logo {
   width: 64px;
   height: 64px;
   border-radius: var(--border-radius);
   object-fit: cover;
   box-shadow: none;
+}
+
+/* Streak chip overlay */
+.streak-chip {
+  position: absolute;
+  bottom: -4px;
+  right: -10px;
+  background: linear-gradient(135deg, #ff9600, #ff6f00);
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  min-width: 28px;
+  line-height: 1.4;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  pointer-events: none;
+}
+
+body.dark-mode .streak-chip {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 .header-container {
@@ -210,6 +242,14 @@ body.dark-mode .bottom-text {
 .missed-day-action-button:focus-visible {
   outline: 3px solid rgba(240, 180, 41, 0.45);
   outline-offset: 2px;
+}
+
+/* Today reminder action button: pill-shaped with text label */
+.today-reminder-action {
+  width: auto;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
 }
 
 .missed-day-container.is-confirmed .missed-day-prompt {

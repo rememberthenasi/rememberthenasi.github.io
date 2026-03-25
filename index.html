@@ -90,7 +90,10 @@
     <!-- Logo Display -->
     <p style="text-align:center;font-size:0.8rem;">בס"ד</p>
     <div class="logo-container">
+      <div class="logo-wrapper">
         <img src="icons/icon-192x192.png" alt="Site Logo" class="site-logo">
+        <div id="streak-chip" class="streak-chip" style="display:none;" aria-hidden="true"></div>
+      </div>
     </div>
     <h1>Remember The Nasi!</h1>
 
@@ -118,6 +121,14 @@
             <option value="12 Nisan">12 Nisan</option>
             <option value="13 Nisan">13 Nisan</option>
           </select>
+        </div>
+        <div id="today-reminder-container" class="missed-day-container" style="display:none;">
+          <div class="missed-day-prompt" aria-live="polite">
+            <span class="missed-day-label">Don't forget the Nasi!</span>
+            <div class="missed-day-actions">
+              <button type="button" id="today-reminder-check" class="missed-day-action-button today-reminder-action" aria-label="Mark today as said" title="Mark today as said">✓ Said already</button>
+            </div>
+          </div>
         </div>
         <div id="missed-day-container" class="missed-day-container" style="display:none;">
           <div class="missed-day-prompt" aria-live="polite">
@@ -848,11 +859,56 @@
                 const select = document.getElementById("day-select");
                 if (!select) return;
                 Array.from(select.options).forEach(option => {
-                    if (!option.value) return;
+                    if (!option.value) {
+                        if (isCurrentDayValidNisan && currentDayMonth) {
+                            const wasSaid = Boolean(data[currentDayMonth]);
+                            const todayText = "Today: " + currentDayMonth;
+                            option.text = wasSaid ? "✓ " + todayText : todayText;
+                        }
+                        return;
+                    }
                     const dayMonth = option.value;
                     const wasSaid = Boolean(data[dayMonth]);
                     option.text = wasSaid ? "✓ " + dayMonth : dayMonth;
                 });
+            }
+
+            // === TODAY REMINDER ===
+            function updateTodayReminder() {
+                const container = document.getElementById("today-reminder-container");
+                if (!container) return;
+                if (!isCurrentDayValidNisan || !currentDayMonth || !currentHebrewYear) {
+                    container.style.display = "none";
+                    return;
+                }
+                const todayIsSaid = isNasiSaid(currentHebrewYear, currentDayMonth);
+                container.style.display = todayIsSaid ? "none" : "flex";
+            }
+
+            // === STREAK CHIP ===
+            function computeStreak() {
+                if (!isCurrentDayValidNisan || !currentDayMonth || !currentHebrewYear) return null;
+                const todayN = getNisanDayNumber(currentDayMonth);
+                if (!todayN) return null;
+                const data = getNasiSaidData(currentHebrewYear);
+                for (let day = 1; day < todayN; day += 1) {
+                    if (!data[day + " Nisan"]) return null;
+                }
+                const todayIsSaid = Boolean(data[currentDayMonth]);
+                const streak = todayIsSaid ? todayN : todayN - 1;
+                return streak > 0 ? streak : null;
+            }
+
+            function updateStreakChip() {
+                const chip = document.getElementById("streak-chip");
+                if (!chip) return;
+                const streak = computeStreak();
+                if (streak === null) {
+                    chip.style.display = "none";
+                } else {
+                    chip.textContent = "🔥 " + streak;
+                    chip.style.display = "flex";
+                }
             }
 
             // Check button click handler
@@ -865,6 +921,8 @@
                     updateCheckButton(dayMonth);
                     updateDaySelectOptions();
                     updateMissedDayPrompt();
+                    updateTodayReminder();
+                    updateStreakChip();
                     if (newState && dayMonth !== currentDayMonth) {
                         const mostRecentUnmarked = getMostRecentUnmarkedDay();
                         if (mostRecentUnmarked) {
@@ -875,6 +933,19 @@
                             }
                         }
                     }
+                });
+            }
+
+            const todayReminderCheckButton = document.getElementById("today-reminder-check");
+            if (todayReminderCheckButton) {
+                todayReminderCheckButton.addEventListener("click", function() {
+                    if (!currentDayMonth || !currentHebrewYear) return;
+                    setNasiSaid(currentHebrewYear, currentDayMonth, true);
+                    updateCheckButton(currentDayMonth);
+                    updateDaySelectOptions();
+                    updateMissedDayPrompt();
+                    updateTodayReminder();
+                    updateStreakChip();
                 });
             }
 
@@ -901,9 +972,11 @@
                   missedDayHideTimer = setTimeout(() => {
                     container.style.display = "none";
                     updateMissedDayPrompt();
+                    updateStreakChip();
                   }, 1200);
                 } else {
                   updateMissedDayPrompt();
+                  updateStreakChip();
                 }
               });
             }
@@ -957,12 +1030,16 @@
                     updateDaySelectOptions();
                     updateCheckButton(isCurrentDayValidNisan ? dayMonth : null);
                     updateMissedDayPrompt();
+                    updateTodayReminder();
+                    updateStreakChip();
                 })
                 .catch(error => {
                     console.error("Error fetching Hebrew date:", error);
                     document.getElementById("date").innerHTML = "Error loading Hebrew date.";
                     setErrorMessage();
                     updateMissedDayPrompt();
+                    updateTodayReminder();
+                    updateStreakChip();
                 });
 
             // Day selector: display a specific day's Nasi and Yehi Ratzon
