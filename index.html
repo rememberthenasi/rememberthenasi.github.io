@@ -63,7 +63,7 @@
         appId: "d70dc600-03a1-459b-9ab9-9bc7a4fcc1d6",
         safari_web_id: "web.onesignal.auto.68a78e72-ca6b-43d3-aa15-83c87cfb9ced",
         notifyButton: { enable: false },
-        autoResubscribe: true,
+        autoResubscribe: false,
       });
 
       // Update settings UI once SDK is ready
@@ -1251,6 +1251,7 @@
 
       // ── Reminder Time helpers ──
       var REMINDER_TIME_KEY = "reminder-time";
+      var NOTIF_OPT_OUT_KEY = "notif-opted-out";
       var DEFAULT_REMINDER_TIME = "06:00";
       var DEFAULT_CUSTOM_TIME = "08:00";
 
@@ -1390,9 +1391,10 @@
           return;
         }
 
-        // Check OneSignal subscription
+        // Check OneSignal subscription, respecting local opt-out preference
         try {
-          var isSubscribed = !!(window.OneSignal &&
+          var userOptedOut = localStorage.getItem(NOTIF_OPT_OUT_KEY) === "true";
+          var isSubscribed = !userOptedOut && !!(window.OneSignal &&
             window.OneSignal.User &&
             window.OneSignal.User.PushSubscription &&
             window.OneSignal.User.PushSubscription.optedIn);
@@ -1418,8 +1420,10 @@
         var currentlyOn = notificationToggle.getAttribute("aria-checked") === "true";
         try {
           if (currentlyOn) {
+            localStorage.setItem(NOTIF_OPT_OUT_KEY, "true");
             await window.OneSignal.User.PushSubscription.optOut();
           } else {
+            localStorage.removeItem(NOTIF_OPT_OUT_KEY);
             if (Notification.permission === "default") {
               await window.OneSignal.Notifications.requestPermission();
             }
