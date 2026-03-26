@@ -1,0 +1,30 @@
+name: Send Daily Nasi Reminders
+
+on:
+  # Run every 30 minutes to cover all possible reminder_time_utc slots
+  schedule:
+    - cron: '0,30 * * * *'
+  # Allow manual trigger for testing
+  workflow_dispatch:
+
+jobs:
+  send-reminders:
+    name: Send push notifications for current 30-min UTC slot
+    runs-on: ubuntu-latest
+    # Only run during Nisan (roughly March–April); the script exits cleanly on non-Nisan days
+    # so this restriction is optional but avoids unnecessary runs outside the season.
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Send reminders
+        env:
+          ONESIGNAL_REST_API_KEY: ${{ secrets.ONESIGNAL_REST_API_KEY }}
+        run: node .github/scripts/send-reminders.js

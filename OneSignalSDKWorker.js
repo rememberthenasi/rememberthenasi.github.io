@@ -1,6 +1,25 @@
 // Unified Service Worker: Offline Support + OneSignal Push
 importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
 
+// Handle clicks on locally-scheduled notifications (tag: 'daily-nasi-reminder').
+// OneSignal's own click handler manages push notifications it sends.
+self.addEventListener('notificationclick', function(event) {
+  if (event.notification.tag !== 'daily-nasi-reminder') return;
+  event.notification.close();
+  var targetUrl = (event.notification.data && event.notification.data.url) || self.location.origin;
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(windowClients) {
+      for (var i = 0; i < windowClients.length; i++) {
+        var client = windowClients[i];
+        if (client.url.startsWith(targetUrl) && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      return clients.openWindow(targetUrl);
+    })
+  );
+});
+
 const CACHE_NAME = 'rememberthenasi-v16';
 
 // Allowlisted assets to precache (versioned URLs matching index.html references; no duplicates)
