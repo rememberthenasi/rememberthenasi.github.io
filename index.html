@@ -63,8 +63,7 @@
         appId: "d70dc600-03a1-459b-9ab9-9bc7a4fcc1d6",
         safari_web_id: "web.onesignal.auto.68a78e72-ca6b-43d3-aa15-83c87cfb9ced",
         notifyButton: { enable: false },
-        autoResubscribe: true,
-        serviceWorkerPath: '/service-worker.js'
+        autoResubscribe: false,
       });
 
       // Update settings UI once SDK is ready
@@ -1156,7 +1155,7 @@
         });
 
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js')
+            navigator.serviceWorker.register('/OneSignalSDKWorker.js')
                 .then(registration => {
                     console.log('ServiceWorker registration successful with scope: ', registration.scope);
                 })
@@ -1252,6 +1251,7 @@
 
       // ── Reminder Time helpers ──
       var REMINDER_TIME_KEY = "reminder-time";
+      var NOTIF_OPT_OUT_KEY = "notif-opted-out";
       var DEFAULT_REMINDER_TIME = "06:00";
       var DEFAULT_CUSTOM_TIME = "08:00";
 
@@ -1259,11 +1259,25 @@
         return localStorage.getItem(REMINDER_TIME_KEY) || DEFAULT_REMINDER_TIME;
       }
 
+      function computeUtcReminderTime(localTime) {
+        var parts = localTime.split(":");
+        var localHours = parseInt(parts[0], 10);
+        var localMinutes = parseInt(parts[1], 10);
+        var offsetMinutes = new Date().getTimezoneOffset(); // (UTC - local) in minutes
+        var utcTotal = localHours * 60 + localMinutes + offsetMinutes;
+        utcTotal = Math.round(utcTotal / 30) * 30; // round to nearest 30-min slot
+        utcTotal = ((utcTotal % 1440) + 1440) % 1440;
+        var h = Math.floor(utcTotal / 60);
+        var m = utcTotal % 60;
+        return String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0");
+      }
+
       function saveReminderTime(time) {
         localStorage.setItem(REMINDER_TIME_KEY, time);
         try {
           if (window.OneSignal && window.OneSignal.User) {
-            window.OneSignal.User.addTags({ reminder_time: time });
+            var utcTime = computeUtcReminderTime(time);
+            window.OneSignal.User.addTags({ reminder_time: time, reminder_time_utc: utcTime });
           }
         } catch (e) {
           console.warn("OneSignal addTags failed:", e);
@@ -1391,9 +1405,10 @@
           return;
         }
 
-        // Check OneSignal subscription
+        // Check OneSignal subscription, respecting local opt-out preference
         try {
-          var isSubscribed = !!(window.OneSignal &&
+          var userOptedOut = localStorage.getItem(NOTIF_OPT_OUT_KEY) === "true";
+          var isSubscribed = !userOptedOut && !!(window.OneSignal &&
             window.OneSignal.User &&
             window.OneSignal.User.PushSubscription &&
             window.OneSignal.User.PushSubscription.optedIn);
@@ -1407,6 +1422,9 @@
           updateBadge(isSubscribed ? 'on' : 'off');
           if (isSubscribed) {
             applyReminderTimeUI(getSavedReminderTime());
+            scheduleNotification();
+          } else {
+            if (_notifTimer !== null) { clearTimeout(_notifTimer); _notifTimer = null; }
           }
         } catch (e) {
           console.warn("OneSignal status check failed:", e);
@@ -1414,19 +1432,69 @@
         updateReminderTimeRowVisibility();
       };
 
+      // ── Client-side notification scheduling (fires when app is open) ──
+      var _notifTimer = null;
+
+      function scheduleNotification() {
+        if (_notifTimer !== null) {
+          clearTimeout(_notifTimer);
+          _notifTimer = null;
+        }
+        if (!("Notification" in window) || !("serviceWorker" in navigator)) return;
+        if (Notification.permission !== "granted") return;
+        if (localStorage.getItem(NOTIF_OPT_OUT_KEY) === "true") return;
+
+        var reminderTime = getSavedReminderTime();
+        var parts = reminderTime.split(":");
+        var targetH = parseInt(parts[0], 10);
+        var targetM = parseInt(parts[1], 10);
+
+        var now = new Date();
+        var fire = new Date(now.getFullYear(), now.getMonth(), now.getDate(), targetH, targetM, 0, 0);
+        if (fire <= now) {
+          fire.setDate(fire.getDate() + 1);
+        }
+
+        var msUntil = fire - now;
+        _notifTimer = setTimeout(function() {
+          _notifTimer = null;
+          showScheduledNotification();
+          scheduleNotification(); // reschedule for tomorrow
+        }, msUntil);
+      }
+
+      function showScheduledNotification() {
+        navigator.serviceWorker.ready.then(function(registration) {
+          registration.showNotification("Remember the Nasi! 🙏", {
+            body: "Time to say the Nasi for today.",
+            icon: "/icons/icon-192x192.png",
+            badge: "/icons/icon-192x192.png",
+            tag: "daily-nasi-reminder",
+            renotify: false,
+            data: { url: window.location.origin + window.location.pathname }
+          });
+        }).catch(function(e) {
+          console.warn("showScheduledNotification failed:", e);
+        });
+      }
+
       async function toggleNotifications() {
         if (!notificationToggle) return;
         var currentlyOn = notificationToggle.getAttribute("aria-checked") === "true";
         try {
           if (currentlyOn) {
+            localStorage.setItem(NOTIF_OPT_OUT_KEY, "true");
+            if (_notifTimer !== null) { clearTimeout(_notifTimer); _notifTimer = null; }
             await window.OneSignal.User.PushSubscription.optOut();
           } else {
+            localStorage.removeItem(NOTIF_OPT_OUT_KEY);
             if (Notification.permission === "default") {
               await window.OneSignal.Notifications.requestPermission();
             }
             if (Notification.permission === "granted") {
               await window.OneSignal.User.PushSubscription.optIn();
               saveReminderTime(getSavedReminderTime());
+              scheduleNotification();
             }
           }
         } catch (e) {
