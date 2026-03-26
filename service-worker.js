@@ -1,5 +1,4 @@
-// Unified Service Worker: Offline Support + OneSignal Push
-importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
+// Service Worker: Offline Support
 
 const CACHE_NAME = 'rememberthenasi-v16';
 
@@ -64,7 +63,7 @@ self.addEventListener('fetch', event => {
   // Only handle GET requests
   if (request.method !== 'GET') return;
 
-  // Only handle same-origin requests (let cross-origin pass through, including OneSignal)
+  // Only handle same-origin requests (let cross-origin pass through)
   if (!request.url.startsWith(self.location.origin)) return;
 
   const url = new URL(request.url);
