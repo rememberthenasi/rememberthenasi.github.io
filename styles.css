@@ -987,6 +987,14 @@ body.dark-mode .nasi-check-button.is-said:hover {
   pointer-events: none;
 }
 
+.notif-badge--on {
+  background: #4caf50;
+}
+
+.notif-badge--off {
+  background: #2196f3;
+}
+
 /* ── Settings Drawer ── */
 
 .settings-backdrop {

@@ -160,7 +160,7 @@
               <path d="M8.8 10.6l6.4-3.2"></path>
               <path d="M8.8 13.4l6.4 3.2"></path>
             </svg>
-            <span>Share as image</span>
+            <span>As image</span>
           </button>
           <!-- Install Button -->
           <button type="button" id="share-button" class="dark-mode-toggle icon-button" aria-label="Install app" title="Install app">
@@ -1296,9 +1296,18 @@
         reminderTimeRow.style.display = isSubscribed ? "flex" : "none";
       }
 
-      function updateBadge(isSubscribed) {
+      function updateBadge(state) {
         if (!notifBadge) return;
-        notifBadge.style.display = isSubscribed ? "block" : "none";
+        notifBadge.classList.remove("notif-badge--on", "notif-badge--off");
+        if (state === "on") {
+          notifBadge.style.display = "block";
+          notifBadge.classList.add("notif-badge--on");
+        } else if (state === "off") {
+          notifBadge.style.display = "block";
+          notifBadge.classList.add("notif-badge--off");
+        } else {
+          notifBadge.style.display = "none";
+        }
       }
 
       function isIOSDevice() {
@@ -1348,7 +1357,7 @@
             notificationStatusText.textContent = "Notifications not supported in this browser";
             notificationStatusText.style.display = "block";
           }
-          updateBadge(false);
+          updateBadge('hidden');
           updateReminderTimeRowVisibility();
           return;
         }
@@ -1361,7 +1370,7 @@
           if (notificationStatusText) {
             notificationStatusText.style.display = "none";
           }
-          updateBadge(false);
+          updateBadge('hidden');
           updateReminderTimeRowVisibility();
           return;
         }
@@ -1377,7 +1386,7 @@
           if (notificationStatusText) {
             notificationStatusText.style.display = "none";
           }
-          updateBadge(false);
+          updateBadge('hidden');
           updateReminderTimeRowVisibility();
           return;
         }
@@ -1395,7 +1404,7 @@
           if (notificationStatusText) {
             notificationStatusText.style.display = "none";
           }
-          updateBadge(isSubscribed);
+          updateBadge(isSubscribed ? 'on' : 'off');
           if (isSubscribed) {
             applyReminderTimeUI(getSavedReminderTime());
           }
