@@ -50,6 +50,7 @@
     
 <!-- Link to Styles-->
 <link rel="stylesheet" href="styles.css?v=20260322a">
+<script src="https://unpkg.com/kosher-zmanim@0.9.0/dist/kosher-zmanim.min.js" crossorigin="anonymous"></script>
 
 </head>
 
@@ -231,6 +232,67 @@
               }
               // Remove meteg (vertical mark) when it is combined with tsere.
               return text.replace(/\u05B5\u05BD|\u05BD\u05B5/g, "\u05B5");
+            }
+
+            function formatLocalTime(value) {
+              if (!value) {
+                return null;
+              }
+              const parsed = new Date(value);
+              if (Number.isNaN(parsed.getTime())) {
+                return null;
+              }
+              return parsed.toLocaleTimeString([], {
+                hour: "numeric",
+                minute: "2-digit"
+              });
+            }
+
+            function getCurrentPosition(options) {
+              return new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject, options);
+              });
+            }
+
+            async function getGpsShkiahStatus() {
+              if (!window.KosherZmanim || !navigator.geolocation) {
+                return null;
+              }
+              let position;
+              try {
+                position = await getCurrentPosition({
+                  enableHighAccuracy: false,
+                  timeout: 8000,
+                  maximumAge: 300000
+                });
+              } catch (error) {
+                return null;
+              }
+              const timeZoneId = Intl.DateTimeFormat().resolvedOptions().timeZone;
+              if (!timeZoneId) {
+                return null;
+              }
+              let zmanim;
+              try {
+                zmanim = window.KosherZmanim.getZmanimJson({
+                  date: new Date(),
+                  timeZoneId,
+                  latitude: position.coords.latitude,
+                  longitude: position.coords.longitude
+                });
+              } catch (error) {
+                return null;
+              }
+              const sunsetValue = zmanim?.BasicZmanim?.Sunset;
+              const sunsetDate = sunsetValue ? new Date(sunsetValue) : null;
+              if (!sunsetDate || Number.isNaN(sunsetDate.getTime())) {
+                return null;
+              }
+              const now = new Date();
+              return {
+                isAfterShkiah: now.getTime() >= sunsetDate.getTime(),
+                sunsetLabel: formatLocalTime(sunsetDate)
+              };
             }
 
             function getShareUrl() {
@@ -976,8 +1038,21 @@
               });
             }
 
-            // Fetch Hebrew Date from HebCal API - UPDATED VERSION
-            fetch("https://www.hebcal.com/converter?cfg=json&gy=" + new Date().getFullYear() + "&gm=" + (new Date().getMonth() + 1) + "&gd=" + new Date().getDate() + "&g2h=1")
+            async function loadCurrentHebrewDate() {
+              const requestDate = new Date();
+              const shkiahStatus = await getGpsShkiahStatus();
+              if (shkiahStatus && shkiahStatus.isAfterShkiah) {
+                requestDate.setDate(requestDate.getDate() + 1);
+              }
+              const shkiahStatusHtml = shkiahStatus
+                ? "<br><span class='colored-text'>GPS: " +
+                  (shkiahStatus.isAfterShkiah ? "After shkiah" : "Before shkiah") +
+                  (shkiahStatus.sunsetLabel ? " (sunset: " + shkiahStatus.sunsetLabel + ")" : "") +
+                  "</span>"
+                : "";
+
+              // Fetch Hebrew Date from HebCal API - UPDATED VERSION
+              return fetch("https://www.hebcal.com/converter?cfg=json&gy=" + requestDate.getFullYear() + "&gm=" + (requestDate.getMonth() + 1) + "&gd=" + requestDate.getDate() + "&g2h=1")
                 .then(response => response.json())
                 .then(data => {
                     const hebrewDate = data.hebrew;
@@ -1001,13 +1076,13 @@
                     const dateEl = document.getElementById("date");
                     if (month === "Nisan" && day >= 1 && day <= 13) {
                         isCurrentDayValidNisan = true;
-                        originalDateHTML = "<span class='colored-text'>Displaying the Nasi and Yehi Ratzon for</span>";
+                        originalDateHTML = "<span class='colored-text'>Displaying the Nasi and Yehi Ratzon for</span>" + shkiahStatusHtml;
                         dateEl.innerHTML = originalDateHTML;
                         fetchPrayer(dayMonth, 'nasi.json', 'english-nasi', 'hebrew-nasi');
                         fetchPrayer(dayMonth, 'yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
                     } else {
                         isCurrentDayValidNisan = false;
-                        originalDateHTML = "The Nasi is read during the first 13 days of Nissan. <br> There is no Nasi read today. <br> Today's Hebrew date is: " + hebrewDate;
+                        originalDateHTML = "The Nasi is read during the first 13 days of Nissan. <br> There is no Nasi read today. <br> Today's Hebrew date is: " + hebrewDate + shkiahStatusHtml;
                         dateEl.innerHTML = originalDateHTML;
                         setNoNasiMessage();
                     }
@@ -1025,6 +1100,9 @@
                     updateTodayReminder();
                     updateStreakChip();
                 });
+            }
+
+            loadCurrentHebrewDate();
 
             // Day selector: display a specific day's Nasi and Yehi Ratzon
             document.getElementById("day-select").addEventListener("change", function() {
