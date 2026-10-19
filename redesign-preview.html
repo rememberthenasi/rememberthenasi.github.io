@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Remember The Nasi Redesign</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Space+Mono:wght@400;700&family=Frank+Ruhl+Libre:wght@300;500;900&family=Heebo:wght@300;500;800&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: six live phone mockups, each built from the real 13-day structure of the Nasi readings */
+:root{
+  --bg:#ebebe8; --fg:#181816; --muted:#66655f; --line:#cdccc5;
+  --serif:'Instrument Serif',Georgia,serif; --sans:'Bricolage Grotesque',system-ui,sans-serif; --mono:'DM Mono',monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141516;--fg:#ececea;--muted:#9b9a94;--line:#303134;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141516;--fg:#ececea;--muted:#9b9a94;--line:#303134;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.5;margin:0;
+  padding-block:40px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1240px;margin:0 auto}
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(2.2rem,5.5vw,3.6rem);line-height:1;margin:0 0 12px;text-wrap:balance}
+.lead{max-width:64ch;color:var(--muted);margin:0 0 36px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:48px 28px}
+.opt{min-width:0;display:flex;flex-direction:column;gap:14px}
+.opt h2{font-family:var(--serif);font-size:1.7rem;font-weight:400;margin:0;line-height:1}
+.opt h2 small{display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.opt p{margin:0;color:var(--muted);max-width:44ch}
+.opt ul{margin:0;padding-left:18px;color:var(--muted);font-size:.9rem}
+.phone{width:100%;max-width:340px;height:640px;border-radius:34px;border:6px solid var(--fg);overflow:hidden;position:relative;margin-inline:auto 0}
+.phone *{min-width:0}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.next{margin-top:48px;border-top:1px solid var(--line);padding-top:20px;color:var(--muted);max-width:70ch}
+.he{direction:rtl}
+
+/* ---------- D · Tekhelet Bath ---------- */
+.D{--c:#dce8f3;--t:#071a3a;background:var(--c);color:var(--t);display:grid;grid-template-columns:44px 1fr;transition:background .6s,color .6s}
+.D .ladder{display:grid;grid-template-rows:repeat(13,1fr);border-right:1px solid var(--t)}
+.D .ladder button{border:0;padding:0;color:#fff;font-family:var(--mono);font-size:.65rem;display:flex;align-items:center;justify-content:center;position:relative}
+.D .ladder button[aria-current="true"]::after{content:"";position:absolute;right:-1px;top:0;bottom:0;width:6px;background:var(--t)}
+.D .main{display:flex;flex-direction:column;padding:20px 18px 16px;overflow:hidden}
+.D .eyebrow{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;display:flex;justify-content:space-between}
+.D .name{font-family:'Frank Ruhl Libre',serif;font-weight:900;font-size:3.1rem;line-height:1;margin:22px 0 4px}
+.D .son{font-family:var(--serif);font-style:italic;font-size:1.2rem;margin:0}
+.D .rule{height:1px;background:var(--t);opacity:.5;margin:18px 0}
+.D .verse{font-family:'Frank Ruhl Libre',serif;font-size:1.4rem;line-height:1.7;margin:0 0 6px;font-weight:500}
+.D .tr{font-size:.9rem;margin:0 0 16px;opacity:.85}
+.D .grow{flex:1;overflow:auto}
+.D .said{border:1.5px solid var(--t);background:transparent;color:var(--t);border-radius:0;padding:14px;font-weight:700;letter-spacing:.04em}
+.D .said[aria-pressed="true"]{background:var(--t);color:var(--c)}
+
+/* ---------- E · Camp Map ---------- */
+.E{background:#e8ebec;color:#101214;display:flex;flex-direction:column;padding:18px 16px 16px;overflow:hidden;font-family:var(--mono)}
+.E .eyebrow{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;display:flex;justify-content:space-between}
+.E svg{width:100%;height:auto;display:block;margin-top:6px}
+.E svg .ln{stroke:#101214;stroke-width:.7;fill:none}
+.E svg .nd{fill:#e8ebec;stroke:#101214;stroke-width:1;cursor:pointer}
+.E svg .nd.done{fill:#101214}
+.E svg .nd.sel{fill:#d6a02b;stroke:#101214;stroke-width:1.6}
+.E svg text{font-family:'Frank Ruhl Libre',serif;font-weight:700;font-size:13px;text-anchor:middle;dominant-baseline:central;fill:#101214;pointer-events:none}
+.E svg .nd.done+text{fill:#e8ebec}
+.E svg .cap{font-family:'DM Mono',monospace;font-weight:400;font-size:6.5px;letter-spacing:.14em;fill:#5b6266}
+.E .panel{flex:1;border-top:1.5px solid #101214;margin-top:6px;padding-top:12px;display:flex;flex-direction:column;overflow:hidden}
+.E .who{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.E .who b{font-family:var(--sans);font-size:1.15rem;font-weight:800}
+.E .who span{font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:#5b6266}
+.E .verse{font-family:'Frank Ruhl Libre',serif;font-size:1.25rem;line-height:1.65;margin:10px 0 2px;flex:1;overflow:auto}
+.E .tr{font-family:var(--sans);font-size:.85rem;color:#3c4246;margin:0 0 10px}
+.E .said{border:0;border-radius:0;background:#101214;color:#e8ebec;padding:13px;font-weight:500;letter-spacing:.06em}
+.E .said[aria-pressed="true"]{background:#d6a02b;color:#101214}
+
+/* ---------- F · Daf ---------- */
+.F{background:#e4e6df;color:#1a1d18;display:flex;flex-direction:column;padding:14px 12px;overflow:hidden}
+.F .head{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;border-bottom:3px double #1a1d18;padding-bottom:6px;font-family:'Frank Ruhl Libre',serif}
+.F .head .pg{font-size:2rem;font-weight:900;line-height:1;text-align:center;padding:0 10px}
+.F .head span{font-size:.72rem;font-family:var(--mono);letter-spacing:.06em}
+.F .head span:last-child{text-align:right}
+.F .tabs{display:flex;gap:0;margin:8px 0 0;font-family:var(--mono);font-size:.64rem;letter-spacing:.08em}
+.F .tabs button{flex:1;border:1px solid #1a1d18;background:transparent;padding:6px;color:#1a1d18}
+.F .tabs button[aria-selected="true"]{background:#1a1d18;color:#e4e6df}
+.F .spread{flex:1;display:grid;grid-template-columns:1fr 1.7fr;gap:0;border:1px solid #1a1d18;border-top:0;overflow:auto}
+.F .gloss{padding:8px 8px;border-right:1px solid #1a1d18;font-size:.7rem;line-height:1.45;color:#2d3229;font-family:var(--sans)}
+.F .gloss b{display:block;font-family:var(--mono);font-weight:500;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:#a62b1f;margin-bottom:4px}
+.F .core{padding:8px 10px;font-family:'Frank Ruhl Libre',serif;font-size:1.2rem;line-height:1.7;font-weight:500}
+.F .core .first{font-size:2.6rem;line-height:.9;float:right;font-weight:900;margin-left:6px;color:#a62b1f}
+.F .core hr{border:0;border-top:1px solid #1a1d18;margin:10px 0}
+.F .days{display:flex;gap:2px;margin-top:8px;flex-wrap:wrap}
+.F .days button{flex:1 0 24px;border:1px solid #1a1d18;background:transparent;font-family:'Frank Ruhl Libre',serif;font-weight:700;color:#1a1d18;padding:5px 0}
+.F .days button.done{background:#c9cdc0}
+.F .days button[aria-current="true"]{background:#1a1d18;color:#e4e6df}
+.F .said{margin-top:8px;border:1px solid #1a1d18;background:transparent;padding:11px;font-weight:700;color:#1a1d18}
+.F .said[aria-pressed="true"]{background:#a62b1f;border-color:#a62b1f;color:#fff}
+
+/* ---------- G · Split-flap ---------- */
+.G{background:#111;color:#f1efe8;display:flex;flex-direction:column;overflow:hidden;font-family:var(--mono)}
+.G .board{padding:16px 14px 12px;display:flex;flex-direction:column;gap:10px}
+.G .row{display:flex;gap:3px;flex-wrap:nowrap}
+.G .row.he{direction:ltr;justify-content:flex-start}
+.G .cell{flex:1 1 0;max-width:34px;height:46px;background:#1f1f1f;border-radius:3px;display:grid;place-items:center;position:relative;
+  font-family:'Heebo',sans-serif;font-weight:800;font-size:1.5rem;color:#f1efe8}
+.G .cell::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:#000}
+.G .cell.big{max-width:none;flex:0 0 74px;height:92px;font-size:3.4rem;font-family:'Frank Ruhl Libre',serif}
+.G .cell.sm{height:34px;font-size:1rem;color:#9a998f}
+.G .lab{font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:#76756c}
+.G .top{display:flex;gap:10px;align-items:flex-end}
+.G .top .col{flex:1;display:flex;flex-direction:column;gap:5px}
+.G .read{background:#f1efe8;color:#111;flex:1;padding:12px 14px;overflow:auto;border-top:3px solid #111}
+.G .read .verse{font-family:'Frank Ruhl Libre',serif;font-size:1.3rem;line-height:1.65;margin:0 0 4px;font-weight:500}
+.G .read .tr{font-family:var(--sans);font-size:.85rem;margin:0}
+.G .keys{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;padding:8px 10px 6px;background:#111}
+.G .keys button{border:0;background:#262626;color:#f1efe8;border-radius:3px;padding:8px 0;font-family:'Frank Ruhl Libre',serif;font-weight:700}
+.G .keys button.done{background:#3a3a36}
+.G .keys button[aria-current="true"]{background:#ffe14d;color:#111}
+.G .said{margin:0 10px 12px;border:0;border-radius:3px;background:#f1efe8;color:#111;padding:13px;font-weight:500;letter-spacing:.08em}
+.G .said[aria-pressed="true"]{background:#ffe14d}
+
+/* ---------- B · The Dial ---------- */
+.B{background:#e9efe9;color:#14231c;padding:20px 20px 18px;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.B .head{display:flex;justify-content:space-between;align-items:baseline}
+.B .head b{font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:1.05rem}
+.B .head span{font-size:.78rem;color:#4b6355}
+.B .dialbox{position:relative;width:236px;height:236px;margin:2px auto 0;flex:none}
+.B .dialbox button.dot{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;border:1.5px solid #14231c;background:transparent;color:#14231c;
+  font-family:'Frank Ruhl Libre',serif;font-weight:700;font-size:.8rem;padding:0;line-height:1}
+.B .dot.done{background:#14231c;color:#e9efe9}
+.B .dot.today{background:#ffb627;border-color:#ffb627;color:#14231c;box-shadow:0 0 0 4px #ffb62755}
+.B .dot[aria-current="true"]{outline:2px solid #14231c;outline-offset:3px}
+.B .centre{position:absolute;inset:0;display:grid;place-content:center;text-align:center;pointer-events:none}
+.B .centre b{font-family:'Frank Ruhl Libre',serif;font-size:3.6rem;line-height:1;font-weight:900}
+.B .centre span{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#4b6355}
+.B .card{flex:1;background:#fff;border-radius:22px;padding:16px 16px 12px;display:flex;flex-direction:column;overflow:hidden}
+.B .tabs{display:flex;gap:6px;margin-bottom:10px}
+.B .tabs button{flex:1;border:0;border-radius:99px;padding:7px;background:#e9efe9;color:#14231c;font-weight:600;font-size:.82rem}
+.B .tabs button[aria-selected="true"]{background:#14231c;color:#fff}
+.B .txt{overflow:auto;flex:1}
+.B .who{font-size:.74rem;color:#4b6355;margin:0 0 4px;font-weight:600}
+.B .verse{font-family:'Frank Ruhl Libre',serif;font-size:1.3rem;line-height:1.7;margin:0 0 6px}
+.B .tr{font-size:.88rem;color:#3d5246;margin:0}
+.B .said{margin-top:8px;border:0;border-radius:14px;padding:12px;font-weight:700;background:#ffb627;color:#14231c}
+.B .said[aria-pressed="true"]{background:#14231c;color:#ffb627}
+
+/* ---------- C · Poster ---------- */
+.C{background:#f4f4f2;color:#0a0a0a;display:grid;grid-template-rows:auto auto 1fr auto;overflow:hidden;font-family:'Heebo',sans-serif}
+.C .bar{display:flex;justify-content:space-between;padding:10px 14px;border-bottom:2px solid #0a0a0a;font-family:'Space Mono',monospace;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase}
+.C .strip{display:grid;grid-template-columns:repeat(13,1fr);border-bottom:2px solid #0a0a0a}
+.C .strip button{border:0;border-right:1px solid #0a0a0a;background:transparent;padding:8px 0;font-family:'Space Mono',monospace;font-size:.62rem;color:#0a0a0a}
+.C .strip button:last-child{border-right:0}
+.C .strip button.done{background:#0a0a0a;color:#f4f4f2}
+.C .strip button.today{background:#ff2e93;color:#0a0a0a;font-weight:700}
+.C .strip button[aria-current="true"]{box-shadow:inset 0 -4px 0 #0a0a0a}
+.C .body{overflow:auto;padding:12px 14px}
+.C .day{font-weight:800;font-size:5.6rem;line-height:.8;letter-spacing:-.05em;margin:4px 0 2px}
+.C .day em{font-style:normal;font-size:1rem;letter-spacing:0;font-family:'Space Mono',monospace;font-weight:400;margin-left:8px}
+.C .nm{font-weight:800;font-size:1rem;margin:10px 0 0}
+.C .verse{font-family:'Frank Ruhl Libre',serif;font-weight:500;font-size:1.55rem;line-height:1.65;margin:10px 0 8px;border-top:2px solid #0a0a0a;padding-top:10px}
+.C .tr{font-weight:300;font-size:.95rem;margin:0 0 12px}
+.C .foot{display:grid;grid-template-columns:1fr auto;border-top:2px solid #0a0a0a}
+.C .foot button{border:0;background:transparent;padding:16px 14px;font-weight:800;text-align:left;font-size:1rem;color:#0a0a0a}
+.C .foot button.said{background:#0a0a0a;color:#f4f4f2}
+.C .foot button.said[aria-pressed="true"]{background:#ff2e93;color:#0a0a0a}
+.C .foot .mode{border-left:2px solid #0a0a0a;font-family:'Space Mono',monospace;font-weight:400;font-size:.7rem}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h1>Six ways to remember the Nasi</h1>
+  <p class="lead">Six redesign directions for the daily Nasi screen. Every phone below is live: tap the day controls and the Mark as said button. All of them show the same sample reading (Day 6, Elyasaf of Gad) so they can be compared fairly. Options B and C came from the first round, D to G are new. Please tell us which one you would most want to open every morning, and why.</p>
+
+  <div class="grid">
+
+    <section class="opt">
+      <h2><small>Option B</small>The Dial</h2>
+      <div class="phone B" id="B" aria-label="Option B mockup">
+        <div class="head"><b>Remember the Nasi</b><span>6 day streak</span></div>
+        <div class="dialbox" id="Bd">
+          <div class="centre"><b id="Bn"></b><span id="Bs"></span></div>
+        </div>
+        <div class="card">
+          <div class="tabs" role="tablist"><button type="button" role="tab" aria-selected="true">Nasi</button><button type="button" role="tab" aria-selected="false">Yehi Ratzon</button></div>
+          <div class="txt">
+            <p class="who" id="Bw"></p>
+            <p class="verse he" lang="he" id="Bh"></p>
+            <p class="tr" id="Be"></p>
+          </div>
+          <button type="button" class="said" aria-pressed="false">Mark as said</button>
+        </div>
+      </div>
+      <p>The 13 days form a ring you can tap. Filled means said and gold is today. It replaces the dropdown and makes the month feel like a path.</p>
+      <ul><li>Friendliest for first-time visitors</li><li>Progress is visible at a glance</li><li>Nasi and Yehi Ratzon become tabs, so less scrolling</li></ul>
+    </section>
+
+    <section class="opt">
+      <h2><small>Option C</small>Poster</h2>
+      <div class="phone C" id="C" aria-label="Option C mockup">
+        <div class="bar"><span>RememberTheNasi</span><span>Streak 06</span></div>
+        <div class="strip" id="Cs"></div>
+        <div class="body">
+          <div class="day" id="Cd"></div>
+          <p class="nm" id="Cn"></p>
+          <p class="verse he" lang="he" id="Ch"></p>
+          <p class="tr" id="Ce"></p>
+        </div>
+        <div class="foot"><button type="button" class="said" aria-pressed="false">Said it →</button><button type="button" class="mode" id="Cm">Yehi Ratzon</button></div>
+      </div>
+      <p>Swiss grid meets Hebrew calligraphy. Black rules, huge numerals, one hot-pink signal. Thirteen cells are the whole navigation.</p>
+      <ul><li>Boldest, most gallery-like</li><li>Fastest to use: one strip, one big action</li><li>Highest contrast, good for reading outdoors</li></ul>
+    </section>
+    <section class="opt">
+      <h2><small>Option D</small>Tekhelet Bath</h2>
+      <div class="phone D" id="D" aria-label="Option D mockup">
+        <div class="ladder" id="Dl"></div>
+        <div class="main">
+          <div class="eyebrow"><span>Day <span id="Dn">6</span> / 13</span><span>Streak 6</span></div>
+          <div class="name he" lang="he" id="Dh"></div>
+          <p class="son" id="De"></p>
+          <div class="rule"></div>
+          <div class="grow">
+            <p class="verse he" lang="he">קָרְבָּנוֹ קַעֲרַת־כֶּסֶף אַחַת שְׁלֹשִׁים וּמֵאָה מִשְׁקָלָהּ</p>
+            <p class="tr">His offering: one silver plate, its weight one hundred and thirty.</p>
+          </div>
+          <button type="button" class="said" aria-pressed="false">Mark as said</button>
+        </div>
+      </div>
+      <p>The whole screen is dipped a little deeper blue each day, like wool in the tekhelet bath. Day 1 is pale sky, day 13 is near black. The side ladder is the day picker.</p>
+      <ul><li>You can tell the day by colour before reading</li><li>Calm, devotional, very little chrome</li><li>Text colour flips automatically for contrast</li></ul>
+    </section>
+
+    <section class="opt">
+      <h2><small>Option E</small>Camp Map</h2>
+      <div class="phone E" id="E" aria-label="Option E mockup">
+        <div class="eyebrow"><span>Camp of Israel</span><span>מזרח ↑</span></div>
+        <svg viewBox="0 0 300 296" id="Es" role="group" aria-label="Twelve tribes around the Mishkan"></svg>
+        <div class="panel">
+          <div class="who"><b id="Ew"></b><span id="Et"></span></div>
+          <p class="verse he" lang="he">קָרְבָּנוֹ קַעֲרַת־כֶּסֶף אַחַת שְׁלֹשִׁים וּמֵאָה מִשְׁקָלָהּ</p>
+          <p class="tr">His offering: one silver plate, its weight one hundred and thirty.</p>
+          <button type="button" class="said" aria-pressed="false">Mark as said</button>
+        </div>
+      </div>
+      <p>The twelve leaders sit where their tribes camped around the Mishkan, three to a side, east at the top. Each day lights up one tribe. The thirteenth day is the Mishkan itself in the centre.</p>
+      <ul><li>Evolves the Dial with real meaning</li><li>Teaches who the Nasi is each day</li><li>Blueprint line work, one gold accent</li></ul>
+    </section>
+
+    <section class="opt">
+      <h2><small>Option F</small>Daf</h2>
+      <div class="phone F" id="F" aria-label="Option F mockup">
+        <div class="head"><span>ניסן</span><div class="pg" id="Fp"></div><span>Nasi · Day <b id="Fn">6</b></span></div>
+        <div class="tabs" role="tablist"><button type="button" role="tab" aria-selected="true">Nasi</button><button type="button" role="tab" aria-selected="false">Yehi Ratzon</button></div>
+        <div class="spread">
+          <div class="gloss"><b id="Fl">Nasi of Gad</b><span id="Ft"></span></div>
+          <div class="core he" lang="he"><span class="first" id="Ff"></span><span id="Fv"></span><hr><span id="Fw"></span></div>
+        </div>
+        <div class="days" id="Fd"></div>
+        <button type="button" class="said" aria-pressed="false">Mark as said</button>
+      </div>
+      <p>The page of a Gemara: Hebrew in the centre with a ruled frame and a drop letter, English as a side gloss in small type, the day as the folio number. A rubric red appears once.</p>
+      <ul><li>Instantly familiar to the audience</li><li>Hebrew gets the dominant, honoured position</li><li>The day picker is a row of Hebrew letters</li></ul>
+    </section>
+
+    <section class="opt">
+      <h2><small>Option G</small>Split-flap</h2>
+      <div class="phone G" id="G" aria-label="Option G mockup">
+        <div class="board">
+          <div class="top">
+            <div class="cell big" id="Gl"></div>
+            <div class="col"><div class="lab">Day</div><div class="row" id="Gd"></div><div class="lab">Tribe</div><div class="row" id="Gt"></div></div>
+          </div>
+          <div class="lab">Nasi</div>
+          <div class="row" id="Gn"></div>
+        </div>
+        <div class="read">
+          <p class="verse he" lang="he">קָרְבָּנוֹ קַעֲרַת־כֶּסֶף אַחַת שְׁלֹשִׁים וּמֵאָה מִשְׁקָלָהּ</p>
+          <p class="tr">His offering: one silver plate, its weight one hundred and thirty.</p>
+        </div>
+        <div class="keys" id="Gk"></div>
+        <button type="button" class="said" aria-pressed="false">Mark as said</button>
+      </div>
+      <p>A departures board. Choosing a day makes the name, tribe and day letter clatter through random characters before they settle. Dark board above, bright reading panel below.</p>
+      <ul><li>The most playful, a real "wow" on load</li><li>Closest cousin of the Poster</li><li>Animation respects reduced-motion</li></ul>
+    </section>
+  </div>
+
+  <p class="next">Nothing on the live site has been changed. Once a direction is chosen, it gets a refinement pass and is then built into the real site, keeping the existing data, streak, share and install features.</p>
+</div>
+
+<script>
+var L=['א','ב','ג','ד','ה','ו','ז','ח','ט','י','יא','יב','יג'];
+var P=[
+ ['נַחְשׁוֹן','Nachshon','בֶּן־עַמִּינָדָב','son of Aminadav','Judah','יהודה'],
+ ['נְתַנְאֵל','Netanel','בֶּן־צוּעָר','son of Tzuar','Yissachar','יששכר'],
+ ['אֱלִיאָב','Eliav','בֶּן־חֵלֹן','son of Chelon','Zevulun','זבולון'],
+ ['אֱלִיצוּר','Elitzur','בֶּן־שְׁדֵיאוּר','son of Shedeur','Reuven','ראובן'],
+ ['שְׁלֻמִיאֵל','Shelumiel','בֶּן־צוּרִישַׁדָּי','son of Tzurishaddai','Shimon','שמעון'],
+ ['אֶלְיָסָף','Elyasaf','בֶּן־דְּעוּאֵל','son of Deuel','Gad','גד'],
+ ['אֱלִישָׁמָע','Elishama','בֶּן־עַמִּיהוּד','son of Amihud','Ephraim','אפרים'],
+ ['גַּמְלִיאֵל','Gamliel','בֶּן־פְּדָהצוּר','son of Pedahtzur','Manasseh','מנשה'],
+ ['אֲבִידָן','Avidan','בֶּן־גִּדְעֹנִי','son of Gidoni','Binyamin','בנימין'],
+ ['אֲחִיעֶזֶר','Achiezer','בֶּן־עַמִּישַׁדָּי','son of Amishaddai','Dan','דן'],
+ ['פַּגְעִיאֵל','Pagiel','בֶּן־עָכְרָן','son of Ochran','Asher','אשר'],
+ ['אֲחִירַע','Achira','בֶּן־עֵינָן','son of Einan','Naftali','נפתלי'],
+ ['הַמִּזְבֵּחַ','The Altar','','the sum of the offerings','Dedication','חנוכה']
+];
+var TODAY=5;
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function toggleSaid(root,fn){root.querySelector('.said').addEventListener('click',function(){
+  var b=this,on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',on);b.textContent=on?'Said ✓':'Mark as said';});}
+function resetSaid(root){var b=root.querySelector('.said');b.setAttribute('aria-pressed','false');b.textContent='Mark as said';}
+
+
+/* B */
+(function(){
+  var root=document.getElementById('B'),dial=document.getElementById('Bd'),R=98,C0=118,mode='nasi',cur=TODAY;
+  var Y='יְהִי רָצוֹן מִלְּפָנֶיךָ שֶׁתְּקַבֵּל תְּפִלָּתֵנוּ';
+  var N='קָרְבָּנוֹ קַעֲרַת־כֶּסֶף אַחַת שְׁלֹשִׁים וּמֵאָה מִשְׁקָלָהּ';
+  var dots=[];
+  function set(n){
+    cur=n;
+    dots.forEach(function(x,i){x.removeAttribute('aria-current');if(i===n)x.setAttribute('aria-current','true')});
+    document.getElementById('Bn').textContent=L[n];
+    document.getElementById('Bs').textContent='Day '+(n+1)+(n===TODAY?' · Today':n<TODAY?' · Said':'');
+    document.getElementById('Bw').textContent=mode==='nasi'?P[n][1]+' '+P[n][3]+' · '+P[n][4]:'Yehi Ratzon';
+    document.getElementById('Bh').textContent=mode==='nasi'?N:Y;
+    document.getElementById('Be').textContent=mode==='nasi'?'His offering: one silver plate, its weight one hundred and thirty.':'May it be Your will that You accept our prayer.';
+    resetSaid(root);
+  }
+  for(var i=0;i<13;i++){
+    var a=(i/13)*2*Math.PI-Math.PI/2;
+    var d=document.createElement('button');d.type='button';d.className='dot'+(i<TODAY?' done':'')+(i===TODAY?' today':'');
+    d.textContent=L[i];d.setAttribute('aria-label','Day '+(i+1));
+    d.style.left=(C0+R*Math.cos(a))+'px';d.style.top=(C0+R*Math.sin(a))+'px';
+    (function(n){d.addEventListener('click',function(){set(n)})})(i);
+    dial.appendChild(d);dots.push(d);
+  }
+  root.querySelectorAll('.tabs button').forEach(function(t,i){t.addEventListener('click',function(){
+    root.querySelectorAll('.tabs button').forEach(function(x){x.setAttribute('aria-selected',x===t)});mode=i?'yr':'nasi';set(cur);});});
+  toggleSaid(root);set(TODAY);
+})();
+
+/* C */
+(function(){
+  var root=document.getElementById('C'),strip=document.getElementById('Cs'),mode='nasi',cur=TODAY,btns=[];
+  var Y='יְהִי רָצוֹן מִלְּפָנֶיךָ שֶׁתְּקַבֵּל תְּפִלָּתֵנוּ';
+  var N='קָרְבָּנוֹ קַעֲרַת־כֶּסֶף אַחַת שְׁלֹשִׁים וּמֵאָה מִשְׁקָלָהּ';
+  function set(n){
+    cur=n;
+    btns.forEach(function(x,i){x.removeAttribute('aria-current');if(i===n)x.setAttribute('aria-current','true')});
+    document.getElementById('Cd').innerHTML=(n<9?'0':'')+(n+1)+'<em>/13 NISSAN</em>';
+    document.getElementById('Cn').textContent=mode==='nasi'?P[n][1]+' '+P[n][3]+', '+P[n][4]:'Yehi Ratzon';
+    document.getElementById('Ch').textContent=mode==='nasi'?N:Y;
+    document.getElementById('Ce').textContent=mode==='nasi'?'His offering: one silver plate, its weight one hundred and thirty.':'May it be Your will that You accept our prayer.';
+    document.getElementById('Cm').textContent=mode==='nasi'?'Yehi Ratzon':'Nasi';
+    resetSaid(root);
+  }
+  for(var j=0;j<13;j++){
+    var s=document.createElement('button');s.type='button';s.textContent=j+1;s.setAttribute('aria-label','Day '+(j+1));
+    s.className=j<TODAY?'done':j===TODAY?'today':'';
+    (function(n){s.addEventListener('click',function(){set(n)})})(j);
+    strip.appendChild(s);btns.push(s);
+  }
+  document.getElementById('Cm').addEventListener('click',function(){mode=mode==='nasi'?'yr':'nasi';set(cur)});
+  toggleSaid(root);set(TODAY);
+})();
+
+/* D */
+(function(){
+  var root=document.getElementById('D'),lad=document.getElementById('Dl');
+  function col(i){var t=i/12;var a=[220,232,243],b=[7,26,58];
+    return 'rgb('+a.map(function(x,k){return Math.round(x+(b[k]-x)*t)}).join(',')+')';}
+  function set(n){
+    root.style.setProperty('--c',col(n));
+    var dark=n>=5;root.style.setProperty('--t',dark?'#eaf1fb':'#071a3a');
+    document.getElementById('Dn').textContent=n+1;
+    document.getElementById('Dh').textContent=P[n][0];
+    document.getElementById('De').textContent=P[n][1]+' '+P[n][3];
+    lad.querySelectorAll('button').forEach(function(x,i){x.removeAttribute('aria-current');if(i===n)x.setAttribute('aria-current','true')});
+    resetSaid(root);
+  }
+  for(var i=0;i<13;i++){var b=document.createElement('button');b.type='button';b.textContent=L[i];b.setAttribute('aria-label','Day '+(i+1));
+    b.style.background=col(i);b.style.color=i>=5?'#eaf1fb':'#071a3a';(function(n){b.addEventListener('click',function(){set(n)})})(i);lad.appendChild(b);}
+  toggleSaid(root);set(TODAY);
+})();
+
+/* E */
+(function(){
+  var root=document.getElementById('E'),svg=document.getElementById('Es'),NS='http://www.w3.org/2000/svg';
+  var pos={0:[150,34],1:[90,34],2:[210,34],4:[264,90],3:[264,150],5:[264,210],7:[90,264],6:[150,264],8:[210,264],10:[36,90],9:[36,150],11:[36,210]};
+  function el(n,a){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);return e;}
+  svg.appendChild(el('rect',{x:84,y:84,width:132,height:132,class:'ln','stroke-dasharray':'2 3'}));
+  svg.appendChild(el('rect',{x:112,y:122,width:76,height:56,class:'ln'}));
+  svg.appendChild(el('line',{x1:112,y1:150,x2:188,y2:150,class:'ln'}));
+  var cap=el('text',{x:150,y:200,class:'cap'});cap.textContent='MISHKAN';svg.appendChild(cap);
+  var nodes=[];
+  for(var i=0;i<13;i++){
+    var p=i<12?pos[i]:[150,136];var g=el('g',{});
+    var c=el('circle',{cx:p[0],cy:p[1],r:i<12?17:13,class:'nd',tabindex:0,role:'button','aria-label':'Day '+(i+1)});
+    var t=el('text',{x:p[0],y:p[1]+1});t.textContent=L[i];
+    (function(n){c.addEventListener('click',function(){set(n)});c.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();set(n)}})})(i);
+    g.appendChild(c);g.appendChild(t);svg.appendChild(g);nodes.push(c);
+  }
+  function set(n){
+    nodes.forEach(function(c,i){c.setAttribute('class','nd'+(i<TODAY?' done':'')+(i===n?' sel':''))});
+    document.getElementById('Ew').textContent=P[n][1];
+    document.getElementById('Et').textContent=n<12?'Tribe of '+P[n][4]:'Day 13 · '+P[n][4];
+    resetSaid(root);
+  }
+  toggleSaid(root);set(TODAY);
+})();
+
+/* F */
+(function(){
+  var root=document.getElementById('F'),days=document.getElementById('Fd');
+  var Y='יְהִי רָצוֹן מִלְּפָנֶיךָ שֶׁתְּקַבֵּל תְּפִלָּתֵנוּ';
+  var N='קָרְבָּנוֹ קַעֲרַת־כֶּסֶף אַחַת שְׁלֹשִׁים וּמֵאָה מִשְׁקָלָהּ';
+  var mode='nasi',cur=TODAY;
+  function set(n){
+    cur=n;
+    document.getElementById('Fp').textContent='דף '+L[n];
+    document.getElementById('Fn').textContent=n+1;
+    var v=mode==='nasi'?N:Y;
+    document.getElementById('Ff').textContent=v.charAt(0);
+    document.getElementById('Fv').textContent=v.slice(1);
+    document.getElementById('Fw').textContent=P[n][0]+' '+P[n][2];
+    document.getElementById('Fl').textContent=mode==='nasi'?'Nasi of '+P[n][4]:'Yehi Ratzon';
+    document.getElementById('Ft').textContent=mode==='nasi'?'His offering: one silver plate, its weight one hundred and thirty. Brought by '+P[n][1]+', '+P[n][3]+'.':'May it be Your will that You accept our prayer.';
+    days.querySelectorAll('button').forEach(function(x,i){x.removeAttribute('aria-current');x.className=i<TODAY?'done':'';if(i===n)x.setAttribute('aria-current','true')});
+    resetSaid(root);
+  }
+  for(var i=0;i<13;i++){var b=document.createElement('button');b.type='button';b.textContent=L[i];b.setAttribute('aria-label','Day '+(i+1));(function(n){b.addEventListener('click',function(){set(n)})})(i);days.appendChild(b);}
+  root.querySelectorAll('.tabs button').forEach(function(t,i){t.addEventListener('click',function(){
+    root.querySelectorAll('.tabs button').forEach(function(x){x.setAttribute('aria-selected',x===t)});mode=i?'yr':'nasi';set(cur);});});
+  toggleSaid(root);set(TODAY);
+})();
+
+/* G */
+(function(){
+  var root=document.getElementById('G'),keys=document.getElementById('Gk');
+  var CH='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  var HE='אבגדהוזחטיכלמנסעפצקרשת';
+  function row(id,len,cls){var r=document.getElementById(id);r.innerHTML='';var cells=[];
+    for(var i=0;i<len;i++){var c=document.createElement('div');c.className='cell'+(cls?' '+cls:'');c.setAttribute('aria-hidden','true');r.appendChild(c);cells.push(c)}return cells;}
+  var dCells=row('Gd',5,'sm'),tCells=row('Gt',10,'sm'),nCells=row('Gn',10);
+  var lCell=document.getElementById('Gl');
+  var live=document.createElement('span');live.className='sr';live.style.cssText='position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)';live.setAttribute('aria-live','polite');root.appendChild(live);
+  function settle(cells,text,isHe){
+    cells.forEach(function(c,i){
+      var target=(text[i]||' ').toUpperCase();
+      if(reduce){c.textContent=target;return;}
+      var k=0,steps=5+i*2;
+      var iv=setInterval(function(){k++;
+        c.textContent=k>=steps?target:(isHe?HE:CH).charAt(Math.floor(Math.random()*(isHe?HE.length:CH.length)));
+        if(k>=steps)clearInterval(iv);},45);
+    });
+  }
+  function set(n){
+    settle(dCells,String(n+1).padStart(2,'0')+'/13',false);
+    settle(tCells,P[n][4],false);
+    settle(nCells,P[n][1],false);
+    settle([lCell],L[n],true);
+    keys.querySelectorAll('button').forEach(function(x,i){x.removeAttribute('aria-current');x.className=i<TODAY?'done':'';if(i===n)x.setAttribute('aria-current','true')});
+    live.textContent='Day '+(n+1)+', '+P[n][1];
+    resetSaid(root);
+  }
+  for(var i=0;i<13;i++){var b=document.createElement('button');b.type='button';b.textContent=L[i];b.setAttribute('aria-label','Day '+(i+1));(function(n){b.addEventListener('click',function(){set(n)})})(i);keys.appendChild(b);}
+  var spare=document.createElement('button');spare.type='button';spare.textContent='·';spare.disabled=true;spare.style.opacity='.3';keys.appendChild(spare);
+  toggleSaid(root);set(TODAY);
+})();
+</script>
+</body>
+</html>
