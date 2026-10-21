@@ -45,7 +45,7 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 
 <!-- Link to Styles-->
-<link rel="stylesheet" href="styles.css?v=20261021c">
+<link rel="stylesheet" href="styles.css?v=20261021d">
 
 </head>
 
@@ -1271,7 +1271,7 @@
                     flapToggle.setAttribute("aria-pressed", on ? "true" : "false");
                     document.getElementById("board").hidden = !on;
                     var meta = document.querySelector('meta[name="theme-color"]');
-                    if (meta) meta.setAttribute("content", on ? "#111111" : "#f4f4f2");
+                    if (meta) meta.setAttribute("content", on ? (document.body.classList.contains("dark-mode") ? "#111111" : "#e8e6df") : "#f4f4f2");
                     if (on) {
                         lastBoardDay = undefined;
                         refreshView();
