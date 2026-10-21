@@ -45,7 +45,7 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 
 <!-- Link to Styles-->
-<link rel="stylesheet" href="styles.css?v=20261022a">
+<link rel="stylesheet" href="styles.css?v=20261022b">
 
 </head>
 
@@ -990,7 +990,8 @@
                         fetchPrayer(dayMonth, 'yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
                     } else {
                         isCurrentDayValidNisan = false;
-                        originalDateHTML = "The Nasi is read during the first 13 days of Nissan. <br> There is no Nasi read today. <br> Today's Hebrew date is: " + hebrewDate;
+                        // No Nasi today: the reading area already says so, so the date line stays empty
+                        originalDateHTML = "";
                         dateEl.innerHTML = originalDateHTML;
                         setNoNasiMessage();
                     }
@@ -1040,7 +1041,7 @@
                     document.getElementById("hebrew-yehiRatzon").textContent = "Loading...";
                     
                     // Revert to current day
-                    if (originalDateHTML) {
+                    if (originalDateHTML !== null) {
                         document.getElementById("date").innerHTML = originalDateHTML;
                         if (isCurrentDayValidNisan && currentDayMonth) {
                             // Current date is within Nisan 1-13, fetch the prayers
