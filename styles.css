@@ -510,25 +510,35 @@ body.flap .said-btn.is-said { background: var(--lemon); color: #111; }
 
   .strip button { padding: 14px 0; font-size: 0.85rem; }
 
+  /* Both columns always share one height, never shorter than --min-layout.
+     In a tall layout the day info stays pinned at the top of the side panel
+     and the buttons stay pinned at the bottom of the screen. */
   .layout {
+    --min-layout: 680px;
     display: grid;
     grid-template-columns: minmax(360px, 400px) minmax(0, 1fr);
-    align-items: start;
+    align-items: stretch;
+    min-height: var(--min-layout);
     padding: 0 max(16px, calc((100% - var(--content)) / 2));
   }
 
   .side {
     display: flex;
     flex-direction: column;
-    position: sticky;
-    top: 0;
-    max-height: 100vh;
-    overflow-y: auto;
     border-left: var(--hair);
     border-right: var(--rule);
   }
 
-  .side-info { padding: 24px 28px 0; }
+  .side-info {
+    padding: 24px 28px 16px;
+    position: sticky;
+    top: 0;
+    background: var(--paper);
+    z-index: 2;
+  }
+
+  body.flap .side-info { position: static; }
+  body.flap .board { position: sticky; top: 0; background: var(--board); z-index: 2; }
 
   .day-num { font-size: 11rem; }
   .day-num em { display: block; margin: 14px 0 0 6px; font-size: 1.05rem; }
@@ -536,7 +546,8 @@ body.flap .said-btn.is-said { background: var(--lemon); color: #111; }
   .nasi-name .he { font-size: 1.35rem; }
 
   .foot {
-    position: static;
+    position: sticky;
+    bottom: 0;
     margin-top: auto;
     padding-bottom: 0;
   }
@@ -545,7 +556,8 @@ body.flap .said-btn.is-said { background: var(--lemon); color: #111; }
 
   .mode-btn { padding: 20px 22px; font-size: 1.15rem; }
 
-  .read { padding: 24px 36px 40px; border-right: var(--hair); }
+  .read { padding: 24px 36px 40px; border-right: var(--hair); display: flex; flex-direction: column; }
+  .read .tools { margin-top: auto; }
 
   .reading-body {
     display: grid;
