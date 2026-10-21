@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>    
-    <!-- Fonts: Heebo (Latin and Hebrew sans), Frank Ruhl Libre (Hebrew text), Space Mono (labels) -->
-    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@300;500;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Fonts: Heebo (Latin sans), Noto Serif Hebrew (Hebrew text with nikud and taamim), Space Mono (labels) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@500;700&family=Heebo:wght@300;500;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BFNQ3TZSCK"></script>
@@ -45,30 +45,46 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 
 <!-- Link to Styles-->
-<link rel="stylesheet" href="styles.css?v=20261021a">
+<link rel="stylesheet" href="styles.css?v=20261021b">
 
 </head>
 
 <body data-lang="both" data-section="nasi">
   <main class="app">
-    <header class="bar">
-      <div class="brand">
-        <span class="bsd" lang="he" dir="rtl">בס"ד</span>
+    <header class="masthead">
+      <div class="bar">
         <h1 class="wordmark">RememberTheNasi</h1>
+        <div class="bar-right">
+          <span id="streak-chip" class="streak-chip" style="display:none;"></span>
+          <span class="bsd" lang="he" dir="rtl">בס"ד</span>
+        </div>
       </div>
-      <div class="bar-right">
-        <span id="streak-chip" class="streak-chip" style="display:none;"></span>
-        <button type="button" id="flap-toggle" class="icon-btn plane-btn" aria-pressed="false" aria-label="Switch to departures board" title="Departures board">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.3c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"></path>
+      <div class="toolbar">
+        <div class="language-toggle" role="group" aria-label="Language">
+          <button type="button" class="language-option" data-language="english" aria-pressed="false">A</button>
+          <button type="button" class="language-option is-active" data-language="both" aria-pressed="true">א/A</button>
+          <button type="button" class="language-option" data-language="hebrew" aria-pressed="false">א</button>
+        </div>
+        <div class="toolbar-right">
+          <button type="button" id="dark-mode-toggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg id="dark-mode-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 1 0 21 12.8z"></path>
           </svg>
         </button>
+          <button type="button" id="flap-toggle" class="icon-btn plane-btn" aria-pressed="false" aria-label="Switch to departures board" title="Departures board">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.3c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"></path>
+          </svg>
+          </button>
+        </div>
       </div>
     </header>
 
     <nav id="day-strip" class="strip" aria-label="Days of Nisan"></nav>
 
-    <section id="board" class="board" aria-label="Departures board" hidden>
+    <div class="layout">
+      <div class="side">
+        <section id="board" class="board" aria-label="Departures board" hidden>
       <div class="board-top">
         <span id="board-letter" class="cell big" aria-hidden="true"></span>
         <div class="board-col">
@@ -83,10 +99,10 @@
       <span id="board-live" class="visually-hidden" aria-live="polite"></span>
     </section>
 
-    <div class="content">
-      <p id="date" class="dateline">Loading Hebrew date...</p>
+        <div class="side-info">
+          <p id="date" class="dateline">Loading Hebrew date...</p>
 
-      <select id="day-select" class="day-select" aria-label="Day of Nisan" hidden>
+          <select id="day-select" class="day-select" aria-label="Day of Nisan" hidden>
         <option id="today-option" value="">Today</option>
             <option value="1 Nisan">1 Nisan</option>
             <option value="2 Nisan">2 Nisan</option>
@@ -103,7 +119,7 @@
             <option value="13 Nisan">13 Nisan</option>
       </select>
 
-      <div id="today-reminder-container" class="missed-day-container" style="display:none;">
+          <div id="today-reminder-container" class="missed-day-container" style="display:none;">
         <div class="missed-day-prompt" aria-live="polite">
           <span class="missed-day-label">Don't forget the Nasi!</span>
           <div class="missed-day-actions">
@@ -111,7 +127,7 @@
           </div>
         </div>
       </div>
-      <div id="missed-day-container" class="missed-day-container" style="display:none;">
+          <div id="missed-day-container" class="missed-day-container" style="display:none;">
         <div class="missed-day-prompt" aria-live="polite">
           <span id="missed-day-label" class="missed-day-label">Missed day reminder</span>
           <div class="missed-day-actions">
@@ -121,35 +137,42 @@
         </div>
       </div>
 
-      <div id="day-head" class="day-head" hidden>
+          <div id="day-head" class="day-head" hidden>
         <p class="day-num"><span id="day-num">01</span><em>/13 NISAN</em></p>
         <p class="nasi-name"><span id="nasi-name-en" class="en"></span><span id="nasi-name-he" class="he" lang="he" dir="rtl"></span></p>
       </div>
-
-      <section id="nasi-section" class="reading" aria-labelledby="nasi-heading">
-        <h2 id="nasi-heading" class="section-label">Nasi <span lang="he" dir="rtl">נשיא</span></h2>
-        <div class="hebrew he" id="hebrew-nasi" lang="he" dir="rtl">Loading...</div>
-        <div class="english en" id="english-nasi">Loading...</div>
-      </section>
-
-      <section id="yr-section" class="reading" aria-labelledby="yr-heading">
-        <h2 id="yr-heading" class="section-label">Yehi Ratzon <span lang="he" dir="rtl">יהי רצון</span></h2>
-        <div class="hebrew he" id="hebrew-yehiRatzon" lang="he" dir="rtl">Loading...</div>
-        <div class="english en" id="english-yehiRatzon">Loading...</div>
-      </section>
-
-      <div class="tools">
-        <button type="button" id="dark-mode-toggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
-          <svg id="dark-mode-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 1 0 21 12.8z"></path>
-          </svg>
-        </button>
-        <div class="language-toggle" role="group" aria-label="Language">
-          <button type="button" class="language-option" data-language="english" aria-pressed="false">A</button>
-          <button type="button" class="language-option is-active" data-language="both" aria-pressed="true">א/A</button>
-          <button type="button" class="language-option" data-language="hebrew" aria-pressed="false">א</button>
         </div>
-        <button type="button" id="text-share-button" class="text-btn" aria-label="Share as image" title="Share as image">
+
+        <div class="foot">
+          <div id="keys" class="keys" role="group" aria-label="Days of Nisan"></div>
+          <div class="foot-buttons">
+            <button type="button" id="mode-toggle" class="mode-btn">Yehi Ratzon →</button>
+            <div id="nasi-check-container" class="nasi-check-container" style="display:none;">
+              <button type="button" id="nasi-check-button" class="said-btn" aria-pressed="false"><span id="nasi-check-label">Mark as said</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="read">
+        <section id="nasi-section" class="reading" aria-labelledby="nasi-heading">
+        <h2 id="nasi-heading" class="section-label">Nasi <span lang="he" dir="rtl">נשיא</span></h2>
+        <div class="reading-body">
+          <div class="hebrew he" id="hebrew-nasi" lang="he" dir="rtl">Loading...</div>
+          <div class="english en" id="english-nasi">Loading...</div>
+        </div>
+      </section>
+
+        <section id="yr-section" class="reading" aria-labelledby="yr-heading">
+        <h2 id="yr-heading" class="section-label">Yehi Ratzon <span lang="he" dir="rtl">יהי רצון</span></h2>
+        <div class="reading-body">
+          <div class="hebrew he" id="hebrew-yehiRatzon" lang="he" dir="rtl">Loading...</div>
+          <div class="english en" id="english-yehiRatzon">Loading...</div>
+        </div>
+      </section>
+
+        <div class="tools">
+          <button type="button" id="text-share-button" class="text-btn" aria-label="Share as image" title="Share as image">
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
             <circle cx="18" cy="5" r="3"></circle>
             <circle cx="6" cy="12" r="3"></circle>
@@ -159,7 +182,7 @@
           </svg>
           <span>As image</span>
         </button>
-        <button type="button" id="share-button" class="text-btn" aria-label="Install app" title="Install app">
+          <button type="button" id="share-button" class="text-btn" aria-label="Install app" title="Install app">
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
             <path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path>
             <path d="M10 5h4"></path>
@@ -167,20 +190,12 @@
           </svg>
           <span>Install</span>
         </button>
-      </div>
+        </div>
 
-      <footer class="credits">
+        <footer class="credits">
         <p>Text reproduced with permission from <a href="http://kehot.com/">Kehot Publication Society</a>.</p>
         <p>Site created by Menachem Spielman · nasi@mspielman.com</p>
       </footer>
-    </div>
-
-    <div id="keys" class="keys" role="group" aria-label="Days of Nisan"></div>
-
-    <div class="foot">
-      <button type="button" id="mode-toggle" class="mode-btn">Yehi Ratzon →</button>
-      <div id="nasi-check-container" class="nasi-check-container" style="display:none;">
-        <button type="button" id="nasi-check-button" class="said-btn" aria-pressed="false"><span id="nasi-check-label">Mark as said</span></button>
       </div>
     </div>
 
@@ -232,64 +247,45 @@
             }
 
             async function buildTodayShareData(languageMode) {
-              const todayOption = document.getElementById("today-option");
-              const todayLabel = todayOption ? todayOption.textContent.replace(/^Today:\s*/, "").trim() : "";
-              const shareHeader = "rememberthenasi.com";
               const mode = languageMode || "both";
               const daySelect = document.getElementById("day-select");
               const selectedDay = daySelect ? daySelect.value : "";
               const displayedDayMonth = selectedDay || currentDayMonth;
-              const displayedDateLabel = selectedDay || todayLabel;
-              const isDisplayedNisanDay = Boolean(displayedDayMonth);
+              const dayNumber = getNisanDayNumber(displayedDayMonth);
+              const showHebrew = mode === "hebrew" || mode === "both";
+              const showEnglish = mode === "english" || mode === "both";
 
-              if (!isDisplayedNisanDay) {
-                const sections = [];
-                if (mode === "hebrew" || mode === "both") {
-                  sections.push({ heading: "", body: "אין נשיא או יהי רצון להיום", lang: "he" });
-                }
-                if (mode === "english" || mode === "both") {
-                  sections.push({ heading: "", body: "No Nasi or Yehi Ratzon for today.", lang: "en" });
-                }
-                return {
-                  title: shareHeader,
-                  dateLabel: displayedDateLabel,
-                  sections
-                };
+              if (!dayNumber) {
+                return { title: "rememberthenasi.com", mode, showHebrew, showEnglish, dayNumber: null, sections: [] };
               }
 
               const [nasiData, yehiRatzonData] = await Promise.all([
                 fetch("nasi.json").then(response => response.json()),
                 fetch("yehiRatzon.json").then(response => response.json())
               ]);
-
               const nasiPrayer = nasiData[displayedDayMonth] || {};
               const yehiPrayer = yehiRatzonData[displayedDayMonth] || {};
-              const sections = [];
-
-              if (mode === "hebrew" || mode === "both") {
-                sections.push(
-                  { heading: "נשיא", body: htmlToText(normalizeHebrewText(nasiPrayer.hebrew)), lang: "he" },
-                  { heading: "יהי רצון", body: htmlToText(normalizeHebrewText(yehiPrayer.hebrew)), lang: "he" }
-                );
-              }
-
-              if (mode === "english" || mode === "both") {
-                sections.push(
-                  { heading: "Nasi", body: htmlToText(nasiPrayer.english), lang: "en" },
-                  { heading: "Yehi Ratzon", body: htmlToText(yehiPrayer.english), lang: "en" }
-                );
-              }
+              const info = NASI_NAMES[dayNumber - 1];
 
               return {
-                title: shareHeader,
-                dateLabel: displayedDateLabel,
-                sections
+                title: "rememberthenasi.com",
+                mode,
+                showHebrew,
+                showEnglish,
+                dayNumber,
+                dateLabel: displayedDayMonth + (currentHebrewYear ? " " + currentHebrewYear : ""),
+                nameEn: dayNumber === 13 ? info.en : info.en + ", " + info.tribe,
+                nameHe: info.he,
+                sections: [
+                  { label: "Nasi", labelHe: "נשיא", he: htmlToText(normalizeHebrewText(nasiPrayer.hebrew)), en: htmlToText(nasiPrayer.english) },
+                  { label: "Yehi Ratzon", labelHe: "יהי רצון", he: htmlToText(normalizeHebrewText(yehiPrayer.hebrew)), en: htmlToText(yehiPrayer.english) }
+                ]
               };
             }
 
             function wrapTextLine(ctx, text, maxWidth) {
               const words = text.trim().split(/\s+/);
-              if (words.length === 0) {
+              if (words.length === 0 || !words[0]) {
                 return [];
               }
               const wrapped = [];
@@ -308,27 +304,6 @@
               return wrapped;
             }
 
-            function buildWrappedLines(lines, ctx, maxWidth) {
-              const output = [];
-              lines.forEach(line => {
-                if (!line || !line.trim()) {
-                  output.push("");
-                  return;
-                }
-                output.push(...wrapTextLine(ctx, line, maxWidth));
-              });
-              return output;
-            }
-
-            function loadImage(src) {
-              return new Promise((resolve, reject) => {
-                const img = new Image();
-                img.onload = () => resolve(img);
-                img.onerror = () => reject(new Error("Unable to load image: " + src));
-                img.src = src;
-              });
-            }
-
             function canvasToBlob(canvas) {
               return new Promise((resolve, reject) => {
                 canvas.toBlob(blob => {
@@ -341,7 +316,32 @@
               });
             }
 
+            // Share image in the Poster style: top bar, 13-day strip, big numeral, readings, black footer.
+            const SHARE_FONTS = {
+              mono: "'Space Mono', monospace",
+              sans: "'Heebo', sans-serif",
+              hebrew: "'Noto Serif Hebrew', serif"
+            };
+            const SHARE_COLORS = { paper: "#f4f4f2", ink: "#0a0a0a", muted: "#55554f", signal: "#ff2e93" };
+
+            async function ensureShareFonts() {
+              if (!document.fonts || !document.fonts.load) return;
+              try {
+                await Promise.all([
+                  document.fonts.load("800 100px Heebo"),
+                  document.fonts.load("300 30px Heebo"),
+                  document.fonts.load("700 26px 'Space Mono'"),
+                  document.fonts.load("400 26px 'Space Mono'"),
+                  document.fonts.load("500 38px 'Noto Serif Hebrew'", "אב"),
+                  document.fonts.load("700 36px 'Noto Serif Hebrew'", "אב")
+                ]);
+              } catch (fontError) {
+                console.warn("Share fonts not loaded, using fallbacks:", fontError);
+              }
+            }
+
             async function createShareImageBlob(shareData) {
+              await ensureShareFonts();
               const canvas = document.createElement("canvas");
               const ctx = canvas.getContext("2d");
               if (!ctx) {
@@ -349,142 +349,137 @@
               }
 
               const width = 1080;
-              const paddingX = 32;
-              const paddingTop = 32;
-              const paddingBottom = 50;
-              const titleSize = 38;
-              const dateSize = 24;
-              const footerSize = 16;
-              const footerText = "Rememberthenasi.com. Text reproduced with permission from Kehot Publication Society.";
-              const maxTextWidth = width - (paddingX * 2);
-              const sectionGap = 10;
-              const headingGap = 4;
-              const bodyGap = 3;
-              const iconSize = 72;
+              const pad = 64;
+              const textWidth = width - pad * 2;
+              const heFont = "500 38px " + SHARE_FONTS.hebrew;
+              const heLine = 66;
+              const enFont = "300 30px " + SHARE_FONTS.sans;
+              const enLine = 46;
 
-              const wrappedSections = [];
-              let contentHeight = titleSize + 20;
-
-              if (shareData.dateLabel) {
-                contentHeight += dateSize + 18;
+              // Lay out the readings first so the canvas height fits them.
+              const blocks = [];
+              if (shareData.dayNumber) {
+                shareData.sections.forEach(section => {
+                  ctx.font = heFont;
+                  const heLines = shareData.showHebrew ? wrapTextLine(ctx, section.he || "", textWidth) : [];
+                  ctx.font = enFont;
+                  const enLines = shareData.showEnglish ? wrapTextLine(ctx, section.en || "", textWidth) : [];
+                  blocks.push({ section, heLines, enLines });
+                });
+              } else {
+                ctx.font = "300 34px " + SHARE_FONTS.sans;
+                blocks.push({
+                  message: true,
+                  enLines: wrapTextLine(ctx, "The Nasi is read during the first 13 days of Nisan. There is no Nasi or Yehi Ratzon today.", textWidth)
+                });
               }
 
-              shareData.sections.forEach(section => {
-                const isHebrew = section.lang === "he";
-                const headingFont = isHebrew
-                  ? "700 32px 'Frank Ruhl Libre', serif"
-                  : "700 28px 'Heebo', sans-serif";
-                const bodyFont = isHebrew
-                  ? "500 28px 'Frank Ruhl Libre', serif"
-                  : "500 24px 'Heebo', sans-serif";
-                const bodyLineHeight = isHebrew ? 36 : 32;
-
-                let wrappedHeading = [];
-                if (section.heading) {
-                  ctx.font = headingFont;
-                  wrappedHeading = buildWrappedLines([section.heading], ctx, maxTextWidth);
+              const barH = 96;
+              const stripH = 72;
+              const headH = shareData.dayNumber ? 400 : 260;
+              let readingH = 0;
+              blocks.forEach(block => {
+                if (block.message) {
+                  readingH += block.enLines.length * 50 + 40;
+                  return;
                 }
-
-                ctx.font = bodyFont;
-                const wrappedBody = buildWrappedLines([section.body], ctx, maxTextWidth);
-
-                const sectionHeight =
-                  (wrappedHeading.length ? wrappedHeading.length * (isHebrew ? 36 : 32) + headingGap : 0) +
-                  (wrappedBody.length ? wrappedBody.length * bodyLineHeight : 0) +
-                  bodyGap +
-                  sectionGap;
-
-                wrappedSections.push({
-                  lang: section.lang,
-                  headingLines: wrappedHeading,
-                  bodyLines: wrappedBody,
-                  headingFont,
-                  bodyFont,
-                  headingLineHeight: isHebrew ? 36 : 32,
-                  bodyLineHeight
-                });
-                contentHeight += sectionHeight;
+                readingH += 70 + block.heLines.length * heLine + (block.heLines.length ? 24 : 0) + block.enLines.length * enLine + 48;
               });
-
-              const minHeight = 900;
-              const height = Math.max(minHeight, paddingTop + contentHeight + paddingBottom);
+              const footH = 150;
+              const height = barH + stripH + headH + readingH + footH;
 
               canvas.width = width;
               canvas.height = height;
+              const C = SHARE_COLORS;
 
-              ctx.fillStyle = "#ffffff";
+              ctx.fillStyle = C.paper;
               ctx.fillRect(0, 0, width, height);
 
-              try {
-                const icon = await loadImage("icons/icon-192x192.png");
-                ctx.drawImage(icon, paddingX, paddingTop - 6, iconSize, iconSize);
-              } catch (iconError) {
-                console.warn("Icon could not be loaded for share image:", iconError);
+              function rule(y, h) {
+                ctx.fillStyle = C.ink;
+                ctx.fillRect(0, y, width, h || 4);
+              }
+              function text(str, x, y, font, color, align, dir) {
+                ctx.font = font;
+                ctx.fillStyle = color;
+                ctx.textAlign = align || "left";
+                ctx.direction = dir || "ltr";
+                ctx.fillText(str, x, y);
               }
 
-              ctx.fillStyle = "#111111";
-              ctx.textAlign = "left";
-              ctx.direction = "ltr";
-              ctx.font = "700 " + titleSize + "px 'Heebo', sans-serif";
-              ctx.fillText(shareData.title, paddingX + iconSize + 22, paddingTop + 50);
+              // Top bar
+              text("REMEMBERTHENASI", pad, 60, "700 28px " + SHARE_FONTS.mono, C.ink);
+              text("בס\"ד", width - pad, 60, "500 28px " + SHARE_FONTS.hebrew, C.ink, "right", "rtl");
+              rule(barH - 4);
 
-              let y = paddingTop + iconSize + 28;
-
-              if (shareData.dateLabel) {
-                ctx.fillStyle = "#374151";
-                ctx.font = "600 " + dateSize + "px 'Heebo', sans-serif";
-                ctx.textAlign = "left";
-                ctx.direction = "ltr";
-                ctx.fillText(shareData.dateLabel, paddingX, y);
-                y += dateSize + 18;
-              }
-
-              wrappedSections.forEach(section => {
-                const isHebrew = section.lang === "he";
-
-                if (section.headingLines.length) {
-                  ctx.fillStyle = "#0f172a";
-                  ctx.font = section.headingFont;
-                  ctx.textAlign = isHebrew ? "right" : "left";
-                  ctx.direction = isHebrew ? "rtl" : "ltr";
-                  section.headingLines.forEach(line => {
-                    ctx.fillText(line, isHebrew ? width - paddingX : paddingX, y);
-                    y += section.headingLineHeight;
-                  });
-                  y += headingGap;
+              // 13-day strip, shared day in pink
+              const cellW = width / 13;
+              for (let d = 1; d <= 13; d += 1) {
+                const x = (d - 1) * cellW;
+                if (d === shareData.dayNumber) {
+                  ctx.fillStyle = C.signal;
+                  ctx.fillRect(x, barH, cellW, stripH - 4);
                 }
+                if (d > 1) {
+                  ctx.fillStyle = C.ink;
+                  ctx.fillRect(x - 1, barH, 2, stripH - 4);
+                }
+                text(String(d), x + cellW / 2, barH + 44, (d === shareData.dayNumber ? "700 " : "400 ") + "24px " + SHARE_FONTS.mono, C.ink, "center");
+              }
+              rule(barH + stripH - 4);
 
-                ctx.fillStyle = "#111111";
-                ctx.font = section.bodyFont;
-                ctx.textAlign = isHebrew ? "right" : "left";
-                ctx.direction = isHebrew ? "rtl" : "ltr";
-                section.bodyLines.forEach(line => {
-                  if (!line) {
-                    y += Math.floor(section.bodyLineHeight * 0.6);
-                    return;
-                  }
-                  ctx.fillText(line, isHebrew ? width - paddingX : paddingX, y);
-                  y += section.bodyLineHeight;
+              // Day header
+              let y = barH + stripH;
+              if (shareData.dayNumber) {
+                text((shareData.dateLabel || "").toUpperCase(), pad, y + 58, "400 24px " + SHARE_FONTS.mono, C.muted);
+                const numeral = String(shareData.dayNumber).padStart(2, "0");
+                ctx.font = "800 250px " + SHARE_FONTS.sans;
+                const numeralWidth = ctx.measureText(numeral).width;
+                text(numeral, pad - 8, y + 270, "800 250px " + SHARE_FONTS.sans, C.ink);
+                text("/13 NISAN", pad + numeralWidth + 12, y + 270, "400 34px " + SHARE_FONTS.mono, C.ink);
+                text(shareData.showEnglish || !shareData.showHebrew ? shareData.nameEn : "", pad, y + 350, "800 36px " + SHARE_FONTS.sans, C.ink);
+                if (shareData.showHebrew) {
+                  text(shareData.nameHe, width - pad, y + 350, "700 36px " + SHARE_FONTS.hebrew, C.ink, "right", "rtl");
+                }
+              } else {
+                text("NO NASI TODAY", pad, y + 170, "800 110px " + SHARE_FONTS.sans, C.ink);
+              }
+              y += headH;
+
+              // Readings
+              blocks.forEach(block => {
+                if (block.message) {
+                  rule(y - 4);
+                  y += 60;
+                  block.enLines.forEach(line => {
+                    text(line, pad, y, "300 34px " + SHARE_FONTS.sans, C.ink);
+                    y += 50;
+                  });
+                  return;
+                }
+                rule(y - 4);
+                text(block.section.label.toUpperCase(), pad, y + 44, "400 24px " + SHARE_FONTS.mono, C.ink);
+                text(block.section.labelHe, width - pad, y + 46, "500 28px " + SHARE_FONTS.hebrew, C.ink, "right", "rtl");
+                y += 70;
+                block.heLines.forEach(line => {
+                  y += heLine;
+                  text(line, width - pad, y - 18, heFont, C.ink, "right", "rtl");
                 });
-
-                y += 8;
+                if (block.heLines.length) y += 24;
+                block.enLines.forEach(line => {
+                  y += enLine;
+                  text(line, pad, y - 12, enFont, C.ink);
+                });
+                y += 48;
               });
 
-              ctx.fillStyle = "#999999";
-              ctx.font = footerSize + "px 'Heebo', sans-serif";
-              ctx.textAlign = "center";
-              ctx.direction = "ltr";
-              
-              // Wrap footer text if needed
-              const footerMaxWidth = maxTextWidth;
-              ctx.font = footerSize + "px 'Heebo', sans-serif";
-              const wrappedFooter = buildWrappedLines([footerText], ctx, footerMaxWidth);
-              
-              // Position footer text with proper spacing
-              let footerY = height - (paddingBottom / 2) - ((wrappedFooter.length - 1) * footerSize / 2);
-              wrappedFooter.forEach((line, index) => {
-                ctx.fillText(line, width / 2, footerY + (index * footerSize * 0.9));
-              });
+              // Footer
+              ctx.fillStyle = C.ink;
+              ctx.fillRect(0, height - footH, width, footH);
+              ctx.fillStyle = C.signal;
+              ctx.fillRect(0, height - footH, 18, footH);
+              text("rememberthenasi.com", pad, height - footH + 66, "800 40px " + SHARE_FONTS.sans, C.paper);
+              text("Text reproduced with permission from Kehot Publication Society.", pad, height - footH + 110, "300 24px " + SHARE_FONTS.sans, "#b9b9b2");
 
               return canvasToBlob(canvas);
             }
@@ -897,14 +892,13 @@
                     updateMissedDayPrompt();
                     updateTodayReminder();
                     updateStreakChip();
-                    if (newState && dayMonth !== currentDayMonth) {
-                        const mostRecentUnmarked = getMostRecentUnmarkedDay();
-                        if (mostRecentUnmarked) {
-                            const daySelect = document.getElementById("day-select");
-                            if (daySelect) {
-                                daySelect.value = mostRecentUnmarked !== currentDayMonth ? mostRecentUnmarked : "";
-                                daySelect.dispatchEvent(new Event("change", { bubbles: true }));
-                            }
+                    if (newState) {
+                        // Move on to the next day, one day at a time, never past today.
+                        const shownNumber = getNisanDayNumber(dayMonth);
+                        const todayNumber = isCurrentDayValidNisan ? getNisanDayNumber(currentDayMonth) : null;
+                        const lastDay = todayNumber || 13;
+                        if (shownNumber && shownNumber < lastDay) {
+                            showDay(shownNumber + 1);
                         }
                     }
                 });
