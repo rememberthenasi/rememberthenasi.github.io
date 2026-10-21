@@ -45,7 +45,7 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 
 <!-- Link to Styles-->
-<link rel="stylesheet" href="styles.css?v=20261023d">
+<link rel="stylesheet" href="styles.css?v=20261023e">
 
 </head>
 
@@ -118,6 +118,13 @@
 
         <div class="side-info">
           <p id="date" class="dateline">Loading Hebrew date...</p>
+
+          <div id="off-season" class="off-season" hidden>
+            <p class="off-label">Today</p>
+            <p id="off-date" class="off-date" lang="he" dir="rtl"></p>
+            <p id="off-countdown" class="off-countdown">The Nasi is said on the first 13 days of Nisan.</p>
+            <button type="button" id="off-start" class="off-start">Read day 1</button>
+          </div>
 
           <select id="day-select" class="day-select" aria-label="Day of Nisan" hidden>
         <option id="today-option" value="">Today</option>
@@ -1044,6 +1051,7 @@
                         originalDateHTML = "";
                         dateEl.innerHTML = originalDateHTML;
                         setNoNasiMessage();
+                        showOffSeason(hebrewDate, month, day, data.hy);
                     }
                     updateDaySelectOptions();
                     updateCheckButton(isCurrentDayValidNisan ? dayMonth : null);
@@ -1363,6 +1371,25 @@
                 if (!d) showDay(1);
                 else if (d < 13) showDay(d + 1);
             });
+            // Outside the 13 days (desktop side card): today's Hebrew date and a countdown to 1 Nisan
+            function showOffSeason(hebrewDate, month, day, hebrewYear) {
+                document.getElementById("off-date").textContent = hebrewDate || "";
+                var afterNisan = ["Iyyar", "Sivan", "Tamuz", "Av", "Elul"].indexOf(month) >= 0 || (month === "Nisan" && day > 13);
+                var nisanYear = afterNisan ? hebrewYear + 1 : hebrewYear;
+                fetch("https://www.hebcal.com/converter?cfg=json&hy=" + nisanYear + "&hm=Nisan&hd=1&h2g=1")
+                    .then(function(response) { return response.json(); })
+                    .then(function(start) {
+                        if (!start || !start.gy) return;
+                        var now = new Date();
+                        var days = Math.round((Date.UTC(start.gy, start.gm - 1, start.gd) - Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())) / 86400000);
+                        if (!isFinite(days) || days < 1) return;
+                        document.getElementById("off-countdown").textContent =
+                            (days === 1 ? "1 day" : days + " days") + " until 1 Nisan, when the Nasi begins.";
+                    })
+                    .catch(function() {});
+            }
+            document.getElementById("off-start").addEventListener("click", function() { showDay(1); });
+
             document.getElementById("today-btn").addEventListener("click", function() {
                 var daySelect = document.getElementById("day-select");
                 daySelect.value = "";
@@ -1464,6 +1491,7 @@
                 document.getElementById("next-day").disabled = dayNumber >= 13;
 
                 document.getElementById("dp-day").hidden = !dayNumber;
+                document.getElementById("off-season").hidden = Boolean(dayNumber) || isCurrentDayValidNisan || !currentHebrewYear;
                 document.getElementById("dp-choose").hidden = Boolean(dayNumber);
                 document.getElementById("dp-sub").textContent = dayNumber ? shortName(dayNumber) : "The first 13 days of Nisan";
                 dayMenuToggle.setAttribute("aria-label", dayNumber ? "Day " + dayNumber + " of 13, choose another day" : "Choose a day");

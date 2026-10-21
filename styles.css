@@ -716,6 +716,7 @@ body.flap .missed-day-prompt { background: var(--key); color: var(--flap-text); 
   box-shadow: var(--shadow);
 }
 
+/* Highlights are segments of the one pill: square in the middle, rounded only at the outer ends */
 .dp-arrow {
   display: grid;
   place-items: center;
@@ -724,8 +725,9 @@ body.flap .missed-day-prompt { background: var(--key); color: var(--flap-text); 
   border: 0;
   background: transparent;
   color: var(--ink);
-  border-radius: 18px;
 }
+#prev-day { border-radius: 18px 0 0 18px; }
+#next-day { border-radius: 0 18px 18px 0; }
 .dp-arrow svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 .dp-arrow:hover:not(:disabled) { background: var(--chip); }
 .dp-arrow:disabled { color: var(--muted); opacity: 0.35; cursor: default; }
@@ -739,7 +741,7 @@ body.flap .missed-day-prompt { background: var(--key); color: var(--flap-text); 
   height: 58px;
   padding: 0 8px;
   border: 0;
-  border-radius: 14px;
+  border-radius: 0;
   background: transparent;
 }
 .dp-current:hover, .dp-current[aria-expanded="true"] { background: var(--chip); }
@@ -799,4 +801,24 @@ body.flap .missed-day-prompt { background: var(--key); color: var(--flap-text); 
 @media (prefers-reduced-motion: reduce) {
   .day-menu { animation: none; }
   .dp-chevron { transition: none; }
+}
+
+/* Outside the 13 days: the desktop side card shows today's date and the countdown */
+.off-season { display: none; }
+
+@media (min-width: 960px) {
+  .off-season:not([hidden]) { display: block; text-align: center; }
+  .off-label { margin: 0 0 4px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .off-date { margin: 0 0 14px; font-family: var(--hebrew); font-weight: 700; font-size: 2rem; line-height: 1.3; }
+  .off-countdown { margin: 0 0 18px; font-size: 0.98rem; line-height: 1.5; }
+  .off-start {
+    height: 44px;
+    padding: 0 22px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 700;
+    box-shadow: var(--shadow);
+  }
 }
