@@ -1,13 +1,13 @@
 // Service Worker: Offline Support
 
-const CACHE_NAME = 'rememberthenasi-v16';
+const CACHE_NAME = 'rememberthenasi-v17';
 
 // Allowlisted assets to precache (versioned URLs matching index.html references; no duplicates)
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/styles.css?v=20260322a',
-  '/manifest.json?v=20260322a',
+  '/styles.css?v=20261021a',
+  '/manifest.json?v=20261021a',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
   '/nasi.json',
@@ -74,8 +74,9 @@ self.addEventListener('fetch', event => {
     event.respondWith(
       fetch(request)
         .then(response => {
-          // Update the cached index.html while serving the fresh copy
-          if (response.ok) {
+          // Update the cached index.html while serving the fresh copy (app shell only,
+          // so pages like /legacy/ or /redesign-preview.html never replace it)
+          if (response.ok && (pathname === '/' || pathname === '/index.html')) {
             const clone = response.clone();
             caches.open(CACHE_NAME).then(cache => cache.put('/index.html', clone));
           }

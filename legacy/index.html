@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>    
+    <!-- Import Frank Ruhl Libre Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Import font Forum-->
+    <link href="https://fonts.googleapis.com/css2?family=Forum&display=swap" rel="stylesheet">
+    <!-- Import Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BFNQ3TZSCK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-BFNQ3TZSCK');
+
+</script>
+
+
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#e4d9d3">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- General SEO Meta Tags -->
+<meta name="description" content="RememberTheNasi.com provides easy access to the daily Nasi readings and Yehi Ratzon prayers during the first 13 days of Nisan. Features offline mode, dark mode, reminders, and mobile-friendly design.">
+<meta name="keywords" content="Daily Nasi, Nasi, Nasi Nissan, Nasi Nisan, Nisan, Remember the Nasi, Nasi Prayer, Nassi Prayer, Yehi Ratzon, Hebrew Prayer for Month of Nissan, Hebrew Prayer for month of Nisan, Nissan, Pesach, Tefillah, Kehot, Chabad, Lubavitch tradition, Hebrew prayer, Jewish prayers, daily prayer, Jewish tradition, free web app, offline prayer app, dark mode Hebrew prayers">
+<meta name="robots" content="noindex, nofollow">
+<meta name="author" content="Menachem Spielman">
+
+<!-- Open Graph Meta Tags for Social Media -->
+<meta property="og:title" content="Remember The Nasi – Daily Nasi and Yehi Ratzon Prayers">
+<meta property="og:description" content="Easily access and read the daily Nasi and Yehi Ratzon prayers during the first 13 days of Nisan with our free, mobile-friendly web app featuring offline support and dark mode.">
+<meta property="og:url" content="https://rememberthenasi.com">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Remember The Nasi – Daily Nasi and Yehi Ratzon Prayers">
+<meta name="twitter:description" content="Stay connected to tradition with daily Nasi and Yehi Ratzon prayers throughout Nisan. Simple, free, and accessible offline with dark mode.">
+
+<!-- HTML Site Design -->
+    <title>Daily Nasi (legacy design)</title>
+    <link rel="manifest" href="../manifest.json?v=20260322a">
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    
+<!-- Link to Styles-->
+<link rel="stylesheet" href="styles.css?v=20260322a">
+
+</head>
+
+<!-- Actual Design -->
+<body>
+  <main class="app">
+    <!-- Logo Display -->
+    <p style="text-align:center;font-size:0.8rem;">בס"ד</p>
+    <div class="logo-container">
+      <div class="logo-wrapper">
+        <img src="../icons/icon-192x192.png" alt="Site Logo" class="site-logo">
+        <div id="streak-chip" class="streak-chip" style="display:none;" aria-hidden="true"></div>
+      </div>
+    </div>
+    <h1>Remember The Nasi!</h1>
+
+    <div class="header-container">
+        <!-- Hebrew date with logic -->
+        <p id="date">Loading Hebrew date...</p>
+    </div>
+
+    <div class="button-container">
+        <div class="controls-top-row">
+          <!-- Day selector dropdown -->
+          <select id="day-select" class="day-select">
+            <option id="today-option" value="">Today</option>
+            <option value="1 Nisan">1 Nisan</option>
+            <option value="2 Nisan">2 Nisan</option>
+            <option value="3 Nisan">3 Nisan</option>
+            <option value="4 Nisan">4 Nisan</option>
+            <option value="5 Nisan">5 Nisan</option>
+            <option value="6 Nisan">6 Nisan</option>
+            <option value="7 Nisan">7 Nisan</option>
+            <option value="8 Nisan">8 Nisan</option>
+            <option value="9 Nisan">9 Nisan</option>
+            <option value="10 Nisan">10 Nisan</option>
+            <option value="11 Nisan">11 Nisan</option>
+            <option value="12 Nisan">12 Nisan</option>
+            <option value="13 Nisan">13 Nisan</option>
+          </select>
+        </div>
+        <div id="today-reminder-container" class="missed-day-container" style="display:none;">
+          <div class="missed-day-prompt" aria-live="polite">
+            <span class="missed-day-label">Don't forget the Nasi!</span>
+            <div class="missed-day-actions">
+              <button type="button" id="today-reminder-check" class="missed-day-action-button today-reminder-action" aria-label="Mark today as said" title="Mark today as said">Said already</button>
+            </div>
+          </div>
+        </div>
+        <div id="missed-day-container" class="missed-day-container" style="display:none;">
+          <div class="missed-day-prompt" aria-live="polite">
+            <span id="missed-day-label" class="missed-day-label">Missed day reminder</span>
+            <div class="missed-day-actions">
+              <button type="button" id="missed-day-check" class="missed-day-action-button missed-day-check" aria-label="Mark missed day as said" title="Mark as said">✓</button>
+              <button type="button" id="missed-day-open" class="missed-day-action-button missed-day-open" aria-label="Open missed day" title="Open day">✕</button>
+            </div>
+          </div>
+        </div>
+        <div class="controls-bottom-row">
+          <!-- Dark mode toggle button -->
+          <button type="button" id="dark-mode-toggle" class="dark-mode-toggle icon-button" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <svg id="dark-mode-icon" class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 1 0 21 12.8z"></path>
+            </svg>
+          </button>
+          <!-- Language selector -->
+          <div class="language-toggle" role="group" aria-label="Language selector">
+            <button type="button" class="language-option" data-language="english" aria-pressed="false">A</button>
+            <button type="button" class="language-option is-active" data-language="both" aria-pressed="true">א/A</button>
+            <button type="button" class="language-option" data-language="hebrew" aria-pressed="false">א</button>
+          </div>
+          <!-- Share Today's Text -->
+          <button type="button" id="text-share-button" class="dark-mode-toggle text-share-button" aria-label="Share as image" title="Share as image">
+            <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <path d="M8.8 10.6l6.4-3.2"></path>
+              <path d="M8.8 13.4l6.4 3.2"></path>
+            </svg>
+            <span>As image</span>
+          </button>
+          <!-- Install Button -->
+          <button type="button" id="share-button" class="dark-mode-toggle icon-button" aria-label="Install app" title="Install app">
+            <svg class="button-icon install-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path>
+              <path d="M10 5h4"></path>
+              <circle cx="12" cy="18" r="1"></circle>
+            </svg>
+          </button>
+
+        </div>
+    </div>
+
+    <table class="prayer-table">
+        <thead>
+          <tr>
+            <th colspan="1">Nasi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="hebrew" id="hebrew-nasi">Loading...</td>
+          </tr>
+          <tr>
+            <td id="english-nasi">Loading...</td>
+          </tr>
+        </tbody>
+    </table>
+
+    <table class="prayer-table">
+        <thead>
+          <tr>
+            <th colspan="1">Yehi Ratzon</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="hebrew" id="hebrew-yehiRatzon">Loading...</td>
+          </tr>
+          <tr>
+            <td id="english-yehiRatzon">Loading...</td>
+          </tr>
+        </tbody>
+    </table>
+
+    <div id="nasi-check-container" class="nasi-check-container" style="display:none;">
+      <button type="button" id="nasi-check-button" class="nasi-check-button" aria-pressed="false">
+        <svg id="nasi-check-icon" class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+        </svg>
+        <span id="nasi-check-label">Mark Nasi as said</span>
+      </button>
+    </div>
+
+    <p class="bottom-text">
+      Text reproduced with permission from
+      <br>
+      <a href="http://kehot.com/" class="dark-mode-link">Kehot Publication Society</a>.
+    </p>
+    <p class="bottom-text">
+      <i>Site created by Menachem Spielman<br>Contact: nasi@mspielman.com</i>
+    </p>
+    <br>
+    <br>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            function setPrayerCells(englishMsg, hebrewMsg) {
+                document.getElementById("english-nasi").textContent = englishMsg;
+                document.getElementById("hebrew-nasi").textContent = hebrewMsg;
+                document.getElementById("english-yehiRatzon").textContent = englishMsg;
+                document.getElementById("hebrew-yehiRatzon").textContent = hebrewMsg;
+            }
+
+            function setNoNasiMessage() {
+                setPrayerCells(
+                    "There is no Nasi / Yehi Ratzon to display today (only said during the first 13 days of Nisan).",
+                    "אין נשיא או יהי רצון להיום (נאמר רק בי״ג הימים הראשונים של חודש ניסן)."
+                );
+            }
+
+            function setErrorMessage() {
+                setPrayerCells(
+                    "Unable to load today's date. Please check your connection and try again.",
+                    "לא ניתן לטעון את תאריך היום. אנא בדוק חיבור לאינטרנט ונסה שוב."
+                );
+            }
+
+            function htmlToText(html) {
+              const temp = document.createElement("div");
+              temp.innerHTML = html || "";
+              return (temp.textContent || temp.innerText || "").trim();
+            }
+
+            function normalizeHebrewText(text) {
+              if (!text) {
+                return "";
+              }
+              // Remove meteg (vertical mark) when it is combined with tsere.
+              return text.replace(/\u05B5\u05BD|\u05BD\u05B5/g, "\u05B5");
+            }
+
+            function getShareUrl() {
+              return window.location.origin + window.location.pathname;
+            }
+
+            function getCurrentLanguageMode() {
+              const activeLanguageButton = document.querySelector(".language-option.is-active");
+              return activeLanguageButton?.dataset.language || localStorage.getItem("language-mode") || "both";
+            }
+
+            async function buildTodayShareData(languageMode) {
+              const todayOption = document.getElementById("today-option");
+              const todayLabel = todayOption ? todayOption.textContent.replace(/^Today:\s*/, "").trim() : "";
+              const shareHeader = "rememberthenasi.com";
+              const mode = languageMode || "both";
+              const daySelect = document.getElementById("day-select");
+              const selectedDay = daySelect ? daySelect.value : "";
+              const displayedDayMonth = selectedDay || currentDayMonth;
+              const displayedDateLabel = selectedDay || todayLabel;
+              const isDisplayedNisanDay = Boolean(displayedDayMonth);
+
+              if (!isDisplayedNisanDay) {
+                const sections = [];
+                if (mode === "hebrew" || mode === "both") {
+                  sections.push({ heading: "", body: "אין נשיא או יהי רצון להיום", lang: "he" });
+                }
+                if (mode === "english" || mode === "both") {
+                  sections.push({ heading: "", body: "No Nasi or Yehi Ratzon for today.", lang: "en" });
+                }
+                return {
+                  title: shareHeader,
+                  dateLabel: displayedDateLabel,
+                  sections
+                };
+              }
+
+              const [nasiData, yehiRatzonData] = await Promise.all([
+                fetch("../nasi.json").then(response => response.json()),
+                fetch("../yehiRatzon.json").then(response => response.json())
+              ]);
+
+              const nasiPrayer = nasiData[displayedDayMonth] || {};
+              const yehiPrayer = yehiRatzonData[displayedDayMonth] || {};
+              const sections = [];
+
+              if (mode === "hebrew" || mode === "both") {
+                sections.push(
+                  { heading: "נשיא", body: htmlToText(normalizeHebrewText(nasiPrayer.hebrew)), lang: "he" },
+                  { heading: "יהי רצון", body: htmlToText(normalizeHebrewText(yehiPrayer.hebrew)), lang: "he" }
+                );
+              }
+
+              if (mode === "english" || mode === "both") {
+                sections.push(
+                  { heading: "Nasi", body: htmlToText(nasiPrayer.english), lang: "en" },
+                  { heading: "Yehi Ratzon", body: htmlToText(yehiPrayer.english), lang: "en" }
+                );
+              }
+
+              return {
+                title: shareHeader,
+                dateLabel: displayedDateLabel,
+                sections
+              };
+            }
+
+            function wrapTextLine(ctx, text, maxWidth) {
+              const words = text.trim().split(/\s+/);
+              if (words.length === 0) {
+                return [];
+              }
+              const wrapped = [];
+              let current = words[0];
+
+              for (let i = 1; i < words.length; i += 1) {
+                const candidate = current + " " + words[i];
+                if (ctx.measureText(candidate).width <= maxWidth) {
+                  current = candidate;
+                } else {
+                  wrapped.push(current);
+                  current = words[i];
+                }
+              }
+              wrapped.push(current);
+              return wrapped;
+            }
+
+            function buildWrappedLines(lines, ctx, maxWidth) {
+              const output = [];
+              lines.forEach(line => {
+                if (!line || !line.trim()) {
+                  output.push("");
+                  return;
+                }
+                output.push(...wrapTextLine(ctx, line, maxWidth));
+              });
+              return output;
+            }
+
+            function loadImage(src) {
+              return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = () => reject(new Error("Unable to load image: " + src));
+                img.src = src;
+              });
+            }
+
+            function canvasToBlob(canvas) {
+              return new Promise((resolve, reject) => {
+                canvas.toBlob(blob => {
+                  if (blob) {
+                    resolve(blob);
+                  } else {
+                    reject(new Error("Failed to create image blob"));
+                  }
+                }, "image/png");
+              });
+            }
+
+            async function createShareImageBlob(shareData) {
+              const canvas = document.createElement("canvas");
+              const ctx = canvas.getContext("2d");
+              if (!ctx) {
+                throw new Error("Canvas context unavailable");
+              }
+
+              const width = 1080;
+              const paddingX = 32;
+              const paddingTop = 32;
+              const paddingBottom = 50;
+              const titleSize = 38;
+              const dateSize = 24;
+              const footerSize = 16;
+              const footerText = "Rememberthenasi.com. Text reproduced with permission from Kehot Publication Society.";
+              const maxTextWidth = width - (paddingX * 2);
+              const sectionGap = 10;
+              const headingGap = 4;
+              const bodyGap = 3;
+              const iconSize = 72;
+
+              const wrappedSections = [];
+              let contentHeight = titleSize + 20;
+
+              if (shareData.dateLabel) {
+                contentHeight += dateSize + 18;
+              }
+
+              shareData.sections.forEach(section => {
+                const isHebrew = section.lang === "he";
+                const headingFont = isHebrew
+                  ? "700 32px 'Noto Serif Hebrew', serif"
+                  : "700 28px 'Inter', sans-serif";
+                const bodyFont = isHebrew
+                  ? "500 28px 'Noto Serif Hebrew', serif"
+                  : "500 24px 'Inter', sans-serif";
+                const bodyLineHeight = isHebrew ? 36 : 32;
+
+                let wrappedHeading = [];
+                if (section.heading) {
+                  ctx.font = headingFont;
+                  wrappedHeading = buildWrappedLines([section.heading], ctx, maxTextWidth);
+                }
+
+                ctx.font = bodyFont;
+                const wrappedBody = buildWrappedLines([section.body], ctx, maxTextWidth);
+
+                const sectionHeight =
+                  (wrappedHeading.length ? wrappedHeading.length * (isHebrew ? 36 : 32) + headingGap : 0) +
+                  (wrappedBody.length ? wrappedBody.length * bodyLineHeight : 0) +
+                  bodyGap +
+                  sectionGap;
+
+                wrappedSections.push({
+                  lang: section.lang,
+                  headingLines: wrappedHeading,
+                  bodyLines: wrappedBody,
+                  headingFont,
+                  bodyFont,
+                  headingLineHeight: isHebrew ? 36 : 32,
+                  bodyLineHeight
+                });
+                contentHeight += sectionHeight;
+              });
+
+              const minHeight = 900;
+              const height = Math.max(minHeight, paddingTop + contentHeight + paddingBottom);
+
+              canvas.width = width;
+              canvas.height = height;
+
+              ctx.fillStyle = "#ffffff";
+              ctx.fillRect(0, 0, width, height);
+
+              try {
+                const icon = await loadImage("../icons/icon-192x192.png");
+                ctx.drawImage(icon, paddingX, paddingTop - 6, iconSize, iconSize);
+              } catch (iconError) {
+                console.warn("Icon could not be loaded for share image:", iconError);
+              }
+
+              ctx.fillStyle = "#111111";
+              ctx.textAlign = "left";
+              ctx.direction = "ltr";
+              ctx.font = "700 " + titleSize + "px 'Inter', sans-serif";
+              ctx.fillText(shareData.title, paddingX + iconSize + 22, paddingTop + 50);
+
+              let y = paddingTop + iconSize + 28;
+
+              if (shareData.dateLabel) {
+                ctx.fillStyle = "#374151";
+                ctx.font = "600 " + dateSize + "px 'Inter', sans-serif";
+                ctx.textAlign = "left";
+                ctx.direction = "ltr";
+                ctx.fillText(shareData.dateLabel, paddingX, y);
+                y += dateSize + 18;
+              }
+
+              wrappedSections.forEach(section => {
+                const isHebrew = section.lang === "he";
+
+                if (section.headingLines.length) {
+                  ctx.fillStyle = "#0f172a";
+                  ctx.font = section.headingFont;
+                  ctx.textAlign = isHebrew ? "right" : "left";
+                  ctx.direction = isHebrew ? "rtl" : "ltr";
+                  section.headingLines.forEach(line => {
+                    ctx.fillText(line, isHebrew ? width - paddingX : paddingX, y);
+                    y += section.headingLineHeight;
+                  });
+                  y += headingGap;
+                }
+
+                ctx.fillStyle = "#111111";
+                ctx.font = section.bodyFont;
+                ctx.textAlign = isHebrew ? "right" : "left";
+                ctx.direction = isHebrew ? "rtl" : "ltr";
+                section.bodyLines.forEach(line => {
+                  if (!line) {
+                    y += Math.floor(section.bodyLineHeight * 0.6);
+                    return;
+                  }
+                  ctx.fillText(line, isHebrew ? width - paddingX : paddingX, y);
+                  y += section.bodyLineHeight;
+                });
+
+                y += 8;
+              });
+
+              ctx.fillStyle = "#999999";
+              ctx.font = footerSize + "px 'Inter', sans-serif";
+              ctx.textAlign = "center";
+              ctx.direction = "ltr";
+              
+              // Wrap footer text if needed
+              const footerMaxWidth = maxTextWidth;
+              ctx.font = footerSize + "px 'Inter', sans-serif";
+              const wrappedFooter = buildWrappedLines([footerText], ctx, footerMaxWidth);
+              
+              // Position footer text with proper spacing
+              let footerY = height - (paddingBottom / 2) - ((wrappedFooter.length - 1) * footerSize / 2);
+              wrappedFooter.forEach((line, index) => {
+                ctx.fillText(line, width / 2, footerY + (index * footerSize * 0.9));
+              });
+
+              return canvasToBlob(canvas);
+            }
+
+            async function shareTodayAsImage() {
+              const shareCaption = "rememberthenasi.com";
+
+              try {
+                const shareData = await buildTodayShareData(getCurrentLanguageMode());
+                const imageBlob = await createShareImageBlob(shareData);
+
+                let imageFile = null;
+                try {
+                  imageFile = new File([imageBlob], "remember-the-nasi.png", { type: "image/png" });
+                } catch (fileError) {
+                  console.warn("File constructor unavailable, using fallback download:", fileError);
+                }
+
+                if (imageFile && navigator.share && navigator.canShare && navigator.canShare({ files: [imageFile] })) {
+                  try {
+                    await navigator.share({
+                      title: shareData.title,
+                      text: shareCaption,
+                      files: [imageFile]
+                    });
+                    return;
+                  } catch (shareError) {
+                    if (shareError && shareError.name === "AbortError") {
+                      return;
+                    }
+                    console.warn("Native file share failed, falling back to download:", shareError);
+                  }
+                }
+
+                const imageUrl = URL.createObjectURL(imageBlob);
+                const downloadLink = document.createElement("a");
+                downloadLink.href = imageUrl;
+                downloadLink.download = "remember-the-nasi.png";
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                URL.revokeObjectURL(imageUrl);
+                alert("Image downloaded. You can now share it in WhatsApp.");
+              } catch (error) {
+                if (error && error.name === "AbortError") {
+                  return;
+                }
+                console.error("Error sharing today's image:", error);
+                alert("Unable to generate image right now. Please try again.");
+              }
+            }
+
+            // Install button functionality using the PWA install prompt
+            const shareButton = document.getElementById("share-button");
+            const textShareButton = document.getElementById("text-share-button");
+            let installPromptEvent = null;
+            const isStandaloneMode = () =>
+              window.matchMedia("(display-mode: standalone)").matches ||
+              ("standalone" in navigator && navigator.standalone);
+
+            function updateInstallButtonVisibility() {
+              if (!shareButton) return;
+              const isInstalled = isStandaloneMode() || localStorage.getItem("app-installed") === "true";
+              shareButton.style.display = isInstalled ? "none" : "inline-flex";
+            }
+
+            updateInstallButtonVisibility();
+
+            window.addEventListener("beforeinstallprompt", (event) => {
+              event.preventDefault();
+              installPromptEvent = event;
+              updateInstallButtonVisibility();
+            });
+
+            window.addEventListener("appinstalled", () => {
+              installPromptEvent = null;
+              localStorage.setItem("app-installed", "true");
+              updateInstallButtonVisibility();
+            });
+
+            shareButton.addEventListener("click", async () => {
+              if (installPromptEvent) {
+                installPromptEvent.prompt();
+                const choice = await installPromptEvent.userChoice;
+                console.log("Install prompt result:", choice.outcome);
+                installPromptEvent = null;
+                return;
+              }
+
+              const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase());
+              const isStandalone = isStandaloneMode();
+
+              if (isIOS && !isStandalone) {
+                alert("To install: tap Share, then Add to Home Screen.");
+              } else {
+                alert("Install is not available right now. If already installed, open from your home screen.");
+              }
+            });
+
+            if (textShareButton) {
+              textShareButton.addEventListener("click", shareTodayAsImage);
+            }
+
+
+            // Dark Mode Toggle
+            const toggleButton = document.getElementById("dark-mode-toggle");
+            const darkModeIcon = document.getElementById("dark-mode-icon");
+            if (localStorage.getItem("dark-mode") === "enabled") {
+                enableDarkMode();
+            }
+
+            toggleButton.addEventListener("click", function() {
+                if (localStorage.getItem("dark-mode") !== "enabled") {
+                    enableDarkMode();
+                } else {
+                    disableDarkMode();
+                }
+            });
+
+            function enableDarkMode() {
+                document.body.classList.add("dark-mode");
+                document.querySelectorAll("h1, h2, p#date, p#dateonly, table, th, td, .link-button, a").forEach(el => {
+                    el.classList.add("dark-mode");
+                });
+              if (darkModeIcon) {
+                darkModeIcon.innerHTML = "<circle cx='12' cy='12' r='4'></circle><path d='M12 2v2'></path><path d='M12 20v2'></path><path d='M4.93 4.93l1.41 1.41'></path><path d='M17.66 17.66l1.41 1.41'></path><path d='M2 12h2'></path><path d='M20 12h2'></path><path d='M4.93 19.07l1.41-1.41'></path><path d='M17.66 6.34l1.41-1.41'></path>";
+              }
+                localStorage.setItem("dark-mode", "enabled");
+            }
+
+            function disableDarkMode() {
+                document.body.classList.remove("dark-mode");
+                document.querySelectorAll("h1, h2, p#date, p#dateonly, table, th, td, .link-button, a").forEach(el => {
+                    el.classList.remove("dark-mode");
+                });
+              if (darkModeIcon) {
+                darkModeIcon.innerHTML = "<path d='M21 12.8A9 9 0 1 1 11.2 3 7 7 0 1 0 21 12.8z'></path>";
+              }
+                localStorage.setItem("dark-mode", "disabled");
+            }
+
+            function fetchPrayer(dayMonth, jsonFile, englishElementId, hebrewElementId) {
+                fetch(jsonFile)
+                    .then(response => response.json())
+                    .then(data => {
+                        const prayer = data[dayMonth];
+                        console.log("Fetched prayer for", dayMonth, "from", jsonFile, ":", prayer);
+                        if (!prayer) {
+                            document.getElementById(englishElementId).textContent = "No text available for this day.";
+                            document.getElementById(hebrewElementId).textContent = "אין טקסט זמין ליום זה.";
+                            return;
+                        }
+                        document.getElementById(englishElementId).innerHTML = prayer.english || "No prayer available";
+                        document.getElementById(hebrewElementId).innerHTML = normalizeHebrewText(prayer.hebrew || "אין תפילה זמינה");
+                    })
+            }
+
+            // Store current day info for reverting
+            let currentDayMonth = null;
+            let originalDateHTML = null;
+            let isCurrentDayValidNisan = false;
+            let currentHebrewYear = null;
+
+            // === NASI SAID TRACKING ===
+            function getNasiSaidData(hebrewYear) {
+                try {
+                    const stored = localStorage.getItem("nasi-said-" + hebrewYear);
+                    return stored ? JSON.parse(stored) : {};
+                } catch (e) {
+                    return {};
+                }
+            }
+
+            function saveNasiSaidData(hebrewYear, data) {
+                try {
+                    localStorage.setItem("nasi-said-" + hebrewYear, JSON.stringify(data));
+                } catch (e) {
+                    // Storage unavailable (e.g. private browsing quota)
+                }
+            }
+
+            function isNasiSaid(hebrewYear, dayMonth) {
+                const data = getNasiSaidData(hebrewYear);
+                return Boolean(data[dayMonth]);
+            }
+
+            function toggleNasiSaid(hebrewYear, dayMonth) {
+                const data = getNasiSaidData(hebrewYear);
+                data[dayMonth] = !data[dayMonth];
+                saveNasiSaidData(hebrewYear, data);
+                return Boolean(data[dayMonth]);
+            }
+
+            function setNasiSaid(hebrewYear, dayMonth, isSaid) {
+              const data = getNasiSaidData(hebrewYear);
+              data[dayMonth] = Boolean(isSaid);
+              saveNasiSaidData(hebrewYear, data);
+              return Boolean(data[dayMonth]);
+            }
+
+            function getNisanDayNumber(dayMonth) {
+              const match = /^([0-9]{1,2})\s+Nisan$/.exec(dayMonth || "");
+              if (!match) {
+                return null;
+              }
+              const parsed = Number.parseInt(match[1], 10);
+              if (Number.isNaN(parsed) || parsed < 1 || parsed > 13) {
+                return null;
+              }
+              return parsed;
+            }
+
+            function getMostRecentUnmarkedDay() {
+              if (!currentHebrewYear) return null;
+              const maxDay = (isCurrentDayValidNisan && currentDayMonth)
+                ? getNisanDayNumber(currentDayMonth)
+                : 13;
+              if (!maxDay) return null;
+              const data = getNasiSaidData(currentHebrewYear);
+              for (let day = maxDay; day >= 1; day -= 1) {
+                const dayMonth = day + " Nisan";
+                if (!data[dayMonth]) {
+                  return dayMonth;
+                }
+              }
+              return null;
+            }
+
+            function getMissedDaysBeforeCurrent() {
+              if (!currentHebrewYear || !isCurrentDayValidNisan || !currentDayMonth) {
+                return [];
+              }
+              const todayNisanDay = getNisanDayNumber(currentDayMonth);
+              if (!todayNisanDay || todayNisanDay <= 1) {
+                return [];
+              }
+              const data = getNasiSaidData(currentHebrewYear);
+              const missed = [];
+              for (let day = 1; day < todayNisanDay; day += 1) {
+                const dayMonth = day + " Nisan";
+                if (!data[dayMonth]) {
+                  missed.push(dayMonth);
+                }
+              }
+              return missed;
+            }
+
+            let missedDayHideTimer = null;
+
+            function updateMissedDayPrompt() {
+              const container = document.getElementById("missed-day-container");
+              const label = document.getElementById("missed-day-label");
+              const checkButton = document.getElementById("missed-day-check");
+              const openButton = document.getElementById("missed-day-open");
+              const actions = container ? container.querySelector(".missed-day-actions") : null;
+              if (!container || !label || !checkButton || !openButton) return;
+
+              if (missedDayHideTimer) {
+                clearTimeout(missedDayHideTimer);
+                missedDayHideTimer = null;
+              }
+
+              container.classList.remove("is-confirmed");
+              if (actions) {
+                actions.style.display = "inline-flex";
+              }
+
+              // Only show missed-day reminder after today's Nasi has been checked off.
+              const todayIsSaid = Boolean(
+                isCurrentDayValidNisan &&
+                currentDayMonth &&
+                currentHebrewYear &&
+                isNasiSaid(currentHebrewYear, currentDayMonth)
+              );
+              if (!todayIsSaid) {
+                container.style.display = "none";
+                checkButton.removeAttribute("data-day-month");
+                openButton.removeAttribute("data-day-month");
+                return;
+              }
+
+              const missedDays = getMissedDaysBeforeCurrent();
+              if (missedDays.length === 0) {
+                container.style.display = "none";
+                checkButton.removeAttribute("data-day-month");
+                openButton.removeAttribute("data-day-month");
+                return;
+              }
+
+              const nextMissedDay = missedDays[0];
+              label.innerHTML = nextMissedDay + " is not marked as said. <br class='mobile-only-break'>Did you say it?";
+              checkButton.setAttribute("data-day-month", nextMissedDay);
+              openButton.setAttribute("data-day-month", nextMissedDay);
+              checkButton.setAttribute("aria-label", "Mark " + nextMissedDay + " as said");
+              openButton.setAttribute("aria-label", "Open " + nextMissedDay);
+              container.style.display = "flex";
+            }
+
+            function getDisplayedDayMonth() {
+                const daySelect = document.getElementById("day-select");
+                const selectedDay = daySelect ? daySelect.value : "";
+                return selectedDay || currentDayMonth;
+            }
+
+            function updateCheckButton(dayMonth) {
+                const container = document.getElementById("nasi-check-container");
+                const button = document.getElementById("nasi-check-button");
+                const label = document.getElementById("nasi-check-label");
+                const icon = document.getElementById("nasi-check-icon");
+                if (!container || !button || !label) return;
+                if (!dayMonth || !currentHebrewYear) {
+                    container.style.display = "none";
+                    return;
+                }
+                container.style.display = "flex";
+                const isSaid = isNasiSaid(currentHebrewYear, dayMonth);
+                button.setAttribute("aria-pressed", isSaid ? "true" : "false");
+                button.classList.toggle("is-said", isSaid);
+                label.textContent = isSaid ? "Nasi said!" : "Mark Nasi as said";
+                if (icon) {
+                    const ns = "http://www.w3.org/2000/svg";
+                    while (icon.firstChild) {
+                        icon.removeChild(icon.firstChild);
+                    }
+                    if (isSaid) {
+                        const path = document.createElementNS(ns, "path");
+                        path.setAttribute("d", "M22 11.08V12a10 10 0 1 1-5.93-9.14");
+                        const poly = document.createElementNS(ns, "polyline");
+                        poly.setAttribute("points", "22 4 12 14.01 9 11.01");
+                        icon.appendChild(path);
+                        icon.appendChild(poly);
+                    } else {
+                        const circle = document.createElementNS(ns, "circle");
+                        circle.setAttribute("cx", "12");
+                        circle.setAttribute("cy", "12");
+                        circle.setAttribute("r", "10");
+                        icon.appendChild(circle);
+                    }
+                }
+            }
+
+            function updateDaySelectOptions() {
+                if (!currentHebrewYear) return;
+                const data = getNasiSaidData(currentHebrewYear);
+                const select = document.getElementById("day-select");
+                if (!select) return;
+                Array.from(select.options).forEach(option => {
+                    if (!option.value) {
+                        if (isCurrentDayValidNisan && currentDayMonth) {
+                            const wasSaid = Boolean(data[currentDayMonth]);
+                            const todayText = "Today: " + currentDayMonth;
+                            option.text = wasSaid ? "✓ " + todayText : todayText;
+                        }
+                        return;
+                    }
+                    const dayMonth = option.value;
+                    const wasSaid = Boolean(data[dayMonth]);
+                    option.text = wasSaid ? "✓ " + dayMonth : dayMonth;
+                });
+            }
+
+            // === TODAY REMINDER ===
+            function updateTodayReminder() {
+                const container = document.getElementById("today-reminder-container");
+                if (!container) return;
+                if (!isCurrentDayValidNisan || !currentDayMonth || !currentHebrewYear) {
+                    container.style.display = "none";
+                    return;
+                }
+                const todayIsSaid = isNasiSaid(currentHebrewYear, currentDayMonth);
+                container.style.display = todayIsSaid ? "none" : "flex";
+            }
+
+            // === STREAK CHIP ===
+            function computeStreak() {
+                if (!isCurrentDayValidNisan || !currentDayMonth || !currentHebrewYear) return null;
+                const todayN = getNisanDayNumber(currentDayMonth);
+                if (!todayN) return null;
+                const data = getNasiSaidData(currentHebrewYear);
+                for (let day = 1; day < todayN; day += 1) {
+                    if (!data[day + " Nisan"]) return null;
+                }
+                const todayIsSaid = Boolean(data[currentDayMonth]);
+                const streak = todayIsSaid ? todayN : todayN - 1;
+                return streak > 0 ? streak : null;
+            }
+
+            function updateStreakChip() {
+                const chip = document.getElementById("streak-chip");
+                if (!chip) return;
+                const streak = computeStreak();
+                if (streak === null) {
+                    chip.style.display = "none";
+                } else {
+                    chip.textContent = "🔥 " + streak;
+                    chip.style.display = "flex";
+                }
+            }
+
+            // Check button click handler
+            const nasiCheckButton = document.getElementById("nasi-check-button");
+            if (nasiCheckButton) {
+                nasiCheckButton.addEventListener("click", function() {
+                    const dayMonth = getDisplayedDayMonth();
+                    if (!dayMonth || !currentHebrewYear) return;
+                    const newState = toggleNasiSaid(currentHebrewYear, dayMonth);
+                    updateCheckButton(dayMonth);
+                    updateDaySelectOptions();
+                    updateMissedDayPrompt();
+                    updateTodayReminder();
+                    updateStreakChip();
+                    if (newState && dayMonth !== currentDayMonth) {
+                        const mostRecentUnmarked = getMostRecentUnmarkedDay();
+                        if (mostRecentUnmarked) {
+                            const daySelect = document.getElementById("day-select");
+                            if (daySelect) {
+                                daySelect.value = mostRecentUnmarked !== currentDayMonth ? mostRecentUnmarked : "";
+                                daySelect.dispatchEvent(new Event("change", { bubbles: true }));
+                            }
+                        }
+                    }
+                });
+            }
+
+            const todayReminderCheckButton = document.getElementById("today-reminder-check");
+            if (todayReminderCheckButton) {
+                todayReminderCheckButton.addEventListener("click", function() {
+                    if (!currentDayMonth || !currentHebrewYear) return;
+                    setNasiSaid(currentHebrewYear, currentDayMonth, true);
+                    updateCheckButton(currentDayMonth);
+                    updateDaySelectOptions();
+                    updateMissedDayPrompt();
+                    updateTodayReminder();
+                    updateStreakChip();
+                });
+            }
+
+            const missedDayCheckButton = document.getElementById("missed-day-check");
+            if (missedDayCheckButton) {
+              missedDayCheckButton.addEventListener("click", function() {
+                const missedDay = this.getAttribute("data-day-month");
+                if (!missedDay || !currentHebrewYear) return;
+                setNasiSaid(currentHebrewYear, missedDay, true);
+                updateDaySelectOptions();
+                if (getDisplayedDayMonth() === missedDay) {
+                  updateCheckButton(missedDay);
+                }
+
+                const container = document.getElementById("missed-day-container");
+                const label = document.getElementById("missed-day-label");
+                const actions = container ? container.querySelector(".missed-day-actions") : null;
+                if (container && label) {
+                  container.classList.add("is-confirmed");
+                  label.textContent = missedDay + " has been checked off.";
+                  if (actions) {
+                    actions.style.display = "none";
+                  }
+                  missedDayHideTimer = setTimeout(() => {
+                    container.style.display = "none";
+                    updateMissedDayPrompt();
+                    updateStreakChip();
+                  }, 1200);
+                } else {
+                  updateMissedDayPrompt();
+                  updateStreakChip();
+                }
+              });
+            }
+
+            const missedDayOpenButton = document.getElementById("missed-day-open");
+            if (missedDayOpenButton) {
+              missedDayOpenButton.addEventListener("click", function() {
+                const missedDay = this.getAttribute("data-day-month");
+                const daySelect = document.getElementById("day-select");
+                if (!missedDay || !daySelect) return;
+                daySelect.value = missedDay;
+                daySelect.dispatchEvent(new Event("change", { bubbles: true }));
+              });
+            }
+
+            // Fetch Hebrew Date from HebCal API - UPDATED VERSION
+            fetch("https://www.hebcal.com/converter?cfg=json&gy=" + new Date().getFullYear() + "&gm=" + (new Date().getMonth() + 1) + "&gd=" + new Date().getDate() + "&g2h=1")
+                .then(response => response.json())
+                .then(data => {
+                    const hebrewDate = data.hebrew;
+                    const day = data.hd;
+                    const month = data.hm;
+                    const dayMonth = day + " " + month;
+                  const todayOption = document.getElementById("today-option");
+
+                    currentDayMonth = dayMonth;
+                    currentHebrewYear = data.hy;
+                  if (todayOption) {
+                      todayOption.textContent = "Today: " + dayMonth;
+                  }
+
+                    console.log("Hebrew Date:", hebrewDate);
+                    console.log("Day:", day);
+                    console.log("Month:", month);
+                    console.log("Day and Month:", dayMonth);
+
+                    // Check if the date falls within the first 13 days of Nissan
+                    const dateEl = document.getElementById("date");
+                    if (month === "Nisan" && day >= 1 && day <= 13) {
+                        isCurrentDayValidNisan = true;
+                        originalDateHTML = "<span class='colored-text'>Displaying the Nasi and Yehi Ratzon for</span>";
+                        dateEl.innerHTML = originalDateHTML;
+                        fetchPrayer(dayMonth, '../nasi.json', 'english-nasi', 'hebrew-nasi');
+                        fetchPrayer(dayMonth, '../yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
+                    } else {
+                        isCurrentDayValidNisan = false;
+                        originalDateHTML = "The Nasi is read during the first 13 days of Nissan. <br> There is no Nasi read today. <br> Today's Hebrew date is: " + hebrewDate;
+                        dateEl.innerHTML = originalDateHTML;
+                        setNoNasiMessage();
+                    }
+                    updateDaySelectOptions();
+                    updateCheckButton(isCurrentDayValidNisan ? dayMonth : null);
+                    updateMissedDayPrompt();
+                    updateTodayReminder();
+                    updateStreakChip();
+                })
+                .catch(error => {
+                    console.error("Error fetching Hebrew date:", error);
+                    document.getElementById("date").innerHTML = "Error loading Hebrew date.";
+                    setErrorMessage();
+                    updateMissedDayPrompt();
+                    updateTodayReminder();
+                    updateStreakChip();
+                });
+
+            // Day selector: display a specific day's Nasi and Yehi Ratzon
+            document.getElementById("day-select").addEventListener("change", function() {
+                const selectedDay = this.value;
+                if (selectedDay) {
+                    // Clear previous prayers while loading
+                    document.getElementById("english-nasi").textContent = "Loading...";
+                    document.getElementById("hebrew-nasi").textContent = "Loading...";
+                    document.getElementById("english-yehiRatzon").textContent = "Loading...";
+                    document.getElementById("hebrew-yehiRatzon").textContent = "Loading...";
+                    
+                    const dateEl = document.getElementById("date");
+                    const span = document.createElement("span");
+                    span.className = "colored-text";
+                    span.appendChild(document.createTextNode("Displaying the Nasi and Yehi Ratzon for"));
+                    dateEl.textContent = "";
+                    dateEl.appendChild(span);
+                    fetchPrayer(selectedDay, '../nasi.json', 'english-nasi', 'hebrew-nasi');
+                    fetchPrayer(selectedDay, '../yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
+                    updateCheckButton(selectedDay);
+                    updateMissedDayPrompt();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    // Clear previous prayers while loading
+                    document.getElementById("english-nasi").textContent = "Loading...";
+                    document.getElementById("hebrew-nasi").textContent = "Loading...";
+                    document.getElementById("english-yehiRatzon").textContent = "Loading...";
+                    document.getElementById("hebrew-yehiRatzon").textContent = "Loading...";
+                    
+                    // Revert to current day
+                    if (originalDateHTML) {
+                        document.getElementById("date").innerHTML = originalDateHTML;
+                        if (isCurrentDayValidNisan && currentDayMonth) {
+                            // Current date is within Nisan 1-13, fetch the prayers
+                            fetchPrayer(currentDayMonth, '../nasi.json', 'english-nasi', 'hebrew-nasi');
+                            fetchPrayer(currentDayMonth, '../yehiRatzon.json', 'english-yehiRatzon', 'hebrew-yehiRatzon');
+                            updateCheckButton(currentDayMonth);
+                        } else {
+                            // Current date is outside Nisan, show the no-nasi message
+                            setNoNasiMessage();
+                            updateCheckButton(null);
+                        }
+                    }
+                        updateMissedDayPrompt();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+
+            // Language Selector
+            const languageButtons = document.querySelectorAll(".language-option");
+            const savedLanguageMode = localStorage.getItem("language-mode") || "both";
+            setLanguageMode(savedLanguageMode);
+
+            languageButtons.forEach(button => {
+              button.addEventListener("click", function() {
+                const mode = this.dataset.language || "both";
+                setLanguageMode(mode);
+                localStorage.setItem("language-mode", mode);
+              });
+            });
+
+            function setLanguageMode(mode) {
+              languageButtons.forEach(button => {
+                const isActive = button.dataset.language === mode;
+                button.classList.toggle("is-active", isActive);
+                button.setAttribute("aria-pressed", isActive ? "true" : "false");
+              });
+              applyLanguageMode(mode);
+            }
+
+            function applyLanguageMode(mode) {
+                const tables = document.querySelectorAll("table.prayer-table tbody");
+                
+                tables.forEach(tbody => {
+                    const rows = tbody.querySelectorAll("tr");
+                    rows.forEach(row => {
+                        const isHebrew = row.querySelector("td.hebrew") !== null;
+                        
+                        if (mode === "hebrew") {
+                            // Show only Hebrew rows
+                            row.style.display = isHebrew ? "table-row" : "none";
+                        } else if (mode === "english") {
+                            // Show only English rows
+                            row.style.display = !isHebrew ? "table-row" : "none";
+                        } else {
+                            // Show both
+                            row.style.display = "table-row";
+                        }
+                    });
+                });
+            }
+        });
+
+        if (false && 'serviceWorker' in navigator) { // legacy copy: service worker disabled
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                })
+                .catch(error => {
+                    console.log('ServiceWorker registration failed: ', error);
+                });
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+  // Paste this inside the existing function
+  document.querySelectorAll("button").forEach(button => {
+    button.addEventListener("touchend", () => {
+      button.blur();
+    });
+  });
+});
+    </script>
+
+  </main>
+</body>
+</html>

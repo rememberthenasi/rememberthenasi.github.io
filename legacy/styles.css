@@ -1,0 +1,972 @@
+/* Base Color Variables */
+:root {
+  --primary-color: #aea09b;
+  --primary-hover: #b8aaa3;
+  --light-bg: #e4d9d3;
+  --dark-bg: #0f2233;
+  --text-color: #333;
+  --dark-text: #f1f1f1;
+  --table-bg: #f9f7f5;
+  --table-dark-bg: #1e3044;
+  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.06);
+  --shadow-dark: 0 4px 16px rgba(0, 0, 0, 0.4), 0 1px 4px rgba(0, 0, 0, 0.3);
+  --border-radius: 12px;
+  --card-radius: 16px;
+  --dark-primary-color: #182d40;
+  --dark-primary-hover: #1a5278;
+
+  /* Surface & border tokens */
+  --surface-1: #ffffff;
+  --surface-2: #f5efeb;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --border-dark: rgba(255, 255, 255, 0.08);
+  --ring-color: rgba(174, 160, 155, 0.5);
+
+  /* Install banner accent */
+  --install-bg: #f1e9e4;
+  --install-border: #d2c4bd;
+  --install-text: #3d3531;
+  --install-btn-bg: #8f7f78;
+  --install-btn-hover: #7e6f69;
+  --install-dark-bg: #1b2f41;
+  --install-dark-border: #29455e;
+  --install-dark-text: #d7dee5;
+
+  /* Layout */
+  --content-max: 860px;
+
+  /* Spacing scale */
+  --space-1: 8px;
+  --space-2: 12px;
+  --space-3: 16px;
+  --space-4: 24px;
+
+  /* Shared button viewport size (except language buttons) */
+  --language-button-vh: 3.2vh;
+  --ui-button-vh: 3.6vh;
+}
+
+/* Global Styles */
+body {
+  font-family: 'Inter', 'Forum', sans-serif;
+  background-color: var(--light-bg);
+  color: var(--text-color);
+  margin: 0;
+  padding: var(--space-4) var(--space-3);
+  transition: background 0.3s, color 0.3s;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Centered app container */
+.app {
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+h1, h2 {
+  font-family: 'Inter', 'Forum', sans-serif;
+  font-weight: 700;
+  text-align: center;
+  color: var(--text-color);
+  margin: var(--space-3) 0 var(--space-2);
+  letter-spacing: -0.3px;
+}
+
+/* Logo & Header */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-2);
+}
+
+.logo-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.site-logo {
+  display: block;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--border-radius);
+  object-fit: cover;
+  box-shadow: none;
+}
+
+/* Streak chip overlay */
+.streak-chip {
+  position: absolute;
+  bottom: -4px;
+  right: -10px;
+  background: linear-gradient(135deg, #ff9600, #ff6f00);
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  min-width: 28px;
+  line-height: 1.4;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  pointer-events: none;
+}
+
+body.dark-mode .streak-chip {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.header-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: var(--space-2);
+  padding-bottom: 0;
+}
+
+/* Text Elements */
+p#date,
+p#dateonly {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 500;
+  text-align: center;
+  color: var(--primary-color);
+  line-height: 1.5;
+}
+
+.bottom-text {
+  font-size: 0.9rem;
+  text-align: center;
+  margin: var(--space-4) auto;
+  padding: 0 var(--space-2);
+  max-width: 60ch;
+  line-height: 1.6;
+  color: #555;
+}
+
+body.dark-mode .bottom-text {
+  color: #aaa;
+}
+
+/* Button container */
+.button-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 var(--space-2);
+}
+
+.controls-top-row,
+.controls-bottom-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.missed-day-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0;
+}
+
+.missed-day-prompt {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  line-height: 1;
+  border: 2px solid #f0b429;
+  background-color: #fff6dd;
+  color: #7a5700;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: var(--shadow-light);
+  box-sizing: border-box;
+  white-space: normal;
+  text-align: center;
+}
+
+.missed-day-label {
+  line-height: 1.3;
+}
+
+.missed-day-label .mobile-only-break {
+  display: none;
+}
+
+.missed-day-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.missed-day-action-button {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 50%;
+  border: 1px solid #d39e00;
+  background-color: #ffffff;
+  color: #7a5700;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.missed-day-action-button:hover {
+  background-color: #fff0c6;
+}
+
+.missed-day-action-button:focus-visible {
+  outline: 3px solid rgba(240, 180, 41, 0.45);
+  outline-offset: 2px;
+}
+
+/* Today reminder action button: pill-shaped with text label */
+.today-reminder-action {
+  width: auto;
+  height: auto;
+  min-height: 32px;
+  padding: 5px 16px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+
+.missed-day-container.is-confirmed .missed-day-prompt {
+  border-color: #4caf50;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+body.dark-mode .missed-day-prompt {
+  background-color: #3e2f10;
+  border-color: #f0b429;
+  color: #ffd87a;
+}
+
+body.dark-mode .missed-day-action-button {
+  background-color: #241b08;
+  border-color: #f0b429;
+  color: #ffd87a;
+}
+
+body.dark-mode .missed-day-action-button:hover {
+  background-color: #4c3a14;
+}
+
+body.dark-mode .missed-day-container.is-confirmed .missed-day-prompt {
+  background-color: #1b3a1e;
+  border-color: #4caf50;
+  color: #a5d6a7;
+}
+
+/* Button Styles */
+button {
+  box-sizing: border-box;
+}
+
+.dark-mode-toggle {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background-color: var(--surface-1);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 0 20px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
+  box-shadow: var(--shadow-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+.dark-mode-toggle:hover {
+  background-color: var(--surface-2);
+  box-shadow: var(--shadow-card);
+}
+
+.dark-mode-toggle:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.dark-mode-toggle:focus-visible {
+  outline: 3px solid var(--ring-color);
+  outline-offset: 2px;
+}
+
+#dark-mode-toggle {
+  width: var(--ui-button-vh);
+  height: var(--ui-button-vh);
+  padding: 0;
+  border-radius: 50%;
+}
+
+#share-button {
+  width: var(--ui-button-vh);
+  height: var(--ui-button-vh);
+  padding: 0;
+  border-radius: 50%;
+}
+
+.icon-button {
+  width: var(--ui-button-vh);
+  height: var(--ui-button-vh);
+  min-width: var(--ui-button-vh);
+  min-height: var(--ui-button-vh);
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  line-height: 0;
+  flex: 0 0 var(--ui-button-vh);
+  background-color: var(--surface-1);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: var(--shadow-light);
+  box-sizing: border-box;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.button-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+.install-icon {
+  stroke: currentColor;
+}
+
+#text-share-button {
+  height: var(--ui-button-vh);
+  padding: 0 14px;
+}
+
+.text-share-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--ui-button-vh);
+  min-height: var(--ui-button-vh);
+  padding: 0 14px;
+  border-radius: 999px;
+  line-height: 1;
+  white-space: nowrap;
+  border: 1px solid var(--border-color);
+  background-color: var(--surface-1);
+  color: var(--text-color);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: var(--shadow-light);
+  box-sizing: border-box;
+}
+
+.text-share-button:hover {
+  background-color: var(--surface-2);
+  box-shadow: var(--shadow-card);
+}
+
+.text-share-button .button-icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+}
+
+/* Link Button */
+.link-button {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: var(--shadow-light);
+}
+
+.link-button:hover {
+  background-color: var(--primary-hover);
+  box-shadow: var(--shadow-card);
+}
+
+/* Table Styles -> elevated cards */
+table {
+  margin: var(--space-3) auto;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: var(--surface-1);
+  table-layout: auto;
+  box-shadow: var(--shadow-card);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+th, td {
+  vertical-align: top;
+  padding: var(--space-3);
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1.7;
+  border-bottom: 1px solid var(--border-color);
+  overflow-wrap: anywhere;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+table.prayer-table th {
+  background-color: var(--primary-color);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: var(--space-2) var(--space-3);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Hebrew text */
+.hebrew {
+  direction: rtl;
+  font-family: 'Noto Serif Hebrew', serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.9;
+}
+
+/* Section Titles */
+.section-title {
+  text-align: center;
+  font-size: 1.4rem;
+}
+
+/* ── Install / iOS Banner ── */
+.banner {
+  margin: var(--space-3) auto;
+  max-width: 90%;
+  background: var(--install-bg);
+  color: var(--install-text);
+  border: 1px solid var(--install-border);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-card);
+  font-family: 'Inter', sans-serif;
+}
+
+.banner__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.banner__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+
+.banner__title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.banner__subtitle {
+  font-size: 0.82rem;
+  opacity: 0.8;
+  line-height: 1.4;
+}
+
+/* Install button */
+.btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 9px 20px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
+}
+
+.btn--install {
+  background-color: var(--install-btn-bg);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 119, 168, 0.35);
+}
+
+.btn--install:hover {
+  background-color: var(--install-btn-hover);
+  box-shadow: 0 4px 12px rgba(0, 119, 168, 0.45);
+}
+
+.btn--install:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.btn--install:focus-visible {
+  outline: 3px solid rgba(0, 119, 168, 0.4);
+  outline-offset: 2px;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+  background-color: var(--dark-bg);
+  color: var(--dark-text);
+  --primary-color: var(--dark-primary-color);
+  --primary-hover: var(--dark-primary-hover);
+  --surface-1: #172a3a;
+  --surface-2: #1a3048;
+  --border-color: var(--border-dark);
+}
+
+h1.dark-mode, h2.dark-mode {
+  color: var(--dark-text);
+}
+
+p#date.dark-mode, p#dateonly.dark-mode {
+  color: var(--dark-text);
+}
+
+table.dark-mode {
+  background-color: var(--table-dark-bg);
+  box-shadow: var(--shadow-dark);
+}
+
+th.dark-mode {
+  background-color: #0b2d3c;
+}
+
+td.dark-mode {
+  color: var(--dark-text);
+  border-bottom-color: var(--border-dark);
+}
+
+.link-button.dark-mode {
+  background-color: var(--primary-hover);
+  color: #fff;
+  box-shadow: var(--shadow-dark);
+}
+
+.link-button.dark-mode:hover {
+  background-color: #34b3b6;
+}
+
+a.dark-mode {
+  color: #34b3b6;
+}
+
+a.dark-mode:hover {
+  color: #1abc9c;
+}
+
+.colored-text {
+  color: rgb(32, 32, 33);
+}
+
+body.dark-mode .colored-text {
+  color: rgb(228, 228, 228);
+}
+
+body.dark-mode .dark-mode-toggle {
+  background-color: var(--surface-1);
+  border-color: var(--border-dark);
+  color: var(--dark-text);
+}
+
+body.dark-mode .dark-mode-toggle:hover {
+  background-color: var(--surface-2);
+}
+
+body.dark-mode .banner {
+  background: var(--install-dark-bg);
+  color: var(--install-dark-text);
+  border-color: var(--install-dark-border);
+}
+
+
+
+/* Responsive Adjustments for Mobile */
+@media (max-width: 768px) {
+  body {
+    padding: var(--space-3) var(--space-2);
+  }
+
+  .site-logo {
+    width: 48px;
+    height: 48px;
+  }
+
+  h1, h2 {
+    font-size: 1.35rem;
+    margin-top: var(--space-2);
+  }
+
+  p#date, p#dateonly {
+    font-size: 0.95rem;
+  }
+
+  .button-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .controls-top-row,
+  .controls-bottom-row {
+    width: auto;
+    flex-wrap: nowrap;
+  }
+
+  .controls-bottom-row {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .dark-mode-toggle.icon-button {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    padding: 0;
+    border-radius: 50%;
+    flex: 0 0 50px;
+  }
+
+  .text-share-button {
+    min-height: 50px;
+    padding: 0 16px;
+  }
+
+  .button-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  th, td {
+    font-size: 0.95rem;
+    padding: var(--space-2);
+  }
+
+  .hebrew {
+    font-size: 1.05rem;
+  }
+
+  .banner {
+    max-width: 100%;
+    padding: var(--space-3);
+  }
+
+  .banner__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .btn--install {
+    width: 100%;
+    text-align: center;
+    padding: 11px 20px;
+  }
+
+}
+
+/* Hover undo for mobile taps */
+@media (hover: none) {
+  .dark-mode-toggle:hover {
+    background-color: var(--surface-1);
+    box-shadow: var(--shadow-light);
+  }
+  .link-button:hover {
+    background-color: var(--primary-color);
+    box-shadow: var(--shadow-light);
+  }
+}
+
+/* Day Selector */
+.day-select {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background-color: var(--surface-1);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 10px 20px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: var(--shadow-light);
+  appearance: none;
+  -webkit-appearance: none;
+  width: auto;
+  min-width: fit-content;
+  text-align: center;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 14px;
+  padding-right: 32px;
+}
+
+.day-select:hover {
+  background-color: var(--surface-2);
+  box-shadow: var(--shadow-card);
+}
+
+.day-select:focus {
+  outline: 3px solid var(--ring-color);
+  outline-offset: 2px;
+}
+
+.day-select:focus-visible {
+  outline: 3px solid var(--ring-color);
+  outline-offset: 2px;
+}
+
+/* Language Selector */
+.language-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 999px;
+  background-color: var(--surface-1);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-light);
+}
+
+.language-option {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-color);
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  min-width: 40px;
+  height: var(--language-button-vh);
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: none;
+  box-sizing: border-box;
+}
+
+.language-option:hover {
+  background-color: var(--surface-2);
+}
+
+.language-option:focus-visible {
+  outline: 3px solid var(--ring-color);
+  outline-offset: 2px;
+}
+
+.language-option.is-active {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+body.dark-mode .day-select {
+  background-color: var(--surface-1);
+  border-color: var(--border-dark);
+  color: var(--dark-text);
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f1f1f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+body.dark-mode .day-select:hover {
+  background-color: var(--surface-2);
+}
+
+body.dark-mode .day-select:focus,
+body.dark-mode .day-select:focus-visible {
+  outline: 3px solid var(--ring-color);
+  outline-offset: 2px;
+}
+
+body.dark-mode .language-toggle {
+  background-color: var(--surface-1);
+  border-color: var(--border-dark);
+}
+
+body.dark-mode .language-option {
+  color: var(--dark-text);
+}
+
+body.dark-mode .language-option:hover {
+  background-color: var(--surface-2);
+}
+
+body.dark-mode .language-option.is-active {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .day-select {
+    width: auto;
+    min-width: 140px;
+    font-size: 16px;
+  }
+
+  .language-option {
+    min-width: 36px;
+    padding: 8px;
+  }
+}
+
+/* ── Nasi Said Check Button ── */
+.nasi-check-container {
+  display: flex;
+  justify-content: center;
+  margin: var(--space-1) auto var(--space-4);
+}
+
+.nasi-check-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--ui-button-vh);
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  line-height: 1;
+  border: 2px solid var(--border-color);
+  background-color: var(--surface-1);
+  color: var(--text-color);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+  box-shadow: var(--shadow-light);
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.nasi-check-button:hover {
+  background-color: var(--surface-2);
+  box-shadow: var(--shadow-card);
+}
+
+.nasi-check-button:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.nasi-check-button:focus-visible {
+  outline: 3px solid var(--ring-color);
+  outline-offset: 2px;
+}
+
+.nasi-check-button.is-said {
+  background-color: #e8f5e9;
+  border-color: #4caf50;
+  color: #2e7d32;
+}
+
+.nasi-check-button.is-said:hover {
+  background-color: #d4edda;
+}
+
+body.dark-mode .nasi-check-button {
+  background-color: var(--surface-1);
+  border-color: var(--border-dark);
+  color: var(--dark-text);
+}
+
+body.dark-mode .nasi-check-button:hover {
+  background-color: var(--surface-2);
+}
+
+body.dark-mode .nasi-check-button.is-said {
+  background-color: #1b3a1e;
+  border-color: #4caf50;
+  color: #a5d6a7;
+}
+
+body.dark-mode .nasi-check-button.is-said:hover {
+  background-color: #1f4523;
+}
+
+@media (max-width: 768px) {
+  .missed-day-label .mobile-only-break {
+    display: block;
+  }
+
+  .missed-day-prompt {
+    min-height: 56px;
+    font-size: 0.95rem;
+    width: 100%;
+    max-width: 460px;
+    border-radius: 18px;
+    padding: 10px 12px;
+  }
+
+  .missed-day-actions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nasi-check-button {
+    min-height: 50px;
+    font-size: 1rem;
+  }
+}
+

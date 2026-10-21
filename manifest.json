@@ -3,8 +3,8 @@
   "short_name": "Daily Nasi",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#e4d9d3",
+  "background_color": "#f4f4f2",
+  "theme_color": "#f4f4f2",
   "icons": [
     {
       "src": "icons/icon-192x192.png",
