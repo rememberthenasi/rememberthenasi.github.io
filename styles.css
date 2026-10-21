@@ -27,13 +27,13 @@
 @media (min-width: 960px) { :root { --content: 1250px; --ladder: 64px; } }
 
 body {
-  --paper: var(--dye, #eef2f8);
+  --paper: var(--dye, #e6eef9);
   --ink: var(--dye-ink, #06142e);
   --muted: var(--ink);
 }
 
 body.dark-mode {
-  --paper: var(--dye, #0b1730);
+  --paper: var(--dye, #1a3a7c);
   --ink: var(--dye-ink, #f4f8ff);
 }
 

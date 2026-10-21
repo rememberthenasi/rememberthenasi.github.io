@@ -17,7 +17,7 @@
 
 
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#eef2f8">
+<meta name="theme-color" content="#e6eef9">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,7 +45,7 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 
 <!-- Link to Styles-->
-<link rel="stylesheet" href="styles.css?v=20261022b">
+<link rel="stylesheet" href="styles.css?v=20261022c">
 
 </head>
 
@@ -353,7 +353,7 @@
 
               // The image always uses the light-mode ramp, so it reads well wherever it is shared.
               const dayNumber = shareData.dayNumber;
-              const bg = dayNumber ? DYE_LIGHT[dayNumber - 1] : "#eef2f8";
+              const bg = DYE_LIGHT[dayNumber ? dayNumber - 1 : 0];
               const ink = dayNumber && dayNumber >= 7 ? INK_ON_DEEP : INK_ON_PALE;
 
               const width = 1080;
@@ -1157,7 +1157,8 @@
             function dyeFor(dayNumber) {
                 var dark = document.body.classList.contains("dark-mode");
                 if (!dayNumber) {
-                    return dark ? { bg: "#0b1730", ink: INK_ON_DEEP } : { bg: "#eef2f8", ink: INK_ON_PALE };
+                    // Outside the 13 days the page rests on the first day's colour
+                    dayNumber = 1;
                 }
                 var deep = dark || dayNumber >= 7;
                 return { bg: (dark ? DYE_DARK : DYE_LIGHT)[dayNumber - 1], ink: deep ? INK_ON_DEEP : INK_ON_PALE };
