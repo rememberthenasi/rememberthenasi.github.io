@@ -1,12 +1,12 @@
 // Service Worker: Offline Support
 
-const CACHE_NAME = 'rememberthenasi-v24';
+const CACHE_NAME = 'rememberthenasi-v25';
 
 // Allowlisted assets to precache (versioned URLs matching index.html references; no duplicates)
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/styles.css?v=20261022b',
+  '/styles.css?v=20261022c',
   '/manifest.json?v=20261021a',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
