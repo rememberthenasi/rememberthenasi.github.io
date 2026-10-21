@@ -1,15 +1,15 @@
-/* Remember The Nasi: Poster design.
-   Swiss grid, black rules, huge numerals, one hot-pink signal.
+/* Remember The Nasi: Tekhelet Bath design.
+   The page is dyed a little deeper blue each day, like wool in the tekhelet bath.
+   paintDye() in index.html sets --dye (background) and --dye-ink (text) on body.
+   Days 1-6 are pale with dark text, days 7-13 deep with light text; every pair is
+   at least 7:1 contrast, and all text uses the full ink colour, never a faded one.
    body.flap switches the page to the departures-board easter egg.
-   Phone: one column with a sticky foot. Desktop (960px+): a sticky side panel and a reading column. */
+   Phone: day ladder down the left edge, sticky foot. Desktop (960px+): ladder,
+   side panel and reading column in a centred 1250px column. */
 
 :root {
-  --paper: #f4f4f2;
-  --ink: #0a0a0a;
-  --muted: #55554f;
-  --signal: #ff2e93;
-
   --sans: 'Heebo', 'Helvetica Neue', Arial, sans-serif;
+  --serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
   --mono: 'Space Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
   --hebrew: 'Noto Serif Hebrew', 'Times New Roman', serif;
 
@@ -19,22 +19,32 @@
   --flap-text: #f1efe8;
   --flap-dim: #8a897f;
   --lemon: #ffe14d;
+
+  --content: 620px;
+  --ladder: 48px;
+}
+
+@media (min-width: 960px) { :root { --content: 1250px; --ladder: 64px; } }
+
+body {
+  --paper: var(--dye, #eef2f8);
+  --ink: var(--dye-ink, #06142e);
+  --muted: var(--ink);
 }
 
 body.dark-mode {
-  --paper: #0d0d0d;
-  --ink: #f1f1ee;
-  --muted: #a8a7a0;
+  --paper: var(--dye, #0b1730);
+  --ink: var(--dye-ink, #f4f8ff);
 }
 
 * {
   box-sizing: border-box;
-  /* Declared on every element so the rules follow --ink in dark mode and on the board */
+  /* Declared on every element so the rules follow --ink on every dye and on the board */
   --rule: 2px solid var(--ink);
   --hair: 1px solid var(--ink);
 }
 
-/* No background on html: the body colour then fills the whole window, so dark mode reaches the edges */
+/* No background on html: the body colour then fills the whole window */
 
 body {
   margin: 0;
@@ -44,11 +54,11 @@ body {
   font-size: 16px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  transition: background 0.25s, color 0.25s;
+  transition: background-color 0.6s ease, color 0.6s ease;
 }
 
 button { font: inherit; color: inherit; cursor: pointer; }
-button:focus-visible, a:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; }
+button:focus-visible, a:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
 
 .visually-hidden {
   position: absolute !important;
@@ -57,17 +67,11 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--signal); outlin
   white-space: nowrap;
 }
 
-/* ---------- Frame ----------
-   Bands (header, strip, rules, foot) run the full width of the screen;
-   content sits in a centred column of --content via the --gutter padding. */
-:root { --content: 620px; }
-@media (min-width: 960px) { :root { --content: 1250px; } }
-
+/* ---------- Frame ---------- */
 .app {
   --gutter: max(16px, calc((100% - var(--content)) / 2));
   display: flex;
   flex-direction: column;
-  background: var(--paper);
 }
 
 /* ---------- Masthead: name bar + toolbar ---------- */
@@ -93,17 +97,9 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--signal); outlin
 }
 
 .wordmark { margin: 0; font: inherit; font-weight: 700; white-space: nowrap; }
-
 .bar-right { display: flex; align-items: baseline; gap: 14px; }
-
 .streak-chip { white-space: nowrap; }
-
-.bsd {
-  font-family: var(--hebrew);
-  font-size: 0.85rem;
-  letter-spacing: 0;
-  text-transform: none;
-}
+.bsd { font-family: var(--hebrew); font-size: 0.85rem; letter-spacing: 0; text-transform: none; }
 
 .toolbar { padding-top: 8px; padding-bottom: 8px; }
 .toolbar-right { display: flex; gap: 8px; }
@@ -143,49 +139,74 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--signal); outlin
 .language-option:last-child { border-right: 0; }
 .language-option.is-active { background: var(--ink); color: var(--paper); }
 
-/* ---------- Day strip ---------- */
-.strip {
+/* ---------- Stage: day ladder beside the layout ---------- */
+.stage {
   display: grid;
-  grid-template-columns: repeat(13, 1fr);
-  border-bottom: var(--rule);
-  padding: 0 max(0px, calc((100% - var(--content)) / 2));
+  grid-template-columns: var(--ladder) minmax(0, 1fr);
+  align-items: start;
+}
+
+.strip {
+  position: sticky;
+  top: 0;
+  /* As tall as the content, capped at one screen so it stays in view while scrolling */
+  align-self: stretch;
+  max-height: 100vh;
+  max-height: 100dvh;
+  display: grid;
+  grid-template-rows: repeat(13, 1fr);
+  border-right: var(--rule);
 }
 
 .strip button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  min-height: 0;
   border: 0;
-  border-right: var(--hair);
-  background: transparent;
-  padding: 11px 0;
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  min-width: 0;
+  padding: 0;
+  background: var(--band, transparent);
+  color: var(--band-ink, inherit);
+  transition: background-color 0.6s ease, color 0.6s ease;
 }
 
-.strip button:last-child { border-right: 0; }
-@media (min-width: 652px) {
-  .strip button:first-child { border-left: var(--hair); }
-  .strip button:last-child { border-right: var(--hair); }
+.ladder-num { font-family: var(--mono); font-size: 0.72rem; line-height: 1; }
+.ladder-letter { font-family: var(--hebrew); font-weight: 700; font-size: 0.7rem; line-height: 1; }
+
+/* Selected day: a bar in the page ink along the inner edge, bold label */
+.strip button[aria-current="true"] .ladder-num { font-weight: 700; font-size: 0.85rem; }
+.strip button[aria-current="true"]::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; right: 0;
+  width: 7px;
+  background: var(--ink);
 }
-.strip button.is-said { background: var(--ink); color: var(--paper); }
-.strip button.is-today { box-shadow: inset 0 0 0 3px var(--signal); font-weight: 700; }
-.strip button[aria-current="true"] { background: var(--signal); color: #0a0a0a; font-weight: 700; box-shadow: none; }
+
+/* Today: a ring; said: a small tick */
+.strip button.is-today::before {
+  content: "";
+  position: absolute;
+  inset: 4px 10px 4px 4px;
+  border: 2px solid currentColor;
+  border-radius: 6px;
+}
+
+.strip button.is-said .ladder-num::after { content: " ✓"; font-size: 0.6rem; }
 
 /* ---------- Layout ---------- */
-.layout { flex: 1; display: flex; flex-direction: column; }
+.layout { display: flex; flex-direction: column; min-width: 0; }
 .side { display: contents; }
 .board { order: 0; }
 .side-info { order: 0; }
 .read { order: 1; }
 .foot { order: 2; }
 
-.side-info {
-  padding: 14px max(var(--gutter), env(safe-area-inset-right, 0px)) 0 max(var(--gutter), env(safe-area-inset-left, 0px));
-}
-
-.read {
-  flex: 1;
-  padding: 0 max(var(--gutter), env(safe-area-inset-right, 0px)) 24px max(var(--gutter), env(safe-area-inset-left, 0px));
-}
+.side-info { padding: 16px 16px 0; }
+.read { flex: 1; padding: 0 16px 24px; }
 
 .dateline {
   margin: 0 0 12px;
@@ -193,44 +214,39 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--signal); outlin
   font-size: 0.72rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--muted);
 }
 
-.day-head { margin: 4px 0 14px; }
+.day-head { margin: 6px 0 18px; }
 .day-head[hidden] { display: none; }
 
-.day-num {
-  margin: 0;
-  font-weight: 800;
-  font-size: clamp(5rem, 24vw, 8.5rem);
-  line-height: 0.8;
-  letter-spacing: -0.05em;
-}
-
-.day-num em {
-  font-style: normal;
+.day-eyebrow {
+  margin: 0 0 6px;
   font-family: var(--mono);
-  font-weight: 400;
-  font-size: 1rem;
-  letter-spacing: 0;
-  margin-left: 10px;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
-.nasi-name {
-  margin: 12px 0 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 4px 12px;
-  flex-wrap: wrap;
-  font-weight: 800;
-  font-size: 1.05rem;
+.nasi-name { margin: 0; display: flex; flex-direction: column; gap: 6px; }
+
+.nasi-name .he {
+  font-family: var(--hebrew);
+  font-weight: 700;
+  font-size: clamp(2.3rem, 10vw, 3.4rem);
+  line-height: 1.25;
+  text-align: right;
+  text-wrap: balance;
 }
 
-.nasi-name .he { font-family: var(--hebrew); font-weight: 700; font-size: 1.1rem; }
+.nasi-name .en {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.4rem;
+  line-height: 1.25;
+}
 
 /* ---------- Reminders ---------- */
-.missed-day-container { margin: 0 0 14px; }
+.missed-day-container { margin: 0 0 16px; }
 
 .missed-day-prompt {
   display: flex;
@@ -240,8 +256,8 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--signal); outlin
   width: 100%;
   border: var(--rule);
   padding: 8px 8px 8px 12px;
-  font-weight: 700;
-  font-size: 0.92rem;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
 .missed-day-actions { display: inline-flex; gap: 6px; flex: none; }
@@ -255,7 +271,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--signal); outlin
 }
 
 .today-reminder-action, .missed-day-check { background: var(--ink); color: var(--paper); }
-.missed-day-container.is-confirmed .missed-day-prompt { background: var(--signal); color: #0a0a0a; border-color: var(--signal); }
+.missed-day-container.is-confirmed .missed-day-prompt { background: var(--ink); color: var(--paper); }
 
 .mobile-only-break { display: none; }
 @media (max-width: 420px) { .mobile-only-break { display: inline; } }
@@ -268,28 +284,28 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--signal); outlin
   display: flex;
   justify-content: space-between;
   font-family: var(--mono);
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 400;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
 .section-label span { font-family: var(--hebrew); font-size: 0.95rem; letter-spacing: 0; text-transform: none; }
 
 .hebrew {
-  margin: 10px 0 14px;
+  margin: 12px 0 14px;
   font-family: var(--hebrew);
   font-weight: 500;
   font-size: 1.45rem;
-  line-height: 1.85;
+  line-height: 1.9;
   text-align: right;
 }
 
 .english {
   margin: 0 0 18px;
-  font-weight: 300;
-  font-size: 1rem;
-  line-height: 1.65;
+  font-weight: 400;
+  font-size: 1.02rem;
+  line-height: 1.7;
 }
 
 body[data-section="nasi"] #yr-section,
@@ -323,13 +339,7 @@ body[data-lang="english"] .he { display: none !important; }
 
 .text-btn svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-.credits {
-  margin-top: 18px;
-  font-size: 0.78rem;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
+.credits { margin-top: 18px; font-size: 0.8rem; line-height: 1.6; }
 .credits p { margin: 0 0 4px; }
 .credits a { color: inherit; }
 
@@ -341,34 +351,35 @@ body[data-lang="english"] .he { display: none !important; }
   background: var(--paper);
   padding-bottom: env(safe-area-inset-bottom, 0px);
   z-index: 5;
+  transition: background-color 0.6s ease;
 }
 
-.foot-buttons { display: flex; padding: 0 max(0px, calc((100% - var(--content)) / 2)); }
+.foot-buttons { display: flex; gap: 8px; padding: 10px 12px; }
 
 .mode-btn {
   flex: 1;
-  border: 0;
+  border: var(--rule);
   background: var(--ink);
   color: var(--paper);
-  padding: 17px 16px;
+  padding: 13px 16px;
   font-weight: 800;
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   text-align: left;
 }
 
 .nasi-check-container { display: flex; }
 
 .said-btn {
-  border: 0;
-  border-left: var(--rule);
-  background: var(--paper);
-  padding: 0 16px;
+  border: var(--rule);
+  background: transparent;
+  padding: 0 14px;
   font-family: var(--mono);
   font-size: 0.75rem;
+  letter-spacing: 0.04em;
   white-space: nowrap;
 }
 
-.said-btn.is-said { background: var(--signal); color: #0a0a0a; font-weight: 700; }
+.said-btn.is-said { font-weight: 700; box-shadow: inset 0 0 0 2px var(--ink); }
 
 /* ---------- Departures board (easter egg) ----------
    Light board by default; body.dark-mode switches it to the dark board. */
@@ -504,11 +515,22 @@ body.flap .mode-btn { background: var(--key); color: var(--flap-text); border-ra
 body.flap .said-btn { background: var(--flap-text); color: var(--board); border: 0; border-radius: 3px; letter-spacing: 0.08em; text-transform: uppercase; }
 body.flap .said-btn.is-said { background: var(--lemon); color: #111; }
 
+/* The board replaces the ladder */
+body.flap .stage { grid-template-columns: minmax(0, 1fr); }
+body.flap .strip { display: none; }
+body.flap .foot-buttons { padding: 0; }
+body.flap .mode-btn,
+body.flap .said-btn { border: 0; }
+
 /* ---------- Desktop ---------- */
 @media (min-width: 960px) {
   .bar { font-size: 0.78rem; }
 
-  .strip button { padding: 14px 0; font-size: 0.85rem; }
+  .stage { padding: 0 max(16px, calc((100% - var(--content)) / 2)); }
+  .strip { border-left: var(--hair); }
+  .ladder-num { font-size: 0.85rem; }
+  .ladder-letter { font-size: 0.8rem; }
+  .strip button[aria-current="true"] .ladder-num { font-size: 1rem; }
 
   /* Both columns always share one height, never shorter than --min-layout.
      In a tall layout the day info stays pinned at the top of the side panel
@@ -516,34 +538,31 @@ body.flap .said-btn.is-said { background: var(--lemon); color: #111; }
   .layout {
     --min-layout: 680px;
     display: grid;
-    grid-template-columns: minmax(360px, 400px) minmax(0, 1fr);
+    grid-template-columns: minmax(340px, 390px) minmax(0, 1fr);
     align-items: stretch;
     min-height: var(--min-layout);
-    padding: 0 max(16px, calc((100% - var(--content)) / 2));
   }
 
   .side {
     display: flex;
     flex-direction: column;
-    border-left: var(--hair);
     border-right: var(--rule);
   }
 
   .side-info {
-    padding: 24px 28px 16px;
+    padding: 28px 28px 16px;
     position: sticky;
     top: 0;
     background: var(--paper);
     z-index: 2;
+    transition: background-color 0.6s ease;
   }
 
   body.flap .side-info { position: static; }
   body.flap .board { position: sticky; top: 0; background: var(--board); z-index: 2; }
 
-  .day-num { font-size: 11rem; }
-  .day-num em { display: block; margin: 14px 0 0 6px; font-size: 1.05rem; }
-  .nasi-name { flex-direction: column; font-size: 1.2rem; }
-  .nasi-name .he { font-size: 1.35rem; }
+  .nasi-name .he { font-size: 3.6rem; }
+  .nasi-name .en { font-size: 1.6rem; }
 
   .foot {
     position: sticky;
@@ -552,12 +571,10 @@ body.flap .said-btn.is-said { background: var(--lemon); color: #111; }
     padding-bottom: 0;
   }
 
-  .foot-buttons { padding: 0; }
+  .foot-buttons { padding: 14px 16px 16px; }
+  .mode-btn { padding: 16px 18px; font-size: 1.1rem; }
 
-  .mode-btn { padding: 20px 22px; font-size: 1.15rem; }
-
-  .read { padding: 24px 36px 40px; border-right: var(--hair); display: flex; flex-direction: column; }
-  /* The day strip already rules off the top of the reading column */
+  .read { padding: 28px 36px 40px; border-right: var(--hair); display: flex; flex-direction: column; }
   .read .section-label { border-top: 0; padding-top: 0; }
   .read .tools { margin-top: auto; }
 
@@ -569,7 +586,7 @@ body.flap .said-btn.is-said { background: var(--lemon); color: #111; }
     align-items: start;
   }
 
-  .reading-body .english { grid-area: en; margin-top: 14px; font-size: 1.05rem; }
+  .reading-body .english { grid-area: en; margin-top: 16px; font-size: 1.06rem; }
   .reading-body .hebrew { grid-area: he; font-size: 1.7rem; }
 
   body[data-lang="hebrew"] .reading-body { grid-template-columns: 1fr; grid-template-areas: "he"; }
@@ -578,12 +595,10 @@ body.flap .said-btn.is-said { background: var(--lemon); color: #111; }
   .tools { margin-top: 12px; }
 
   body.flap .board { padding: 24px 28px 18px; }
-  body.flap .read { border-right: 0; }
-  body.flap .side { border-left: 0; }
-  body.flap .read { padding-top: 24px; }
+  body.flap .read { border-right: 0; padding-top: 24px; }
   body.flap .foot { padding: 12px 16px 16px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body { transition: none; }
+  body, .strip button, .foot, .side-info { transition: none; }
 }

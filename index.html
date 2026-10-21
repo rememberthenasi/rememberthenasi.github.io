@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>    
-    <!-- Fonts: Heebo (Latin sans), Noto Serif Hebrew (Hebrew text with nikud and taamim), Space Mono (labels) -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@500;700&family=Heebo:wght@300;500;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Fonts: Heebo (Latin text), Instrument Serif (English names), Noto Serif Hebrew (Hebrew with nikud and taamim), Space Mono (labels) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@500;700&family=Heebo:wght@300;400;500;800&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BFNQ3TZSCK"></script>
@@ -17,7 +17,7 @@
 
 
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#f4f4f2">
+<meta name="theme-color" content="#eef2f8">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,7 +45,7 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 
 <!-- Link to Styles-->
-<link rel="stylesheet" href="styles.css?v=20261021f">
+<link rel="stylesheet" href="styles.css?v=20261022a">
 
 </head>
 
@@ -80,6 +80,7 @@
       </div>
     </header>
 
+    <div class="stage">
     <nav id="day-strip" class="strip" aria-label="Days of Nisan"></nav>
 
     <div class="layout">
@@ -138,8 +139,8 @@
       </div>
 
           <div id="day-head" class="day-head" hidden>
-        <p class="day-num"><span id="day-num">01</span><em>/13 NISAN</em></p>
-        <p class="nasi-name"><span id="nasi-name-en" class="en"></span><span id="nasi-name-he" class="he" lang="he" dir="rtl"></span></p>
+        <p class="day-eyebrow">Day <span id="day-num">01</span> / 13</p>
+        <p class="nasi-name"><span id="nasi-name-he" class="he" lang="he" dir="rtl"></span><span id="nasi-name-en" class="en"></span></p>
       </div>
         </div>
 
@@ -197,6 +198,7 @@
         <p>Site created by Menachem Spielman · nasi@mspielman.com</p>
       </footer>
       </div>
+    </div>
     </div>
 
     <script>
@@ -316,24 +318,25 @@
               });
             }
 
-            // Share image in the Poster style: top bar, 13-day strip, big numeral, readings, black footer.
+            // Share image in the Tekhelet style: the day's own dye, the 13-band ladder, the Nasi's name as the headline.
             const SHARE_FONTS = {
               mono: "'Space Mono', monospace",
               sans: "'Heebo', sans-serif",
+              serif: "'Instrument Serif', Georgia, serif",
               hebrew: "'Noto Serif Hebrew', serif"
             };
-            const SHARE_COLORS = { paper: "#f4f4f2", ink: "#0a0a0a", muted: "#55554f", signal: "#ff2e93" };
 
             async function ensureShareFonts() {
               if (!document.fonts || !document.fonts.load) return;
               try {
                 await Promise.all([
-                  document.fonts.load("800 100px Heebo"),
-                  document.fonts.load("300 30px Heebo"),
+                  document.fonts.load("400 30px Heebo"),
+                  document.fonts.load("800 40px Heebo"),
+                  document.fonts.load("italic 400 44px 'Instrument Serif'"),
                   document.fonts.load("700 26px 'Space Mono'"),
                   document.fonts.load("400 26px 'Space Mono'"),
                   document.fonts.load("500 38px 'Noto Serif Hebrew'", "אב"),
-                  document.fonts.load("700 36px 'Noto Serif Hebrew'", "אב")
+                  document.fonts.load("700 96px 'Noto Serif Hebrew'", "אב")
                 ]);
               } catch (fontError) {
                 console.warn("Share fonts not loaded, using fallbacks:", fontError);
@@ -348,17 +351,24 @@
                 throw new Error("Canvas context unavailable");
               }
 
+              // The image always uses the light-mode ramp, so it reads well wherever it is shared.
+              const dayNumber = shareData.dayNumber;
+              const bg = dayNumber ? DYE_LIGHT[dayNumber - 1] : "#eef2f8";
+              const ink = dayNumber && dayNumber >= 7 ? INK_ON_DEEP : INK_ON_PALE;
+
               const width = 1080;
+              const ladderW = 84;
               const pad = 64;
-              const textWidth = width - pad * 2;
+              const left = ladderW + pad;
+              const right = width - pad;
+              const textWidth = right - left;
               const heFont = "500 38px " + SHARE_FONTS.hebrew;
-              const heLine = 66;
-              const enFont = "300 30px " + SHARE_FONTS.sans;
+              const heLine = 68;
+              const enFont = "400 29px " + SHARE_FONTS.sans;
               const enLine = 46;
 
-              // Lay out the readings first so the canvas height fits them.
               const blocks = [];
-              if (shareData.dayNumber) {
+              if (dayNumber) {
                 shareData.sections.forEach(section => {
                   ctx.font = heFont;
                   const heLines = shareData.showHebrew ? wrapTextLine(ctx, section.he || "", textWidth) : [];
@@ -367,38 +377,32 @@
                   blocks.push({ section, heLines, enLines });
                 });
               } else {
-                ctx.font = "300 34px " + SHARE_FONTS.sans;
+                ctx.font = "400 34px " + SHARE_FONTS.sans;
                 blocks.push({
                   message: true,
                   enLines: wrapTextLine(ctx, "The Nasi is read during the first 13 days of Nisan. There is no Nasi or Yehi Ratzon today.", textWidth)
                 });
               }
 
-              const barH = 96;
-              const stripH = 72;
-              const headH = shareData.dayNumber ? 400 : 260;
+              const topH = 110;
+              const headH = dayNumber ? 300 : 200;
               let readingH = 0;
               blocks.forEach(block => {
                 if (block.message) {
                   readingH += block.enLines.length * 50 + 40;
                   return;
                 }
-                readingH += 70 + block.heLines.length * heLine + (block.heLines.length ? 24 : 0) + block.enLines.length * enLine + 48;
+                readingH += 76 + block.heLines.length * heLine + (block.heLines.length ? 24 : 0) + block.enLines.length * enLine + 52;
               });
               const footH = 150;
-              const height = barH + stripH + headH + readingH + footH;
+              const height = topH + headH + readingH + footH;
 
               canvas.width = width;
               canvas.height = height;
-              const C = SHARE_COLORS;
 
-              ctx.fillStyle = C.paper;
+              ctx.fillStyle = bg;
               ctx.fillRect(0, 0, width, height);
 
-              function rule(y, h) {
-                ctx.fillStyle = C.ink;
-                ctx.fillRect(0, y, width, h || 4);
-              }
               function text(str, x, y, font, color, align, dir) {
                 ctx.font = font;
                 ctx.fillStyle = color;
@@ -406,80 +410,75 @@
                 ctx.direction = dir || "ltr";
                 ctx.fillText(str, x, y);
               }
-
-              // Top bar
-              text("REMEMBERTHENASI", pad, 60, "700 28px " + SHARE_FONTS.mono, C.ink);
-              text("בס\"ד", width - pad, 60, "500 28px " + SHARE_FONTS.hebrew, C.ink, "right", "rtl");
-              rule(barH - 4);
-
-              // 13-day strip, shared day in pink
-              const cellW = width / 13;
-              for (let d = 1; d <= 13; d += 1) {
-                const x = (d - 1) * cellW;
-                if (d === shareData.dayNumber) {
-                  ctx.fillStyle = C.signal;
-                  ctx.fillRect(x, barH, cellW, stripH - 4);
-                }
-                if (d > 1) {
-                  ctx.fillStyle = C.ink;
-                  ctx.fillRect(x - 1, barH, 2, stripH - 4);
-                }
-                text(String(d), x + cellW / 2, barH + 44, (d === shareData.dayNumber ? "700 " : "400 ") + "24px " + SHARE_FONTS.mono, C.ink, "center");
+              function rule(y) {
+                ctx.fillStyle = ink;
+                ctx.fillRect(left, y, textWidth, 3);
               }
-              rule(barH + stripH - 4);
 
-              // Day header
-              let y = barH + stripH;
-              if (shareData.dayNumber) {
-                text((shareData.dateLabel || "").toUpperCase(), pad, y + 58, "400 24px " + SHARE_FONTS.mono, C.muted);
-                const numeral = String(shareData.dayNumber).padStart(2, "0");
-                ctx.font = "800 250px " + SHARE_FONTS.sans;
-                const numeralWidth = ctx.measureText(numeral).width;
-                text(numeral, pad - 8, y + 270, "800 250px " + SHARE_FONTS.sans, C.ink);
-                text("/13 NISAN", pad + numeralWidth + 12, y + 270, "400 34px " + SHARE_FONTS.mono, C.ink);
-                text(shareData.showEnglish || !shareData.showHebrew ? shareData.nameEn : "", pad, y + 350, "800 36px " + SHARE_FONTS.sans, C.ink);
-                if (shareData.showHebrew) {
-                  text(shareData.nameHe, width - pad, y + 350, "700 36px " + SHARE_FONTS.hebrew, C.ink, "right", "rtl");
+              // Ladder: 13 bands down the left edge, the shared day marked with a bar
+              const bandsH = height - footH;
+              const bandH = bandsH / 13;
+              for (let d = 1; d <= 13; d += 1) {
+                const y = (d - 1) * bandH;
+                ctx.fillStyle = DYE_LIGHT[d - 1];
+                ctx.fillRect(0, y, ladderW, Math.ceil(bandH));
+                const bandInk = d >= 7 ? INK_ON_DEEP : INK_ON_PALE;
+                text(String(d), ladderW / 2, y + bandH / 2 + 9, (d === dayNumber ? "700 " : "400 ") + "24px " + SHARE_FONTS.mono, bandInk, "center");
+                if (d === dayNumber) {
+                  ctx.fillStyle = ink;
+                  ctx.fillRect(ladderW - 10, y, 10, Math.ceil(bandH));
+                }
+              }
+              ctx.fillStyle = ink;
+              ctx.fillRect(ladderW, 0, 3, bandsH);
+
+              // Top line
+              text("REMEMBERTHENASI", left, 66, "700 26px " + SHARE_FONTS.mono, ink);
+              text("בס\"ד", right, 66, "500 28px " + SHARE_FONTS.hebrew, ink, "right", "rtl");
+
+              let y = topH;
+              if (dayNumber) {
+                const label = "DAY " + String(dayNumber).padStart(2, "0") + " / 13" + (shareData.dateLabel ? "  ·  " + shareData.dateLabel.toUpperCase() : "");
+                text(label, left, y + 20, "400 24px " + SHARE_FONTS.mono, ink);
+                text(shareData.nameHe, right, y + 150, "700 92px " + SHARE_FONTS.hebrew, ink, "right", "rtl");
+                if (shareData.showEnglish || !shareData.showHebrew) {
+                  text(shareData.nameEn, left, y + 230, "italic 400 46px " + SHARE_FONTS.serif, ink);
                 }
               } else {
-                text("NO NASI TODAY", pad, y + 170, "800 110px " + SHARE_FONTS.sans, C.ink);
+                text("No Nasi today", left, y + 120, "italic 400 96px " + SHARE_FONTS.serif, ink);
               }
               y += headH;
 
-              // Readings
               blocks.forEach(block => {
+                rule(y - 6);
                 if (block.message) {
-                  rule(y - 4);
-                  y += 60;
+                  y += 56;
                   block.enLines.forEach(line => {
-                    text(line, pad, y, "300 34px " + SHARE_FONTS.sans, C.ink);
+                    text(line, left, y, "400 34px " + SHARE_FONTS.sans, ink);
                     y += 50;
                   });
                   return;
                 }
-                rule(y - 4);
-                text(block.section.label.toUpperCase(), pad, y + 44, "400 24px " + SHARE_FONTS.mono, C.ink);
-                text(block.section.labelHe, width - pad, y + 46, "500 28px " + SHARE_FONTS.hebrew, C.ink, "right", "rtl");
-                y += 70;
+                text(block.section.label.toUpperCase(), left, y + 42, "400 24px " + SHARE_FONTS.mono, ink);
+                text(block.section.labelHe, right, y + 44, "500 28px " + SHARE_FONTS.hebrew, ink, "right", "rtl");
+                y += 76;
                 block.heLines.forEach(line => {
                   y += heLine;
-                  text(line, width - pad, y - 18, heFont, C.ink, "right", "rtl");
+                  text(line, right, y - 20, heFont, ink, "right", "rtl");
                 });
                 if (block.heLines.length) y += 24;
                 block.enLines.forEach(line => {
                   y += enLine;
-                  text(line, pad, y - 12, enFont, C.ink);
+                  text(line, left, y - 12, enFont, ink);
                 });
-                y += 48;
+                y += 52;
               });
 
-              // Footer
-              ctx.fillStyle = C.ink;
+              // Footer in the deepest dye
+              ctx.fillStyle = DYE_LIGHT[12];
               ctx.fillRect(0, height - footH, width, footH);
-              ctx.fillStyle = C.signal;
-              ctx.fillRect(0, height - footH, 18, footH);
-              text("rememberthenasi.com", pad, height - footH + 66, "800 40px " + SHARE_FONTS.sans, C.paper);
-              text("Text reproduced with permission from Kehot Publication Society.", pad, height - footH + 110, "300 24px " + SHARE_FONTS.sans, "#b9b9b2");
+              text("rememberthenasi.com", pad, height - footH + 66, "800 40px " + SHARE_FONTS.sans, INK_ON_DEEP);
+              text("Text reproduced with permission from Kehot Publication Society.", pad, height - footH + 110, "400 24px " + SHARE_FONTS.sans, "#c9d6ee");
 
               return canvasToBlob(canvas);
             }
@@ -1130,6 +1129,54 @@
             }
 
             buildDayButtons(dayStrip, stripButtons, function(d) { return String(d); });
+            stripButtons.forEach(function(button, index) {
+                var number = document.createElement("span");
+                number.className = "ladder-num";
+                number.textContent = String(index + 1);
+                var letter = document.createElement("span");
+                letter.className = "ladder-letter";
+                letter.lang = "he";
+                letter.textContent = HEBREW_DAY_LETTERS[index];
+                button.textContent = "";
+                button.appendChild(number);
+                button.appendChild(letter);
+            });
+
+            // === TEKHELET DYE: the page deepens one shade a day ===
+            // Days 1-6 are pale blues with dark text, days 7-13 deep blues with light text.
+            // Every pair is at least 7:1 contrast (WCAG AAA); the mid-blue zone where
+            // neither text colour would be legible is skipped on purpose.
+            var DYE_LIGHT = ["#e6eef9", "#d4e1f2", "#c3d3ec", "#b1c6e5", "#a0b8df", "#8eabd8",
+                             "#1f4593", "#1a3c80", "#16326d", "#12285a", "#0d1f48", "#081635", "#040c22"];
+            var DYE_DARK = ["#1a3a7c", "#183674", "#16326c", "#142e63", "#122a5b", "#102653", "#0e224a",
+                            "#0d1d42", "#0b193a", "#091532", "#07112a", "#050d21", "#030919"];
+            var INK_ON_PALE = "#06142e";
+            var INK_ON_DEEP = "#f4f8ff";
+
+            function dyeFor(dayNumber) {
+                var dark = document.body.classList.contains("dark-mode");
+                if (!dayNumber) {
+                    return dark ? { bg: "#0b1730", ink: INK_ON_DEEP } : { bg: "#eef2f8", ink: INK_ON_PALE };
+                }
+                var deep = dark || dayNumber >= 7;
+                return { bg: (dark ? DYE_DARK : DYE_LIGHT)[dayNumber - 1], ink: deep ? INK_ON_DEEP : INK_ON_PALE };
+            }
+
+            function paintDye(dayNumber) {
+                var dye = dyeFor(dayNumber);
+                document.body.style.setProperty("--dye", dye.bg);
+                document.body.style.setProperty("--dye-ink", dye.ink);
+                document.body.classList.toggle("is-deep", dye.ink === INK_ON_DEEP);
+                stripButtons.forEach(function(button, index) {
+                    var band = dyeFor(index + 1);
+                    button.style.setProperty("--band", band.bg);
+                    button.style.setProperty("--band-ink", band.ink);
+                });
+                if (!document.body.classList.contains("flap")) {
+                    var meta = document.querySelector('meta[name="theme-color"]');
+                    if (meta) meta.setAttribute("content", dye.bg);
+                }
+            }
             buildDayButtons(keysGrid, keyButtons, function(d) { return HEBREW_DAY_LETTERS[d - 1]; });
             if (keysGrid) {
                 var spare = document.createElement("span");
@@ -1161,6 +1208,7 @@
 
                 markDayButtons(stripButtons, dayNumber, saidData);
                 markDayButtons(keyButtons, dayNumber, saidData);
+                paintDye(dayNumber);
 
                 var dayHead = document.getElementById("day-head");
                 if (dayHead) {
@@ -1271,14 +1319,15 @@
                     flapToggle.setAttribute("aria-pressed", on ? "true" : "false");
                     document.getElementById("board").hidden = !on;
                     var meta = document.querySelector('meta[name="theme-color"]');
-                    if (meta) meta.setAttribute("content", on ? (document.body.classList.contains("dark-mode") ? "#111111" : "#e8e6df") : "#f4f4f2");
-                    if (on) {
-                        lastBoardDay = undefined;
-                        refreshView();
-                    }
+                    if (meta && on) meta.setAttribute("content", document.body.classList.contains("dark-mode") ? "#111111" : "#e8e6df");
+                    lastBoardDay = undefined;
+                    refreshView();
                     window.scrollTo({ top: 0, behavior: "smooth" });
                 });
             }
+
+            // Dark mode changes the whole dye ramp
+            document.getElementById("dark-mode-toggle").addEventListener("click", refreshView);
 
             refreshView();
         });
