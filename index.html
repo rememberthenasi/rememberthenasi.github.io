@@ -45,7 +45,7 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 
 <!-- Link to Styles-->
-<link rel="stylesheet" href="styles.css?v=20261023e">
+<link rel="stylesheet" href="styles.css?v=20261023f">
 
 </head>
 
@@ -198,7 +198,7 @@
 
     <div id="settings-panel" class="settings" hidden>
       <div class="settings-backdrop" data-close-settings></div>
-      <div class="settings-sheet" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="settings-sheet" role="dialog" aria-labelledby="settings-title">
         <div class="settings-head">
           <h2 id="settings-title">Settings</h2>
           <button type="button" class="icon-btn settings-close" data-close-settings aria-label="Close settings">
@@ -1521,7 +1521,6 @@
             function openSettings() {
                 settingsPanel.hidden = false;
                 settingsToggle.setAttribute("aria-expanded", "true");
-                document.body.classList.add("settings-open");
                 var first = settingsSheet.querySelector(".language-option.is-active") || settingsSheet.querySelector("button");
                 if (first) first.focus();
             }
@@ -1529,7 +1528,6 @@
                 if (settingsPanel.hidden) return;
                 settingsPanel.hidden = true;
                 settingsToggle.setAttribute("aria-expanded", "false");
-                document.body.classList.remove("settings-open");
                 settingsToggle.focus();
             }
             settingsToggle.addEventListener("click", function() {
@@ -1540,23 +1538,12 @@
             });
             document.addEventListener("keydown", function(event) {
                 if (event.key === "Escape") closeSettings();
-                // Keep keyboard focus inside the open panel
-                if (event.key === "Tab" && !settingsPanel.hidden) {
-                    var items = Array.prototype.filter.call(settingsSheet.querySelectorAll("button, a"), function(el) {
-                        return !el.hidden && !el.disabled && el.offsetParent !== null;
-                    });
-                    if (!items.length) return;
-                    var first = items[0], last = items[items.length - 1];
-                    if (event.shiftKey && document.activeElement === first) { last.focus(); event.preventDefault(); }
-                    else if (!event.shiftKey && document.activeElement === last) { first.focus(); event.preventDefault(); }
-                }
             });
 
             // The board's plane: close the panel first, then switch
             document.getElementById("flap-toggle").addEventListener("click", function() {
                 settingsPanel.hidden = true;
                 settingsToggle.setAttribute("aria-expanded", "false");
-                document.body.classList.remove("settings-open");
             });
             document.getElementById("flap-exit").addEventListener("click", function() {
                 document.getElementById("flap-toggle").click();
