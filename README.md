@@ -12,4 +12,4 @@ You can see the check status in the **Checks** tab of any pull request.
 The original design (before the Poster redesign) is preserved two ways:
 
 - **Browsable copy:** `legacy/index.html` and `legacy/styles.css`, live at `/legacy/`.
-- **Git tag:** `legacy-design-v1` points at the last commit with the original design as the main page. To restore it, check out `index.html` and `styles.css` from that tag.
+- **Git branch:** `legacy-design-v1` points at the last commit with the original design as the main page. To restore it, check out `index.html` and `styles.css` from that branch.
