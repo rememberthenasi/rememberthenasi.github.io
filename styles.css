@@ -75,7 +75,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--ink); outline-o
 }
 
 /* ---------- Masthead: name bar + toolbar ---------- */
-.masthead { --gutter: max(16px, calc((100% - var(--content)) / 2)); border-bottom: var(--rule); }
+.masthead { --gutter: max(16px, calc((100% - var(--content)) / 2)); }
 
 .bar, .toolbar {
   display: flex;
@@ -88,8 +88,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--ink); outline-o
 
 .bar {
   padding-top: max(10px, env(safe-area-inset-top, 0px));
-  padding-bottom: 10px;
-  border-bottom: var(--hair);
+  padding-bottom: 4px;
   font-family: var(--mono);
   font-size: 0.72rem;
   letter-spacing: 0.08em;
@@ -155,7 +154,6 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--ink); outline-o
   max-height: 100dvh;
   display: grid;
   grid-template-rows: repeat(13, 1fr);
-  border-right: var(--rule);
 }
 
 .strip button {
@@ -207,6 +205,8 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--ink); outline-o
 
 .side-info { padding: 16px 16px 0; }
 .read { flex: 1; padding: 0 16px 24px; }
+
+.dateline:empty { display: none; }
 
 .dateline {
   margin: 0 0 12px;
@@ -278,9 +278,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--ink); outline-o
 
 /* ---------- Reading ---------- */
 .section-label {
-  margin: 0;
-  padding-top: 10px;
-  border-top: var(--rule);
+  margin: 8px 0 0;
   display: flex;
   justify-content: space-between;
   font-family: var(--mono);
@@ -319,8 +317,7 @@ body[data-lang="english"] .he { display: none !important; }
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  padding-top: 14px;
-  border-top: var(--hair);
+  padding-top: 20px;
 }
 
 .text-btn {
@@ -347,7 +344,6 @@ body[data-lang="english"] .he { display: none !important; }
 .foot {
   position: sticky;
   bottom: 0;
-  border-top: var(--rule);
   background: var(--paper);
   padding-bottom: env(safe-area-inset-bottom, 0px);
   z-index: 5;
@@ -426,8 +422,6 @@ body.flap .foot {
   --muted: var(--flap-dim);
   color: var(--flap-text);
 }
-body.flap .masthead,
-body.flap .bar { border-bottom-color: var(--flap-line); }
 body.flap .plane-btn { background: var(--lemon); color: #111; border-color: var(--lemon); }
 body.flap .strip,
 body.flap .day-head { display: none; }
@@ -479,7 +473,6 @@ body.flap .read {
 }
 
 body.flap .foot {
-  border-top: 1px solid var(--flap-line);
   padding: 8px 10px max(10px, env(safe-area-inset-bottom, 0px));
 }
 
@@ -527,7 +520,6 @@ body.flap .said-btn { border: 0; }
   .bar { font-size: 0.78rem; }
 
   .stage { padding: 0 max(16px, calc((100% - var(--content)) / 2)); }
-  .strip { border-left: var(--hair); }
   .ladder-num { font-size: 0.85rem; }
   .ladder-letter { font-size: 0.8rem; }
   .strip button[aria-current="true"] .ladder-num { font-size: 1rem; }
@@ -546,7 +538,6 @@ body.flap .said-btn { border: 0; }
   .side {
     display: flex;
     flex-direction: column;
-    border-right: var(--rule);
   }
 
   .side-info {
@@ -574,8 +565,8 @@ body.flap .said-btn { border: 0; }
   .foot-buttons { padding: 14px 16px 16px; }
   .mode-btn { padding: 16px 18px; font-size: 1.1rem; }
 
-  .read { padding: 28px 36px 40px; border-right: var(--hair); display: flex; flex-direction: column; }
-  .read .section-label { border-top: 0; padding-top: 0; }
+  .read { padding: 28px 36px 40px; display: flex; flex-direction: column; }
+  .read .section-label { margin-top: 0; }
   .read .tools { margin-top: auto; }
 
   .reading-body {
@@ -595,7 +586,7 @@ body.flap .said-btn { border: 0; }
   .tools { margin-top: 12px; }
 
   body.flap .board { padding: 24px 28px 18px; }
-  body.flap .read { border-right: 0; padding-top: 24px; }
+  body.flap .read { padding-top: 24px; }
   body.flap .foot { padding: 12px 16px 16px; }
 }
 
