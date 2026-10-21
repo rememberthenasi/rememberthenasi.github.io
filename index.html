@@ -45,7 +45,7 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 
 <!-- Link to Styles-->
-<link rel="stylesheet" href="styles.css?v=20261023a">
+<link rel="stylesheet" href="styles.css?v=20261023b">
 
 </head>
 
@@ -60,31 +60,30 @@
           </span>
           <h1 class="wordmark">Remember The Nasi</h1>
         </div>
-        <span class="bsd" lang="he" dir="rtl">בס"ד</span>
-      </div>
-      <div class="toolbar">
-        <div class="language-toggle" role="group" aria-label="Language">
-          <button type="button" class="language-option" data-language="english" aria-pressed="false">A</button>
-          <button type="button" class="language-option is-active" data-language="both" aria-pressed="true">א/A</button>
-          <button type="button" class="language-option" data-language="hebrew" aria-pressed="false">א</button>
-        </div>
-        <div class="toolbar-right">
-          <button type="button" id="dark-mode-toggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
-          <svg id="dark-mode-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 1 0 21 12.8z"></path>
-          </svg>
-        </button>
-          <button type="button" id="flap-toggle" class="icon-btn plane-btn" aria-pressed="false" aria-label="Switch to departures board" title="Departures board">
+        <div class="bar-right">
+          <span class="bsd" lang="he" dir="rtl">בס"ד</span>
+          <button type="button" id="flap-exit" class="icon-btn flap-exit" aria-label="Leave departures board" title="Leave departures board">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.3c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"></path></svg>
+          </button>
+          <button type="button" id="settings-toggle" class="icon-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="settings-panel" aria-label="Settings" title="Settings">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.3c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"></path>
-          </svg>
+              <path d="M4 7h9"></path><path d="M17 7h3"></path><circle cx="15" cy="7" r="2"></circle>
+              <path d="M4 17h3"></path><path d="M11 17h9"></path><circle cx="9" cy="17" r="2"></circle>
+            </svg>
           </button>
         </div>
       </div>
     </header>
 
+
     <div class="stage">
-    <nav id="day-strip" class="strip" aria-label="Days of Nisan"></nav>
+    <div class="daynav">
+      <nav id="day-strip" class="strip" aria-label="Days of Nisan"></nav>
+      <div id="progress" class="progress" hidden>
+        <div class="progress-track" aria-hidden="true"><span id="progress-fill" class="progress-fill"></span></div>
+        <span id="progress-label" class="progress-label"></span>
+      </div>
+    </div>
 
     <div class="layout">
       <div class="side">
@@ -142,7 +141,16 @@
       </div>
 
           <div id="day-head" class="day-head" hidden>
-        <p class="day-eyebrow">Day <span id="day-num">01</span> / 13</p>
+        <div class="day-nav">
+          <button type="button" id="prev-day" class="day-arrow" aria-label="Previous day">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"></path></svg>
+          </button>
+          <p class="day-eyebrow">Day <span id="day-num">1</span> of 13</p>
+          <button type="button" id="next-day" class="day-arrow" aria-label="Next day">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7"></path></svg>
+          </button>
+        </div>
+        <button type="button" id="today-btn" class="today-btn" hidden>Back to today</button>
         <p class="nasi-name"><span id="nasi-name-he" class="he" lang="he" dir="rtl"></span><span id="nasi-name-en" class="en"></span></p>
       </div>
         </div>
@@ -175,7 +183,44 @@
         </div>
       </section>
 
-        <div class="tools">
+
+        <footer class="credits">
+        <p>Text reproduced with permission from <a href="http://kehot.com/">Kehot Publication Society</a>.</p>
+        <p>Powered by <a href="https://totalis.one/?src=nasi">TOTALIS</a> · nasi@totalis.one</p>
+      </footer>
+      </div>
+    </div>
+    </div>
+
+    <div id="settings-panel" class="settings" hidden>
+      <div class="settings-backdrop" data-close-settings></div>
+      <div class="settings-sheet" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+        <div class="settings-head">
+          <h2 id="settings-title">Settings</h2>
+          <button type="button" class="icon-btn settings-close" data-close-settings aria-label="Close settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12"></path><path d="M18 6L6 18"></path></svg>
+          </button>
+        </div>
+
+        <div class="setting">
+          <span class="setting-label" id="language-label">Language</span>
+          <div class="language-toggle segmented" role="group" aria-labelledby="language-label">
+            <button type="button" class="language-option" data-language="english" aria-pressed="false">English</button>
+            <button type="button" class="language-option is-active" data-language="both" aria-pressed="true">Both</button>
+            <button type="button" class="language-option" data-language="hebrew" aria-pressed="false" lang="he">עברית</button>
+          </div>
+        </div>
+
+        <div class="setting">
+          <span class="setting-label" id="theme-label">Appearance</span>
+          <div class="segmented" role="group" aria-labelledby="theme-label">
+            <button type="button" class="theme-option" data-theme="light" aria-pressed="false">Light</button>
+            <button type="button" class="theme-option" data-theme="dark" aria-pressed="false">Dark</button>
+            <button type="button" class="theme-option" data-theme="auto" aria-pressed="false">Automatic</button>
+          </div>
+        </div>
+
+        <div class="setting-actions">
           <button type="button" id="text-share-button" class="text-btn" aria-label="Share as image" title="Share as image">
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
             <circle cx="18" cy="5" r="3"></circle>
@@ -184,7 +229,7 @@
             <path d="M8.8 10.6l6.4-3.2"></path>
             <path d="M8.8 13.4l6.4 3.2"></path>
           </svg>
-          <span>As image</span>
+          <span>Share as image</span>
         </button>
           <button type="button" id="share-button" class="text-btn" aria-label="Install app" title="Install app">
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -192,16 +237,21 @@
             <path d="M10 5h4"></path>
             <circle cx="12" cy="18" r="1"></circle>
           </svg>
-          <span>Install</span>
+          <span>Install app</span>
         </button>
         </div>
 
-        <footer class="credits">
-        <p>Text reproduced with permission from <a href="http://kehot.com/">Kehot Publication Society</a>.</p>
-        <p>Powered by <a href="https://totalis.one/?src=nasi">TOTALIS</a> · nasi@totalis.one</p>
-      </footer>
+        <div class="settings-foot">
+          <span>Remember The Nasi</span>
+          <button type="button" id="flap-toggle" class="icon-btn plane-btn" aria-pressed="false" aria-label="Switch to departures board" title="Departures board">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.3c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"></path></svg>
+          </button>
+        </div>
+
+        <button type="button" id="dark-mode-toggle" hidden aria-label="Toggle dark mode">
+          <svg id="dark-mode-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"></svg>
+        </button>
       </div>
-    </div>
     </div>
 
     <script>
@@ -1184,6 +1234,7 @@
                 markDayButtons(stripButtons, dayNumber, saidData);
                 markDayButtons(keyButtons, dayNumber, saidData);
                 paintDye(dayNumber);
+                updateDayNav(dayNumber, saidData);
 
                 var dayHead = document.getElementById("day-head");
                 if (dayHead) {
@@ -1191,7 +1242,7 @@
                 }
                 if (dayNumber) {
                     var info = NASI_NAMES[dayNumber - 1];
-                    document.getElementById("day-num").textContent = String(dayNumber).padStart(2, "0");
+                    document.getElementById("day-num").textContent = String(dayNumber);
                     document.getElementById("nasi-name-en").textContent = dayNumber === 13 ? info.en : info.en + ", " + info.tribe;
                     document.getElementById("nasi-name-he").textContent = info.he;
 
@@ -1300,6 +1351,162 @@
                     window.scrollTo({ top: 0, behavior: "smooth" });
                 });
             }
+
+            // === DAY NAVIGATION: arrows, back to today, swipe, progress ===
+            function shownDayNumber() {
+                return getNisanDayNumber(getDisplayedDayMonth());
+            }
+
+            document.getElementById("prev-day").addEventListener("click", function() {
+                var d = shownDayNumber();
+                if (d && d > 1) showDay(d - 1);
+            });
+            document.getElementById("next-day").addEventListener("click", function() {
+                var d = shownDayNumber();
+                if (d && d < 13) showDay(d + 1);
+            });
+            document.getElementById("today-btn").addEventListener("click", function() {
+                var daySelect = document.getElementById("day-select");
+                daySelect.value = "";
+                daySelect.dispatchEvent(new Event("change", { bubbles: true }));
+            });
+
+            // Swipe left for the next day, right for the previous one (phones)
+            (function() {
+                var read = document.querySelector(".read");
+                var startX = null, startY = null;
+                if (!read) return;
+                read.addEventListener("touchstart", function(event) {
+                    if (event.touches.length !== 1) { startX = null; return; }
+                    startX = event.touches[0].clientX;
+                    startY = event.touches[0].clientY;
+                }, { passive: true });
+                read.addEventListener("touchend", function(event) {
+                    if (startX === null) return;
+                    var dx = event.changedTouches[0].clientX - startX;
+                    var dy = event.changedTouches[0].clientY - startY;
+                    startX = null;
+                    if (Math.abs(dx) < 70 || Math.abs(dy) > 45) return;
+                    var d = shownDayNumber();
+                    if (!d) return;
+                    if (dx < 0 && d < 13) showDay(d + 1);
+                    if (dx > 0 && d > 1) showDay(d - 1);
+                }, { passive: true });
+            })();
+
+            function updateDayNav(dayNumber, saidData) {
+                var prev = document.getElementById("prev-day");
+                var next = document.getElementById("next-day");
+                prev.disabled = !dayNumber || dayNumber <= 1;
+                next.disabled = !dayNumber || dayNumber >= 13;
+
+                var daySelect = document.getElementById("day-select");
+                document.getElementById("today-btn").hidden = !(isCurrentDayValidNisan && daySelect && daySelect.value);
+
+                var progress = document.getElementById("progress");
+                if (!currentHebrewYear) {
+                    progress.hidden = true;
+                    return;
+                }
+                var said = 0;
+                for (var d = 1; d <= 13; d += 1) {
+                    if (saidData[d + " Nisan"]) said += 1;
+                }
+                progress.hidden = false;
+                document.getElementById("progress-fill").style.width = (said / 13 * 100) + "%";
+                document.getElementById("progress-label").textContent = said + " of 13 said";
+            }
+
+            // === SETTINGS PANEL ===
+            var settingsPanel = document.getElementById("settings-panel");
+            var settingsToggle = document.getElementById("settings-toggle");
+            var settingsSheet = settingsPanel.querySelector(".settings-sheet");
+
+            function openSettings() {
+                settingsPanel.hidden = false;
+                settingsToggle.setAttribute("aria-expanded", "true");
+                document.body.classList.add("settings-open");
+                var first = settingsSheet.querySelector(".language-option.is-active") || settingsSheet.querySelector("button");
+                if (first) first.focus();
+            }
+            function closeSettings() {
+                if (settingsPanel.hidden) return;
+                settingsPanel.hidden = true;
+                settingsToggle.setAttribute("aria-expanded", "false");
+                document.body.classList.remove("settings-open");
+                settingsToggle.focus();
+            }
+            settingsToggle.addEventListener("click", function() {
+                if (settingsPanel.hidden) openSettings(); else closeSettings();
+            });
+            settingsPanel.querySelectorAll("[data-close-settings]").forEach(function(el) {
+                el.addEventListener("click", closeSettings);
+            });
+            document.addEventListener("keydown", function(event) {
+                if (event.key === "Escape") closeSettings();
+                // Keep keyboard focus inside the open panel
+                if (event.key === "Tab" && !settingsPanel.hidden) {
+                    var items = Array.prototype.filter.call(settingsSheet.querySelectorAll("button, a"), function(el) {
+                        return !el.hidden && !el.disabled && el.offsetParent !== null;
+                    });
+                    if (!items.length) return;
+                    var first = items[0], last = items[items.length - 1];
+                    if (event.shiftKey && document.activeElement === first) { last.focus(); event.preventDefault(); }
+                    else if (!event.shiftKey && document.activeElement === last) { first.focus(); event.preventDefault(); }
+                }
+            });
+
+            // The board's plane: close the panel first, then switch
+            document.getElementById("flap-toggle").addEventListener("click", function() {
+                settingsPanel.hidden = true;
+                settingsToggle.setAttribute("aria-expanded", "false");
+                document.body.classList.remove("settings-open");
+            });
+            document.getElementById("flap-exit").addEventListener("click", function() {
+                document.getElementById("flap-toggle").click();
+            });
+
+            // Appearance: Light, Dark or Automatic (follows the device)
+            var themeButtons = document.querySelectorAll(".theme-option");
+            var darkQuery = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+
+            function storedTheme() {
+                try {
+                    var saved = localStorage.getItem("theme-mode");
+                    if (saved) return saved;
+                    var legacy = localStorage.getItem("dark-mode");
+                    if (legacy === "enabled") return "dark";
+                    if (legacy === "disabled") return "light";
+                } catch (e) {}
+                return "auto";
+            }
+
+            function applyTheme(mode) {
+                var wantDark = mode === "dark" || (mode === "auto" && darkQuery && darkQuery.matches);
+                if (wantDark !== document.body.classList.contains("dark-mode")) {
+                    // The original toggle keeps its own storage and icon in step
+                    document.getElementById("dark-mode-toggle").click();
+                }
+                themeButtons.forEach(function(button) {
+                    var on = button.dataset.theme === mode;
+                    button.classList.toggle("is-active", on);
+                    button.setAttribute("aria-pressed", on ? "true" : "false");
+                });
+            }
+
+            themeButtons.forEach(function(button) {
+                button.addEventListener("click", function() {
+                    var mode = button.dataset.theme;
+                    try { localStorage.setItem("theme-mode", mode); } catch (e) {}
+                    applyTheme(mode);
+                });
+            });
+            if (darkQuery && darkQuery.addEventListener) {
+                darkQuery.addEventListener("change", function() {
+                    if (storedTheme() === "auto") applyTheme("auto");
+                });
+            }
+            applyTheme(storedTheme());
 
             // Dark mode changes the whole dye ramp
             document.getElementById("dark-mode-toggle").addEventListener("click", refreshView);
