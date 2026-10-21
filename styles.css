@@ -34,7 +34,7 @@ body.dark-mode {
   --hair: 1px solid var(--ink);
 }
 
-html { background: var(--paper); }
+/* No background on html: the body colour then fills the whole window, so dark mode reaches the edges */
 
 body {
   margin: 0;
@@ -65,7 +65,6 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--signal); outlin
 
 .app {
   --gutter: max(16px, calc((100% - var(--content)) / 2));
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   background: var(--paper);
@@ -435,6 +434,15 @@ body.flap .read {
   padding-top: 14px;
 }
 
+/* Dark mode on the board: the reading panel goes dark too */
+body.flap.dark-mode .read {
+  background: #181818;
+  color: var(--flap-text);
+  --ink: var(--flap-text);
+  --muted: var(--flap-dim);
+  --paper: #181818;
+}
+
 body.flap .foot {
   border-top: 1px solid #2a2a2a;
   padding: 8px 10px max(10px, env(safe-area-inset-bottom, 0px));
@@ -493,7 +501,6 @@ body.flap .said-btn.is-said { background: var(--lemon); }
     overflow-y: auto;
     border-left: var(--hair);
     border-right: var(--rule);
-    min-height: calc(100vh - 160px);
   }
 
   .side-info { padding: 24px 28px 0; }
