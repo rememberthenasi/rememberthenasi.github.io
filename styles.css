@@ -557,6 +557,8 @@ body.flap .said-btn.is-said { background: var(--lemon); color: #111; }
   .mode-btn { padding: 20px 22px; font-size: 1.15rem; }
 
   .read { padding: 24px 36px 40px; border-right: var(--hair); display: flex; flex-direction: column; }
+  /* The day strip already rules off the top of the reading column */
+  .read .section-label { border-top: 0; padding-top: 0; }
   .read .tools { margin-top: auto; }
 
   .reading-body {
