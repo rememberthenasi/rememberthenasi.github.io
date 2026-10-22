@@ -346,8 +346,9 @@ body.flap .bar .flap-exit { display: inline-grid; background: var(--lemon); colo
 .section-label { padding: 0; }
 .section-label > span { font-family: var(--hebrew); font-size: 0.95rem; font-weight: 500; letter-spacing: 0; text-transform: none; color: var(--muted); }
 
-.hebrew { margin: 8px 0 14px; font-family: var(--hebrew); font-weight: 500; font-size: 1.45rem; line-height: 1.9; text-align: right; }
-.english { margin: 0 0 16px; font-size: 1.02rem; line-height: 1.7; }
+/* --text-scale comes from the Text size setting */
+.hebrew { margin: 8px 0 14px; font-family: var(--hebrew); font-weight: 500; font-size: calc(1.45rem * var(--text-scale, 1)); line-height: 1.9; text-align: right; }
+.english { margin: 0 0 16px; font-size: calc(1.02rem * var(--text-scale, 1)); line-height: 1.7; }
 
 body[data-lang="hebrew"] .en,
 body[data-lang="english"] .he { display: none !important; }
@@ -595,7 +596,7 @@ body.flap .logo { box-shadow: none; }
   }
 
   .reading-body .english { grid-area: en; margin-top: 12px; }
-  .reading-body .hebrew { grid-area: he; font-size: 1.6rem; }
+  .reading-body .hebrew { grid-area: he; font-size: calc(1.6rem * var(--text-scale, 1)); }
 
   body[data-lang="hebrew"] .reading-body { grid-template-columns: 1fr; grid-template-areas: "he"; }
   body[data-lang="english"] .reading-body { grid-template-columns: minmax(0, 46rem); grid-template-areas: "en"; }
@@ -813,3 +814,10 @@ body.flap .missed-day-prompt { background: var(--key); color: var(--flap-text); 
     box-shadow: var(--shadow);
   }
 }
+
+/* Text size buttons: each "A" previews its own size */
+.size-option { font-family: var(--sans); font-weight: 700; line-height: 1; }
+.size-option[data-size="small"] { font-size: 0.75rem; }
+.size-option[data-size="medium"] { font-size: 0.92rem; }
+.size-option[data-size="large"] { font-size: 1.1rem; }
+.size-option[data-size="xlarge"] { font-size: 1.3rem; }

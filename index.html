@@ -45,7 +45,7 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 
 <!-- Link to Styles-->
-<link rel="stylesheet" href="styles.css?v=20261023f">
+<link rel="stylesheet" href="styles.css?v=20261024a">
 
 </head>
 
@@ -221,6 +221,16 @@
             <button type="button" class="theme-option" data-theme="light" aria-pressed="false">Light</button>
             <button type="button" class="theme-option" data-theme="dark" aria-pressed="false">Dark</button>
             <button type="button" class="theme-option" data-theme="auto" aria-pressed="false">Automatic</button>
+          </div>
+        </div>
+
+        <div class="setting">
+          <span class="setting-label" id="size-label">Text size</span>
+          <div class="segmented size-options" role="group" aria-labelledby="size-label">
+            <button type="button" class="size-option" data-size="small" aria-pressed="false" aria-label="Small text">A</button>
+            <button type="button" class="size-option" data-size="medium" aria-pressed="true" aria-label="Medium text">A</button>
+            <button type="button" class="size-option" data-size="large" aria-pressed="false" aria-label="Large text">A</button>
+            <button type="button" class="size-option" data-size="xlarge" aria-pressed="false" aria-label="Extra large text">A</button>
           </div>
         </div>
 
@@ -1590,6 +1600,30 @@
                 });
             }
             applyTheme(storedTheme());
+
+            // Text size for the readings, saved on the device so it survives closing the app
+            var TEXT_SCALES = { small: 0.88, medium: 1, large: 1.15, xlarge: 1.32 };
+            var sizeButtons = document.querySelectorAll(".size-option");
+
+            function applyTextSize(size) {
+                if (!TEXT_SCALES[size]) size = "medium";
+                document.body.style.setProperty("--text-scale", TEXT_SCALES[size]);
+                sizeButtons.forEach(function(button) {
+                    var on = button.dataset.size === size;
+                    button.classList.toggle("is-active", on);
+                    button.setAttribute("aria-pressed", on ? "true" : "false");
+                });
+            }
+
+            sizeButtons.forEach(function(button) {
+                button.addEventListener("click", function() {
+                    try { localStorage.setItem("text-size", button.dataset.size); } catch (e) {}
+                    applyTextSize(button.dataset.size);
+                });
+            });
+            var savedTextSize = "medium";
+            try { savedTextSize = localStorage.getItem("text-size") || "medium"; } catch (e) {}
+            applyTextSize(savedTextSize);
 
             // Dark mode changes the whole dye ramp
             document.getElementById("dark-mode-toggle").addEventListener("click", refreshView);
