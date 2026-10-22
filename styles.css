@@ -346,9 +346,13 @@ body.flap .bar .flap-exit { display: inline-grid; background: var(--lemon); colo
 .section-label { padding: 0; }
 .section-label > span { font-family: var(--hebrew); font-size: 0.95rem; font-weight: 500; letter-spacing: 0; text-transform: none; color: var(--muted); }
 
-/* --text-scale comes from the Text size setting */
-.hebrew { margin: 8px 0 14px; font-family: var(--hebrew); font-weight: 500; font-size: calc(1.45rem * var(--text-scale, 1)); line-height: 1.9; text-align: right; }
-.english { margin: 0 0 16px; font-size: calc(1.02rem * var(--text-scale, 1)); line-height: 1.7; }
+/* --text-scale comes from the Text size setting.
+   Hebrew letters are drawn at the height of English capitals: measured in the browser,
+   a Noto Serif Hebrew letter is 0.654em tall and a Heebo capital 0.72em, so the Hebrew
+   font size is the English size x 1.1. */
+.reading { --en-size: calc(1.02rem * var(--text-scale, 1)); --he-ratio: 1.1; }
+.hebrew { margin: 8px 0 14px; font-family: var(--hebrew); font-weight: 500; font-size: calc(var(--en-size) * var(--he-ratio)); line-height: 2; text-align: right; }
+.english { margin: 0 0 16px; font-size: var(--en-size); line-height: 1.7; }
 
 body[data-lang="hebrew"] .en,
 body[data-lang="english"] .he { display: none !important; }
@@ -589,14 +593,14 @@ body.flap .logo { box-shadow: none; }
 
   .reading-body {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-areas: "en he";
     gap: 32px;
     align-items: start;
   }
 
   .reading-body .english { grid-area: en; margin-top: 12px; }
-  .reading-body .hebrew { grid-area: he; font-size: calc(1.6rem * var(--text-scale, 1)); }
+  .reading-body .hebrew { grid-area: he; }
 
   body[data-lang="hebrew"] .reading-body { grid-template-columns: 1fr; grid-template-areas: "he"; }
   body[data-lang="english"] .reading-body { grid-template-columns: minmax(0, 46rem); grid-template-areas: "en"; }
@@ -815,9 +819,41 @@ body.flap .missed-day-prompt { background: var(--key); color: var(--flap-text); 
   }
 }
 
-/* Text size buttons: each "A" previews its own size */
-.size-option { font-family: var(--sans); font-weight: 700; line-height: 1; }
-.size-option[data-size="small"] { font-size: 0.75rem; }
-.size-option[data-size="medium"] { font-size: 0.92rem; }
-.size-option[data-size="large"] { font-size: 1.1rem; }
-.size-option[data-size="xlarge"] { font-size: 1.3rem; }
+/* Text size stepper: - and + either side of the current percentage */
+.stepper {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--chip);
+}
+
+.stepper-btn {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  height: 34px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--card);
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 34px;
+  box-shadow: var(--shadow);
+}
+.stepper-btn:disabled { opacity: 0.4; cursor: default; box-shadow: none; }
+.stepper-a { font-weight: 700; }
+.stepper-a.small { font-size: 0.72rem; }
+.stepper-a.large { font-size: 1.05rem; }
+
+.stepper-value {
+  min-width: 70px;
+  height: 34px;
+  border: 0;
+  background: transparent;
+  font-weight: 700;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
