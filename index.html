@@ -45,7 +45,7 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 
 <!-- Link to Styles-->
-<link rel="stylesheet" href="styles.css?v=20261024a">
+<link rel="stylesheet" href="styles.css?v=20261024b">
 
 </head>
 
@@ -226,11 +226,10 @@
 
         <div class="setting">
           <span class="setting-label" id="size-label">Text size</span>
-          <div class="segmented size-options" role="group" aria-labelledby="size-label">
-            <button type="button" class="size-option" data-size="small" aria-pressed="false" aria-label="Small text">A</button>
-            <button type="button" class="size-option" data-size="medium" aria-pressed="true" aria-label="Medium text">A</button>
-            <button type="button" class="size-option" data-size="large" aria-pressed="false" aria-label="Large text">A</button>
-            <button type="button" class="size-option" data-size="xlarge" aria-pressed="false" aria-label="Extra large text">A</button>
+          <div class="stepper" role="group" aria-labelledby="size-label">
+            <button type="button" id="size-down" class="stepper-btn" aria-label="Smaller text"><span class="stepper-a small" aria-hidden="true">A</span><span aria-hidden="true">−</span></button>
+            <button type="button" id="size-reset" class="stepper-value" aria-live="polite" title="Reset to 100%">100%</button>
+            <button type="button" id="size-up" class="stepper-btn" aria-label="Larger text"><span class="stepper-a large" aria-hidden="true">A</span><span aria-hidden="true">+</span></button>
           </div>
         </div>
 
@@ -440,8 +439,8 @@
               const pad = 64;
               const cardPad = 52;
               const textWidth = width - pad * 2 - cardPad * 2;
-              const heFont = "500 38px " + SHARE_FONTS.hebrew;
-              const heLine = 68;
+              const heFont = "500 32px " + SHARE_FONTS.hebrew; // English 29px x 1.1: Hebrew letters as tall as English capitals
+              const heLine = 60;
               const enFont = "400 29px " + SHARE_FONTS.sans;
               const enLine = 46;
 
@@ -1601,29 +1600,38 @@
             }
             applyTheme(storedTheme());
 
-            // Text size for the readings, saved on the device so it survives closing the app
-            var TEXT_SCALES = { small: 0.88, medium: 1, large: 1.15, xlarge: 1.32 };
-            var sizeButtons = document.querySelectorAll(".size-option");
+            // Text size for the readings: - and + in 10% steps from 60% to 300%,
+            // saved on the device so it survives closing the app
+            var TEXT_MIN = 60, TEXT_MAX = 300, TEXT_STEP = 10;
+            var textPercent = 100;
 
-            function applyTextSize(size) {
-                if (!TEXT_SCALES[size]) size = "medium";
-                document.body.style.setProperty("--text-scale", TEXT_SCALES[size]);
-                sizeButtons.forEach(function(button) {
-                    var on = button.dataset.size === size;
-                    button.classList.toggle("is-active", on);
-                    button.setAttribute("aria-pressed", on ? "true" : "false");
-                });
+            function applyTextSize(percent) {
+                percent = Math.min(TEXT_MAX, Math.max(TEXT_MIN, Math.round(percent / TEXT_STEP) * TEXT_STEP));
+                textPercent = percent;
+                document.body.style.setProperty("--text-scale", percent / 100);
+                document.getElementById("size-reset").textContent = percent + "%";
+                document.getElementById("size-reset").setAttribute("aria-label", "Text size " + percent + "%, reset to 100%");
+                document.getElementById("size-down").disabled = percent <= TEXT_MIN;
+                document.getElementById("size-up").disabled = percent >= TEXT_MAX;
+                try { localStorage.setItem("text-scale", String(percent)); } catch (e) {}
             }
 
-            sizeButtons.forEach(function(button) {
-                button.addEventListener("click", function() {
-                    try { localStorage.setItem("text-size", button.dataset.size); } catch (e) {}
-                    applyTextSize(button.dataset.size);
-                });
-            });
-            var savedTextSize = "medium";
-            try { savedTextSize = localStorage.getItem("text-size") || "medium"; } catch (e) {}
-            applyTextSize(savedTextSize);
+            document.getElementById("size-down").addEventListener("click", function() { applyTextSize(textPercent - TEXT_STEP); });
+            document.getElementById("size-up").addEventListener("click", function() { applyTextSize(textPercent + TEXT_STEP); });
+            document.getElementById("size-reset").addEventListener("click", function() { applyTextSize(100); });
+
+            (function() {
+                var saved = null;
+                try {
+                    saved = localStorage.getItem("text-scale");
+                    if (!saved) {
+                        // Carry over the earlier four-button setting
+                        var old = { small: 90, medium: 100, large: 120, xlarge: 130 }[localStorage.getItem("text-size")];
+                        if (old) saved = old;
+                    }
+                } catch (e) {}
+                applyTextSize(Number(saved) || 100);
+            })();
 
             // Dark mode changes the whole dye ramp
             document.getElementById("dark-mode-toggle").addEventListener("click", refreshView);
