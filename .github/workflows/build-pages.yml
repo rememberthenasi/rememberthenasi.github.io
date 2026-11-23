@@ -1,0 +1,67 @@
+name: Build guide pages
+
+# Rebuilds /nasi/, /nissan/, /pesach/ and sitemap.xml with tools/build-pages.mjs and commits
+# them when they change. They only change when the dates roll forward to the next year
+# (the week after Pesach) or when the generator or nasi.json / yehiRatzon.json change.
+
+on:
+  schedule:
+    - cron: '23 4 * * 1'   # every Monday, 04:23 UTC
+  push:
+    branches: [main]
+    paths:
+      - 'tools/build-pages.mjs'
+      - 'nasi.json'
+      - 'yehiRatzon.json'
+  workflow_dispatch:       # "Run workflow" button on the Actions tab
+
+permissions:
+  contents: write          # to commit the rebuilt pages
+  actions: write           # to keep the weekly schedule switched on (see the last step)
+
+concurrency:
+  group: build-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Rebuild and commit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build the pages
+        run: npm run build:pages
+
+      - name: Validate HTML
+        run: npm run lint
+
+      - name: Commit if anything changed
+        run: |
+          git add nasi nissan pesach 404.html sitemap.xml
+          if git diff --cached --quiet; then
+            echo "Pages are already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Rebuild guide pages (dates roll forward)"
+          git push
+
+      # GitHub pauses scheduled workflows in a public repository after 60 days without
+      # activity. Re-enabling this workflow on every run keeps the weekly schedule alive
+      # through the quiet months between one Pesach and the next.
+      - name: Keep the schedule switched on
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/build-pages.yml/enable"

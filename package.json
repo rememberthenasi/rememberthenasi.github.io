@@ -3,7 +3,8 @@
   "private": true,
   "description": "Website for displaying the daily Nasi reading during the first 13 days of Nisan",
   "scripts": {
-    "lint": "html-validate index.html"
+    "lint": "html-validate index.html 404.html nasi nissan pesach",
+    "build:pages": "node tools/build-pages.mjs"
   },
   "devDependencies": {
     "html-validate": "^10.11.2"
