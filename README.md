@@ -26,5 +26,13 @@ Besides the app on `/`, the site has static guide pages written for search engin
 
 They are generated from `nasi.json` and `yehiRatzon.json` by `tools/build-pages.mjs` and styled by
 `pages.css` (the app's `styles.css` is not used or changed). Dates are worked out for the next three
-Nissans. **Once a year, after Pesach**, run `npm run build:pages` and commit the result so the dates
-roll forward. Edit the wording in `tools/build-pages.mjs`, not in the generated HTML.
+Nissans.
+
+The **Build guide pages** workflow (`.github/workflows/build-pages.yml`) rebuilds them every Monday,
+and whenever the generator or the JSON files change on `main`, and commits the result if anything
+changed. In practice that is once a year, the week after Pesach, when the dates roll forward. It can
+also be run by hand from the Actions tab ("Run workflow").
+
+Edit the wording in `tools/build-pages.mjs`, not in the generated HTML, and bump `CONTENT_UPDATED`
+there when you do. To preview the pages as they will look on a later date:
+`BUILD_TODAY=2027-05-01 npm run build:pages` (then discard the output).

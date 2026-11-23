@@ -7,8 +7,9 @@
 //         pesach/index.html, 404.html, sitemap.xml
 //
 // Dates are worked out with the Hebrew calendar built into Node (Intl), starting from the
-// next Nissan that has not finished yet. Run it again once a year (after Nissan) so the
-// "upcoming dates" tables roll forward, then commit the output. index.html is never touched.
+// next Pesach that has not finished yet. The "Build guide pages" GitHub Action
+// (.github/workflows/build-pages.yml) reruns this every week and commits the output when it
+// changes, so the dates roll forward by themselves after Pesach. index.html is never touched.
 
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -94,11 +95,17 @@ const g = d => gregFmt.format(d).replace(/^(\w+) /, '$1, ');
 const gs = d => shortFmt.format(d);
 const gregYear = d => d.getUTCFullYear();
 
-const NOW = new Date();
+// BUILD_TODAY=2027-05-01 node tools/build-pages.mjs  previews the pages as they will be on that date.
+const NOW = process.env.BUILD_TODAY ? new Date(process.env.BUILD_TODAY + 'T00:00:00Z') : new Date();
 const TODAY = new Date(Date.UTC(NOW.getUTCFullYear(), NOW.getUTCMonth(), NOW.getUTCDate()));
-const BUILD_DATE = TODAY.toISOString().slice(0, 10);
 let firstYear = hebParts(TODAY).year;
 if (nisan(firstYear, 22) < TODAY) firstYear += 1;
+// "Last updated" for search engines: the later of the day the dates last rolled forward
+// (the day after the previous Pesach) and CONTENT_UPDATED. It does not change from day to day,
+// so the scheduled rebuild only produces a commit when something really changed.
+const CONTENT_UPDATED = '2026-11-23'; // bump this when you change the wording below
+const rolledOn = nisan(firstYear - 1, 23).toISOString().slice(0, 10);
+const BUILD_DATE = rolledOn > CONTENT_UPDATED ? rolledOn : CONTENT_UPDATED;
 const YEARS = [firstYear, firstYear + 1, firstYear + 2];
 const Y0 = YEARS[0];
 const GY0 = gregYear(nisan(Y0, 1));
